@@ -72,16 +72,27 @@ function BuildingMap() {
              draggable
       >
         <Layer>
+          {layers.floors.map((floor) => (
+            floor.paths.map((path) => (
+              <Path
+                data={path.d}
+                key={path.id}
+                stroke={path.stroke}
+                strokeWidth={path.strokeWidth}
+              >
+
+              </Path>
+            ))
+          ))}
 
           {layers.floors.map((floor) => (
               floor.rooms.map(room => (
                   <Rect
                     key={room.id}
                     x={room.x}
-                    y={room.y - 1000}
+                    y={room.y}
                     width={room.width}
                     height={room.height}
-                    fill={"white"}
                     stroke={"black"}
                     strokeWidth={1}
                     onClick={() => {
@@ -93,18 +104,7 @@ function BuildingMap() {
               )
             )
           )}
-          {layers.floors.map((floor) => (
-            floor.path.map((path) => (
-              <Path
-                data={path.d}
-                fill={path.fill}
-                stroke={path.stroke}
-                strokeWidth={path.strokeWidth}
-              >
 
-              </Path>
-            ))
-          ))}
 
         </Layer>
       </Stage>

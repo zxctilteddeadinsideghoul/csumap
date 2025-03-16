@@ -9,6 +9,7 @@ function BuildingMap() {
   });
 
   const [coords, setCoords] = useState({})
+  const [curLayer, setCurLayer] = useState(0)
 
   const handleWheel = (e) => {
     e.evt.preventDefault();
@@ -50,7 +51,11 @@ function BuildingMap() {
   }
 
   const clickHandler = () => {
-    console.log(layers.floors[2].rooms[0].x, layers.floors[2].rooms[0].y);
+    if (curLayer === 4) {
+      setCurLayer(0)
+    } else {
+      setCurLayer(curLayer + 1);
+    }
   }
 
   const moveHandler = (e) => {
@@ -59,7 +64,7 @@ function BuildingMap() {
 
   return (
     <>
-      <button onClick={clickHandler}></button>
+      <button onClick={clickHandler}>change layer</button>
       <div>X:{coords.x}, Y:{coords.y}</div>
       <Stage height={window.innerHeight}
              width={window.innerWidth}
@@ -72,7 +77,7 @@ function BuildingMap() {
              draggable
       >
         <Layer>
-          {layers.floors.map((floor) => (
+          {layers.buildings[curLayer].floors.map((floor) => (
             floor.paths.map((path) => (
               <Path
                 data={path.d}
@@ -80,12 +85,11 @@ function BuildingMap() {
                 stroke={path.stroke}
                 strokeWidth={path.strokeWidth}
               >
-
               </Path>
             ))
           ))}
 
-          {layers.floors.map((floor) => (
+          {layers.buildings[curLayer].floors.map((floor) => (
               floor.rooms.map(room => (
                   <Rect
                     key={room.id}

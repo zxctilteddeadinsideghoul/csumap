@@ -1,0 +1,62 @@
+/* RoomInfoModal.css */
+.modal-overlay {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Выравнивание по нижнему краю */
+    z-index: 1000; /* Чтобы окно было поверх канвы */
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    width: 100%; /* Окно будет по ширине страницы */
+    max-width: 100%; /* Максимальная ширина окна */
+    box-sizing: border-box; /* Чтобы padding не выходил за пределы окна */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative; /* Для позиционирования крестика */
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: black;
+}
+
+h2 {
+    margin-top: 0; /* Убираем отступ сверху */
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 15px; /* Меньше отступов на мобильных */
+    }
+
+    .close-button {
+        top: 5px;
+        right: 5px;
+        font-size: 18px; /* Уменьшаем размер крестика на мобильных */
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 10px; /* Еще меньше отступов на маленьких экранах */
+    }
+
+    .close-button {
+        top: 5px;
+        right: 5px;
+        font-size: 16px; /* Уменьшаем размер крестика еще больше */
+    }
+}

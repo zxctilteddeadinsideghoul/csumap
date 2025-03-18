@@ -1,5 +1,6 @@
 import {Layer, Path, Rect, Stage, Text} from "react-konva";
 import {use, useEffect, useMemo, useRef, useState} from "react";
+import RoomInfoModal from "./RoomInfoModal.jsx";
 
 function BuildingMap() {
   const [stageScale, setStageScale] = useState(0.5);
@@ -122,6 +123,7 @@ function BuildingMap() {
 
   const [layers, setLayers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRoom, setSelectedRoom] = useState(null);
 
   useEffect(() => {
     fetch("https://staticstorm.ru/map/map_data").then((response) => {
@@ -144,6 +146,20 @@ function BuildingMap() {
     console.log(stage.isDragging());
   };
 
+  //темка для модалки
+  const handleRoomClick = (room) => {
+    setSelectedRoom(room);
+  };
+
+  const handleTouchRoom = (e, room) => {
+    e.evt.preventDefault(); // Предотвращаем стандартное поведение на мобильных устройствах
+    handleRoomClick(room);
+  };
+
+  const handleLayerChange = (event) => {
+    setCurLayer(parseInt(event.target.value, 10)); // Обновляем текущий этаж
+  };
+
   const renderedLayers = useMemo(() => (
     layers[curLayer]?.floors.map(floor => (
       floor.rooms.map(room => (
@@ -155,7 +171,8 @@ function BuildingMap() {
               height={room.height}
               stroke="black"
               strokeWidth={1}
-              onClick={() => alert(room.id)}
+              onClick={() => handleRoomClick(room)}
+              onTap={(e) => handleTouchRoom(e, room)}
         />
       ))
     ))
@@ -165,18 +182,24 @@ function BuildingMap() {
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  const clickHandler = () => {
-    if (curLayer === 4) {
-      setCurLayer(0)
-    } else {
-      setCurLayer(curLayer + 1);
-    }
-  }
+  
 
   return (
     <>
-      <button onClick={clickHandler}>change layer</button>
+      <div>
+        <label htmlFor="layer-select">Выберите этаж: </label>
+        <select
+            id="layer-select"
+            value={curLayer}
+            onChange={handleLayerChange} // Обработчик изменения этажа
+        >
+          <option value="4">0 этаж</option>
+          <option value="0" selected="selected">1 этаж</option>
+          <option value="1">2 этаж</option>
+          <option value="2">3 этаж</option>
+          <option value="3">4 этаж</option>
+        </select>
+      </div>
       <Stage height={window.innerHeight}
              width={window.innerWidth}
              onWheel={handleWheel}
@@ -193,6 +216,7 @@ function BuildingMap() {
           {renderedLayers}
         </Layer>
       </Stage>
+      <RoomInfoModal room={selectedRoom} onClose={() => setSelectedRoom(null)} />
     </>
   );
 

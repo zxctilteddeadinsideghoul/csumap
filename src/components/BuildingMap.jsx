@@ -1,13 +1,13 @@
-import {Layer, Path, Rect, Stage, Text} from "react-konva";
-import {use, useEffect, useMemo, useRef, useState} from "react";
+import {Circle, Layer, Line, Path, Rect, Stage, Text} from "react-konva";
+import React from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 
 function BuildingMap() {
-  const [stageScale, setStageScale] = useState(0.5);
-  const [stageX, setStageX] = useState(0);
+  const [stageScale, setStageScale] = useState(0.3);
+  const [stageX, setStageX] = useState(350);
   const [stageY, setStageY] = useState(0);
 
   const [isZooming, setIsZooming] = useState(false);
-  const [coords, setCoords] = useState({})
   const [curLayer, setCurLayer] = useState(0)
 
   function getCenter(p1, p2) {
@@ -56,12 +56,12 @@ function BuildingMap() {
       }
 
       // local coordinates of center point
-      var pointTo = {
+      const pointTo = {
         x: (newCenter.x - stage.x()) / stage.scaleX(),
         y: (newCenter.y - stage.y()) / stage.scaleX(),
       };
 
-      var scale = stage.scaleX() * (dist / lastDistRef.current);
+      const scale = stage.scaleX() * (dist / lastDistRef.current);
 
       stage.scaleX(scale);
       stage.scaleY(scale);
@@ -102,12 +102,12 @@ function BuildingMap() {
 
     const newScale =
       e.evt.deltaY > 0
-        ? oldScale > 3
+        ? oldScale < 0.2
           ? oldScale
-          : oldScale * scaleBy
-        : oldScale < 0.2
+          : oldScale / scaleBy
+        : oldScale > 3
           ? oldScale
-          : oldScale / scaleBy;
+          : oldScale * scaleBy;
 
     setStageScale(newScale);
     setStageX(
@@ -138,33 +138,89 @@ function BuildingMap() {
     if (isZooming) {
       stage.stopDrag();
     }
-
-    console.log(stage.isDragging());
   };
 
-  const renderedLayers = useMemo(() => (
+
+  const [selectedRoom, setSelectedRoom] = useState("")
+  const [points, setPoints] = useState([]);
+  const [linePoints, setLinePoints] = useState([0, 0, 0, 0]);
+  const [lines, setLines] = useState([]);
+
+
+
+  const handleAddPoint = () => {
+    const point = {id: points.length, x: 1, y: 1};
+    setPoints([...points, point])
+  }
+
+  const [hasPointSelected, setHasPointSelected] = useState(false);
+  const pointRef= useRef(null);
+
+  useEffect(() => {
+    const updateLine = () => {
+      if (pointRef.current) {
+        setLinePoints([0, 0, pointRef.current.x(), pointRef.current.y()]);
+      }
+    };
+
+    updateLine();
+  }, [pointRef.current?.attrs?.x, pointRef.current?.attrs?.y]);
+
+
+  const handleRoomSelect = (data) => {
+    setSelectedRoom(data)
+  }
+
+  const renderedRooms = useMemo(() => (
     layers[curLayer]?.floors.map(floor => (
       floor.rooms.map(room => (
-        <Rect key={room.id}
-              x={room.x}
-              y={room.y}
-              fill="white"
-              width={room.width}
-              height={room.height}
-              stroke="black"
-              strokeWidth={1}
-              onClick={() => alert(room.id)}
-        />
+        <React.Fragment key={room.id}>
+          <Rect
+            x={room.x}
+            y={room.y}
+            width={room.width}
+            height={room.height}
+            stroke="black"
+            strokeWidth={1}
+            onClick={() => handleRoomSelect(room.id)}
+            onTouchStart={() => handleRoomSelect(room.id)}
+            draggable
+          />
+          <Text
+            x={room.x + room.width / 2}
+            y={room.y + room.height / 2}
+            offsetX={room.width / 4}
+            offsetY={7}
+            text={room.id}
+            fontSize={14}
+            fill="black"
+          />
+        </React.Fragment>
       ))
     ))
   ), [curLayer, layers]);
 
+  const renderedWalls = useMemo(() => (
+    layers[curLayer]?.floors.map(floor => (
+      floor.paths.map(path => (
+        <Path
+          key={path.id}
+          data={path.d}
+          stroke={path.stroke}
+          strokeWidth={1}
+        >
+
+        </Path>
+      ))
+    ))
+  ), [curLayer, layers]);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  const clickHandler = () => {
+
+  const floorSwitchHandler = () => {
     if (curLayer === 4) {
       setCurLayer(0)
     } else {
@@ -172,12 +228,20 @@ function BuildingMap() {
     }
   }
 
+
+
+
   return (
     <>
-      <button onClick={clickHandler}>change layer</button>
+      <div>selected room: {selectedRoom}</div>
+      <button onClick={handleAddPoint}>add point</button>
+      <button onClick={floorSwitchHandler}>change layer</button>
       <Stage height={window.innerHeight}
              width={window.innerWidth}
              onWheel={handleWheel}
+             onTap={() => {
+               setSelectedRoom()
+             }}
              onTouchMove={handleMultiTouch}
              onTouchEnd={multiTouchEnd}
              onDragStart={handleDragStart}
@@ -188,7 +252,25 @@ function BuildingMap() {
              draggable
       >
         <Layer>
-          {renderedLayers}
+          {renderedWalls}
+          {renderedRooms}
+          {points.map(point => (
+            <Circle
+              key={point.id}
+              x={point.x}
+              y={point.y}
+              onDragEnd={() => console.log(pointRef.current.attrs.x, pointRef.current.attrs.y)}
+              ref={pointRef}
+              width={40}
+              fill={"red"}
+              draggable
+            />
+          ))}
+          <Line
+            points={linePoints}
+            stroke={"red"}
+            strokeWidth={2}
+          />
         </Layer>
       </Stage>
     </>

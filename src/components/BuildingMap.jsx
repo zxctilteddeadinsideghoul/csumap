@@ -28,6 +28,7 @@ function BuildingMap() {
     const stage = e.target.getStage();
 
     if (touch1 && touch2) {
+        stage.stopDrag();
       setIsZooming(true);
 
       const p1 = {
@@ -39,10 +40,11 @@ function BuildingMap() {
         y: touch2.clientY,
       };
 
-      if (!lastCenterRef.current) {
-        lastCenterRef.current = getCenter(p1, p2);
-        return;
-      }
+        if (!lastCenterRef.current || !lastDistRef.current) {
+            lastCenterRef.current = getCenter(p1, p2);
+            lastDistRef.current = getDistance(p1, p2);
+            return;
+        }
       const newCenter = getCenter(p1, p2);
 
       function getDistance(p1, p2) {
@@ -101,7 +103,7 @@ function BuildingMap() {
     };
 
     const newScale =
-      e.evt.deltaY > 0
+      e.evt.deltaY < 0
         ? oldScale > 3
           ? oldScale
           : oldScale * scaleBy

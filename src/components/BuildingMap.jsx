@@ -1,8 +1,9 @@
 import {Layer, Path, Rect, Stage, Text} from "react-konva";
 import {use, useEffect, useMemo, useRef, useState} from "react";
 import RoomInfoModal from "./RoomInfoModal.jsx";
+import '../BuildingMap.css'
 
-function BuildingMap() {
+function BuildingMap({ isMapActive }) {
   const [stageScale, setStageScale] = useState(0.5);
   const [stageX, setStageX] = useState(0);
   const [stageY, setStageY] = useState(0);
@@ -22,6 +23,7 @@ function BuildingMap() {
   const lastDistRef = useRef(0);
 
   const handleMultiTouch = (e) => {
+    if (!isMapActive) return;
     e.evt.preventDefault();
 
     var touch1 = e.evt.touches[0];
@@ -93,6 +95,7 @@ function BuildingMap() {
   };
 
   const handleWheel = (e) => {
+    if (!isMapActive) return;
     e.evt.preventDefault();
 
     const scaleBy = 1.2;
@@ -125,6 +128,7 @@ function BuildingMap() {
   const [loading, setLoading] = useState(true);
   const [selectedRoom, setSelectedRoom] = useState(null);
 
+
   useEffect(() => {
     fetch("https://staticstorm.ru/map/map_data").then((response) => {
         response.json().then(
@@ -137,6 +141,7 @@ function BuildingMap() {
     );
   }, []);
   const handleDragStart = (e) => {
+    if (!isMapActive) return;
     const stage = e.target.getStage();
 
     if (isZooming) {
@@ -148,16 +153,19 @@ function BuildingMap() {
 
   //темка для модалки
   const handleRoomClick = (room) => {
+    if (!isMapActive) return;
     setSelectedRoom(room);
   };
 
   const handleTouchRoom = (e, room) => {
+    if (!isMapActive) return;
     e.evt.preventDefault(); // Предотвращаем стандартное поведение на мобильных устройствах
     handleRoomClick(room);
   };
 
-  const handleLayerChange = (event) => {
-    setCurLayer(parseInt(event.target.value, 10)); // Обновляем текущий этаж
+  const handleLayerChange = (layerIndex) => {
+    if (!isMapActive) return;
+    setCurLayer(layerIndex);
   };
 
   const renderedLayers = useMemo(() => (
@@ -186,19 +194,16 @@ function BuildingMap() {
 
   return (
     <>
-      <div>
-        <label htmlFor="layer-select">Выберите этаж: </label>
-        <select
-            id="layer-select"
-            value={curLayer}
-            onChange={handleLayerChange} // Обработчик изменения этажа
-        >
-          <option value="4">0 этаж</option>
-          <option value="0" selected="selected">1 этаж</option>
-          <option value="1">2 этаж</option>
-          <option value="2">3 этаж</option>
-          <option value="3">4 этаж</option>
-        </select>
+      <div className="floor-buttons">
+        {[4, 0, 1, 2, 3].map((layerIndex) => (
+            <button
+                key={layerIndex}
+                className={`floor-button ${curLayer === layerIndex ? 'active' : ''}`}
+                onClick={() => handleLayerChange(layerIndex)}
+            >
+              {layerIndex === 4 ? '0' : `${layerIndex + 1}`}
+            </button>
+        ))}
       </div>
       <Stage height={window.innerHeight}
              width={window.innerWidth}

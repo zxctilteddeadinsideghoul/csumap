@@ -13,7 +13,8 @@
     "konva": "^9.3.19",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-konva": "^19.0.3"
+    "react-konva": "^19.0.3",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

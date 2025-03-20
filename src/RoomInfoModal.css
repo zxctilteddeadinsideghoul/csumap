@@ -1,24 +1,33 @@
-/* RoomInfoModal.css */
 .modal-overlay {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    padding: 2rem;
+    top: 0;
+    right: -100%;
+    bottom: -100%;
+    width: 300px;
+    height: auto;
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Выравнивание по нижнему краю */
-    z-index: 1000; /* Чтобы окно было поверх канвы */
+    align-items: flex-start;
+    z-index: 1000;
+    transition: right 0.3s ease-in-out, bottom 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+.modal-overlay.visible {
+    right: 0;
+    bottom: 0;
 }
 
 .modal-content {
     background-color: white;
     padding: 20px;
-    width: 100%; /* Окно будет по ширине страницы */
-    max-width: 100%; /* Максимальная ширина окна */
-    box-sizing: border-box; /* Чтобы padding не выходил за пределы окна */
+    width: 100%;
+    box-sizing: border-box;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative; /* Для позиционирования крестика */
+    position: relative;
+    border-radius: 10px;
+    pointer-events: auto;
 }
 
 .close-button {
@@ -33,30 +42,42 @@
 }
 
 h2 {
-    margin-top: 0; /* Убираем отступ сверху */
+    margin-top: 0;
 }
 
-/* Адаптивные стили для мобильных устройств */
 @media (max-width: 768px) {
+    .modal-overlay {
+        padding: 0px;
+        right: 0;
+        width: 100%;
+        height: auto;
+        align-items: flex-end;
+        bottom: -100%;
+        background-color: transparent;
+        z-index: 1003;
+    }
+
     .modal-content {
-        padding: 15px; /* Меньше отступов на мобильных */
+        width: 100%;
+        border-radius: 8px 8px 0 0;
+        background-color: white;
     }
 
     .close-button {
         top: 5px;
         right: 5px;
-        font-size: 18px; /* Уменьшаем размер крестика на мобильных */
+        font-size: 18px;
     }
 }
 
 @media (max-width: 480px) {
     .modal-content {
-        padding: 10px; /* Еще меньше отступов на маленьких экранах */
+        padding: 10px;
     }
 
     .close-button {
         top: 5px;
         right: 5px;
-        font-size: 16px; /* Уменьшаем размер крестика еще больше */
+        font-size: 16px;
     }
 }

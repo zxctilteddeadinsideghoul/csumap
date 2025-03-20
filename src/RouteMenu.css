@@ -26,6 +26,8 @@
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .route-menu button {
@@ -41,4 +43,37 @@
 
 .route-menu button:hover {
     background-color: #0056b3;
+}
+
+.react-select-container {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.react-select__control {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-height: 38px;
+}
+
+.react-select__menu {
+    max-height: 350px; /* Ограничиваем высоту меню */
+    overflow-y: auto; /* Добавляем прокрутку */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px; /* Отступ сверху */
+}
+
+.react-select__menu-list {
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+.react-select__option {
+    padding: 8px 12px; /* Отступы для элементов списка */
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.react-select__option:hover {
+    background-color: #f0f0f0; /* Эффект при наведении */
 }

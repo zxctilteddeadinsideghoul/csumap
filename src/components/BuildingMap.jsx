@@ -2,6 +2,8 @@ import {Layer, Path, Rect, Stage, Text} from "react-konva";
 import {use, useEffect, useMemo, useRef, useState} from "react";
 import RoomInfoModal from "./RoomInfoModal.jsx";
 import '../BuildingMap.css'
+import useStore from './store.jsx';
+
 
 function BuildingMap({ isMapActive }) {
   const [stageScale, setStageScale] = useState(0.5);
@@ -131,15 +133,19 @@ function BuildingMap({ isMapActive }) {
 
   useEffect(() => {
     fetch("https://staticstorm.ru/map/map_data").then((response) => {
-        response.json().then(
-          (response) => {
-            setLayers([...response.buildings])
-            setLoading(false)
-          }
-        )
-      }
-    );
+      response.json().then((response) => {
+        setLayers([...response.buildings]);
+        setLoading(false);
+
+        // Сохраняем все кабинеты в глобальное состояние
+        const allRooms = response.buildings.flatMap(building =>
+            building.floors.flatMap(floor => floor.rooms)
+        );
+        useStore.getState().setRooms(allRooms);
+      });
+    });
   }, []);
+
   const handleDragStart = (e) => {
     if (!isMapActive) return;
     const stage = e.target.getStage();

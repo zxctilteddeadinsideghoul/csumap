@@ -1,0 +1,14 @@
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    overflow: hidden;
+}
+
+.fullscreen {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #ffffff;
+}

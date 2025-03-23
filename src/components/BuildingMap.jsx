@@ -8,7 +8,7 @@ function BuildingMap() {
   const [stageY, setStageY] = useState(0);
 
   const [isZooming, setIsZooming] = useState(false);
-  const [curLayer, setCurLayer] = useState(0)
+  const [curLayer, setCurLayer] = useState(4)
 
   function getCenter(p1, p2) {
     return {
@@ -55,7 +55,6 @@ function BuildingMap() {
         lastDistRef.current = dist;
       }
 
-      // local coordinates of center point
       const pointTo = {
         x: (newCenter.x - stage.x()) / stage.scaleX(),
         y: (newCenter.y - stage.y()) / stage.scaleX(),
@@ -66,7 +65,6 @@ function BuildingMap() {
       stage.scaleX(scale);
       stage.scaleY(scale);
 
-      // calculate new position of the stage
       const dx = newCenter.x - lastCenterRef.current.x;
       const dy = newCenter.y - lastCenterRef.current.y;
 
@@ -122,16 +120,18 @@ function BuildingMap() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://staticstorm.ru/map/map_data").then((response) => {
+    fetch("https://staticstorm.ru/map/map_data2").then((response) => {
         response.json().then(
           (response) => {
-            setLayers([...response.buildings])
+            setLayers(response.layers)
             setLoading(false)
           }
         )
       }
     );
   }, []);
+
+
   const handleDragStart = (e) => {
     const stage = e.target.getStage();
 
@@ -142,49 +142,62 @@ function BuildingMap() {
 
 
   const [selectedRoom, setSelectedRoom] = useState("")
-  const [points, setPoints] = useState([]);
-  const [linePoints, setLinePoints] = useState([0, 0, 0, 0]);
-  const [lines, setLines] = useState([]);
 
+  const stageRef = useRef(null)
 
-
-  const handleAddPoint = () => {
-    const point = {id: points.length, x: 1, y: 1};
-    setPoints([...points, point])
-  }
-
-  const [hasPointSelected, setHasPointSelected] = useState(false);
-  const pointRef= useRef(null);
-
-  useEffect(() => {
-    const updateLine = () => {
-      if (pointRef.current) {
-        setLinePoints([0, 0, pointRef.current.x(), pointRef.current.y()]);
-      }
-    };
-
-    updateLine();
-  }, [pointRef.current?.attrs?.x, pointRef.current?.attrs?.y]);
 
 
   const handleRoomSelect = (data) => {
     setSelectedRoom(data)
   }
 
+  const renderedWalls = useMemo(() =>
+    (layers[curLayer]?.walls.map(wall => (
+      <Path
+        data={wall.data}
+        stroke={"black"}
+      />
+    ))),
+  )
+
+  const renderedIcons = useMemo(() => (
+    layers[curLayer]?.vectors.map((vector) => (
+      <Path
+        data={vector.data}
+        stroke={"black"}
+        strokeWidth={1}
+      />
+    ))
+  ))
+
+
   const renderedRooms = useMemo(() => (
-    layers[curLayer]?.floors.map(floor => (
-      floor.rooms.map(room => (
+    layers[curLayer]?.rooms.map(room => {
+      if (room.x === undefined) {
+        return (
+
+          <Path
+            key={room.id}
+            id={room.id}
+            data={room.data}
+            stroke={"black"}
+            strokeWidth={1}
+          />
+
+        )
+      }
+      return (
         <React.Fragment key={room.id}>
           <Rect
+            id={room.id}
             x={room.x}
             y={room.y}
             width={room.width}
             height={room.height}
             stroke="black"
             strokeWidth={1}
-            onClick={() => handleRoomSelect(room.id)}
-            onTouchStart={() => handleRoomSelect(room.id)}
-            draggable
+            onClick={() => {}}
+            onTouchStart={() => alert(room.id)}
           />
           <Text
             x={room.x + room.width / 2}
@@ -196,24 +209,11 @@ function BuildingMap() {
             fill="black"
           />
         </React.Fragment>
-      ))
-    ))
+      );
+    })
+
   ), [curLayer, layers]);
 
-  const renderedWalls = useMemo(() => (
-    layers[curLayer]?.floors.map(floor => (
-      floor.paths.map(path => (
-        <Path
-          key={path.id}
-          data={path.d}
-          stroke={path.stroke}
-          strokeWidth={1}
-        >
-
-        </Path>
-      ))
-    ))
-  ), [curLayer, layers]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -229,19 +229,14 @@ function BuildingMap() {
   }
 
 
-
-
   return (
     <>
       <div>selected room: {selectedRoom}</div>
-      <button onClick={handleAddPoint}>add point</button>
       <button onClick={floorSwitchHandler}>change layer</button>
       <Stage height={window.innerHeight}
              width={window.innerWidth}
+             ref={stageRef}
              onWheel={handleWheel}
-             onTap={() => {
-               setSelectedRoom()
-             }}
              onTouchMove={handleMultiTouch}
              onTouchEnd={multiTouchEnd}
              onDragStart={handleDragStart}
@@ -254,23 +249,7 @@ function BuildingMap() {
         <Layer>
           {renderedWalls}
           {renderedRooms}
-          {points.map(point => (
-            <Circle
-              key={point.id}
-              x={point.x}
-              y={point.y}
-              onDragEnd={() => console.log(pointRef.current.attrs.x, pointRef.current.attrs.y)}
-              ref={pointRef}
-              width={40}
-              fill={"red"}
-              draggable
-            />
-          ))}
-          <Line
-            points={linePoints}
-            stroke={"red"}
-            strokeWidth={2}
-          />
+          {renderedIcons}
         </Layer>
       </Stage>
     </>

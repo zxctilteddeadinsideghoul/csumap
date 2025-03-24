@@ -62,35 +62,52 @@ function MapRedactor() {
         /^museum_\d+$/.test(id) ||
         /^cash_\d+$/.test(id)
       ) {
-        groups.vectors.push(path.attrs); // Используем только attrs
+        groups.vectors.push({
+          ...path.attrs,
+          type: "icon"
+        });
       } else if (
         /^(rt\d+_m\d+_\d+|t\d+_m\d+_\d+|[ar]_[a-z\d]+|r\d+[a-z\d]*|rt\d+_[wm]\d+|t\d+_w\d+_\d+)$/.test(id)
       ) {
         groups.rooms.push({
           ...path.attrs,
+          type: "room_vectorized",
           name: id,
           description: "",
           workingtime: ""
         });
       } else if (/^(a_walls\d+|grates\d*|undefined|walls\d+)$/.test(id)) {
-        groups.walls.push(path.attrs);
+        groups.walls.push({
+          ...path.attrs,
+          type: "wall"
+        });
       } else if (/^inside_roads\d*$/.test(id)) {
-        groups.roads.push(path.attrs);
+        groups.roads.push({
+          ...path.attrs,
+          type: "road"
+        });
       } else {
-        groups.others.push(path.attrs);
+        groups.others.push({
+          ...path.attrs,
+          type: "other"
+        });
       }
     });
 
-    rects.forEach((rect) => {
+    rects.forEach(rect => {
       if (rect.attrs.id) {
         groups.rooms.push({
           ...rect.attrs,
+          type: "room",
           name: rect.attrs.id,
           description: "",
           workingTime: ""
         });
       } else {
-        groups.vectors.push(rect.attrs);
+        groups.vectors.push({
+          ...rect.attrs,
+          type: "icon_box"
+        });
       }
     });
 
@@ -104,7 +121,7 @@ function MapRedactor() {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/save", {
+      const response = await fetch("http://127.0.0.1:5000/save", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +144,7 @@ function MapRedactor() {
 
 
   useEffect(() => {
-    fetch("https://staticstorm.ru/map/map_data2").then((response) => {
+    fetch("http://127.0.0.1:5000/map_data").then((response) => {
         response.json().then(
           (response) => {
             setLayers(response.layers)
@@ -141,8 +158,12 @@ function MapRedactor() {
   const renderedWalls = useMemo(() =>
     (layers[curLayer]?.walls.map(wall => (
       <Path
+        key={wall.data}
+        x={wall.x || null}
+        y={wall.y || null}
         data={wall.data}
         stroke={"black"}
+        draggable
       />
     ))),
   )
@@ -150,7 +171,10 @@ function MapRedactor() {
   const renderedIcons = useMemo(() => (
     layers[curLayer]?.vectors.map((vector) => (
       <Path
+        key={vector.data}
         data={vector.data}
+        x={vector.x || null}
+        y={vector.y || null}
         stroke={"gray"}
         strokeWidth={1}
         draggable
@@ -211,7 +235,13 @@ function MapRedactor() {
       <button onClick={() => layers[0].rooms.forEach((room) => console.log(room.x))}>
         print
       </button>
-      <button onClick={() => {}}></button>
+      <button onClick={handleSave}>
+        save
+      </button>
+      <button onClick={sendData}>
+        send
+      </button>
+      <button onClick={() => {setCurLayer(curLayer+1)}}>changeLayer</button>
       <Stage height={window.innerHeight}
              width={window.innerWidth}
              ref={stageRef} //(el) => {stageRef.current[curLayer] = el}

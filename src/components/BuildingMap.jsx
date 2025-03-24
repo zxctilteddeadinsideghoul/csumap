@@ -1,13 +1,17 @@
-import {Circle, Layer, Line, Path, Rect, Stage, Text} from "react-konva";
-import React from "react";
+import {Layer, Path, Rect, Stage, Text} from "react-konva";
 import {useEffect, useMemo, useRef, useState} from "react";
+import RoomInfoModal from "./RoomInfoModal.jsx";
+import '../BuildingMap.css'
+import useStore from './store.jsx';
 
-function BuildingMap() {
-  const [stageScale, setStageScale] = useState(0.3);
-  const [stageX, setStageX] = useState(350);
+
+function BuildingMap({ isMapActive }) {
+  const [stageScale, setStageScale] = useState(0.5);
+  const [stageX, setStageX] = useState(0);
   const [stageY, setStageY] = useState(0);
 
   const [isZooming, setIsZooming] = useState(false);
+  const [coords, setCoords] = useState({})
   const [curLayer, setCurLayer] = useState(0)
 
   function getCenter(p1, p2) {
@@ -21,6 +25,7 @@ function BuildingMap() {
   const lastDistRef = useRef(0);
 
   const handleMultiTouch = (e) => {
+    if (!isMapActive) return;
     e.evt.preventDefault();
 
     var touch1 = e.evt.touches[0];
@@ -28,6 +33,7 @@ function BuildingMap() {
     const stage = e.target.getStage();
 
     if (touch1 && touch2) {
+        stage.stopDrag();
       setIsZooming(true);
 
       const p1 = {
@@ -39,10 +45,11 @@ function BuildingMap() {
         y: touch2.clientY,
       };
 
-      if (!lastCenterRef.current) {
-        lastCenterRef.current = getCenter(p1, p2);
-        return;
-      }
+        if (!lastCenterRef.current || !lastDistRef.current) {
+            lastCenterRef.current = getCenter(p1, p2);
+            lastDistRef.current = getDistance(p1, p2);
+            return;
+        }
       const newCenter = getCenter(p1, p2);
 
       function getDistance(p1, p2) {
@@ -56,12 +63,12 @@ function BuildingMap() {
       }
 
       // local coordinates of center point
-      const pointTo = {
+      var pointTo = {
         x: (newCenter.x - stage.x()) / stage.scaleX(),
         y: (newCenter.y - stage.y()) / stage.scaleX(),
       };
 
-      const scale = stage.scaleX() * (dist / lastDistRef.current);
+      var scale = stage.scaleX() * (dist / lastDistRef.current);
 
       stage.scaleX(scale);
       stage.scaleY(scale);
@@ -90,6 +97,7 @@ function BuildingMap() {
   };
 
   const handleWheel = (e) => {
+    if (!isMapActive) return;
     e.evt.preventDefault();
 
     const scaleBy = 1.2;
@@ -101,13 +109,13 @@ function BuildingMap() {
     };
 
     const newScale =
-      e.evt.deltaY > 0
-        ? oldScale < 0.2
+      e.evt.deltaY < 0
+        ? oldScale > 3
           ? oldScale
-          : oldScale / scaleBy
-        : oldScale > 3
+          : oldScale * scaleBy
+        : oldScale < 0.2
           ? oldScale
-          : oldScale * scaleBy;
+          : oldScale / scaleBy;
 
     setStageScale(newScale);
     setStageX(
@@ -120,128 +128,92 @@ function BuildingMap() {
 
   const [layers, setLayers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRoom, setSelectedRoom] = useState(null);
+
 
   useEffect(() => {
     fetch("https://staticstorm.ru/map/map_data").then((response) => {
-        response.json().then(
-          (response) => {
-            setLayers([...response.buildings])
-            setLoading(false)
-          }
-        )
-      }
-    );
+      response.json().then((response) => {
+        setLayers([...response.buildings]);
+        setLoading(false);
+
+        // Сохраняем все кабинеты в глобальное состояние
+        const allRooms = response.buildings.flatMap(building =>
+            building.floors.flatMap(floor => floor.rooms)
+        );
+        useStore.getState().setRooms(allRooms);
+      });
+    });
   }, []);
+
   const handleDragStart = (e) => {
+    if (!isMapActive) return;
     const stage = e.target.getStage();
 
     if (isZooming) {
       stage.stopDrag();
     }
+
+    console.log(stage.isDragging());
   };
 
+  //темка для модалки
+  const handleRoomClick = (room) => {
+    if (!isMapActive) return;
+    setSelectedRoom(room);
+  };
 
-  const [selectedRoom, setSelectedRoom] = useState("")
-  const [points, setPoints] = useState([]);
-  const [linePoints, setLinePoints] = useState([0, 0, 0, 0]);
-  const [lines, setLines] = useState([]);
+  const handleTouchRoom = (e, room) => {
+    if (!isMapActive) return;
+    e.evt.preventDefault(); // Предотвращаем стандартное поведение на мобильных устройствах
+    handleRoomClick(room);
+  };
 
+  const handleLayerChange = (layerIndex) => {
+    if (!isMapActive) return;
+    setCurLayer(layerIndex);
+  };
 
-
-  const handleAddPoint = () => {
-    const point = {id: points.length, x: 1, y: 1};
-    setPoints([...points, point])
-  }
-
-  const [hasPointSelected, setHasPointSelected] = useState(false);
-  const pointRef= useRef(null);
-
-  useEffect(() => {
-    const updateLine = () => {
-      if (pointRef.current) {
-        setLinePoints([0, 0, pointRef.current.x(), pointRef.current.y()]);
-      }
-    };
-
-    updateLine();
-  }, [pointRef.current?.attrs?.x, pointRef.current?.attrs?.y]);
-
-
-  const handleRoomSelect = (data) => {
-    setSelectedRoom(data)
-  }
-
-  const renderedRooms = useMemo(() => (
+  const renderedLayers = useMemo(() => (
     layers[curLayer]?.floors.map(floor => (
       floor.rooms.map(room => (
-        <React.Fragment key={room.id}>
-          <Rect
-            x={room.x}
-            y={room.y}
-            width={room.width}
-            height={room.height}
-            stroke="black"
-            strokeWidth={1}
-            onClick={() => handleRoomSelect(room.id)}
-            onTouchStart={() => handleRoomSelect(room.id)}
-            draggable
-          />
-          <Text
-            x={room.x + room.width / 2}
-            y={room.y + room.height / 2}
-            offsetX={room.width / 4}
-            offsetY={7}
-            text={room.id}
-            fontSize={14}
-            fill="black"
-          />
-        </React.Fragment>
+        <Rect key={room.id}
+              x={room.x}
+              y={room.y}
+              fill="white"
+              width={room.width}
+              height={room.height}
+              stroke="black"
+              strokeWidth={1}
+              onClick={() => handleRoomClick(room)}
+              onTap={(e) => handleTouchRoom(e, room)}
+        />
       ))
     ))
   ), [curLayer, layers]);
 
-  const renderedWalls = useMemo(() => (
-    layers[curLayer]?.floors.map(floor => (
-      floor.paths.map(path => (
-        <Path
-          key={path.id}
-          data={path.d}
-          stroke={path.stroke}
-          strokeWidth={1}
-        >
-
-        </Path>
-      ))
-    ))
-  ), [curLayer, layers]);
 
   if (loading) {
     return <div>Loading...</div>;
   }
-
-
-  const floorSwitchHandler = () => {
-    if (curLayer === 4) {
-      setCurLayer(0)
-    } else {
-      setCurLayer(curLayer + 1);
-    }
-  }
-
-
-
+  
 
   return (
     <>
-      <div>selected room: {selectedRoom}</div>
-      <button onClick={handleAddPoint}>add point</button>
-      <button onClick={floorSwitchHandler}>change layer</button>
+      <div className="floor-buttons">
+        {[4, 0, 1, 2, 3].map((layerIndex) => (
+            <button
+                key={layerIndex}
+                className={`floor-button ${curLayer === layerIndex ? 'active' : ''}`}
+                onClick={() => handleLayerChange(layerIndex)}
+            >
+              {layerIndex === 4 ? '0' : `${layerIndex + 1}`}
+            </button>
+        ))}
+      </div>
       <Stage height={window.innerHeight}
              width={window.innerWidth}
              onWheel={handleWheel}
-             onTap={() => {
-               setSelectedRoom()
-             }}
              onTouchMove={handleMultiTouch}
              onTouchEnd={multiTouchEnd}
              onDragStart={handleDragStart}
@@ -252,27 +224,10 @@ function BuildingMap() {
              draggable
       >
         <Layer>
-          {renderedWalls}
-          {renderedRooms}
-          {points.map(point => (
-            <Circle
-              key={point.id}
-              x={point.x}
-              y={point.y}
-              onDragEnd={() => console.log(pointRef.current.attrs.x, pointRef.current.attrs.y)}
-              ref={pointRef}
-              width={40}
-              fill={"red"}
-              draggable
-            />
-          ))}
-          <Line
-            points={linePoints}
-            stroke={"red"}
-            strokeWidth={2}
-          />
+          {renderedLayers}
         </Layer>
       </Stage>
+      <RoomInfoModal room={selectedRoom} onClose={() => setSelectedRoom(null)} />
     </>
   );
 

@@ -1,0 +1,28 @@
+.floor-buttons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.floor-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.floor-button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.floor-button:hover {
+    background-color: #ddd;
+}

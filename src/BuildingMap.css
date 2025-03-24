@@ -1,28 +1,60 @@
 .floor-buttons {
     position: fixed;
-    top: 20px;
+    top: 220px;
     left: 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     z-index: 1000;
 }
 
 .floor-button {
-    padding: 10px 20px;
-    font-size: 16px;
+    height: 43px;
+    width: 43px;
+    padding: 10px 15px;
+    font-size: 20px;
+    text-align: center;
     border: none;
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 4px #00000040;
     transition: background-color 0.3s ease;
 }
 
 .floor-button.active {
-    background-color: #007bff;
+    background-color: #d6322d;
     color: white;
 }
 
 .floor-button:hover {
-    background-color: #ddd;
+    background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+    .floor-buttons {
+        top: 150px;
+        left: 10px;
+    }
+
+    .floor-button {
+        height: 43px;
+        width: 43px;
+        font-size: 16px;
+        background-color: #ffffff;
+    }
+}
+
+@media (max-width: 480px) {
+    .floor-buttons {
+        top: 120px;
+    }
+
+    .floor-button {
+        height: 43px;
+        width: 43px;
+        font-size: 14px;
+        color: black;
+        background-color: #ffffff;
+    }
 }

@@ -6,12 +6,20 @@ import useStore from './store.jsx';
 
 
 function BuildingMap({isMapActive}) {
-    const [stageScale, setStageScale] = useState(0.5);
-    const [stageX, setStageX] = useState(0);
-    const [stageY, setStageY] = useState(0);
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    const [stageScale, setStageScale] = useState(isMobileDevice() ? 0.3 : 0.5);
+    const [stageX, setStageX] = useState(isMobileDevice() ? -80 : 250);
+    const [stageY, setStageY] = useState(isMobileDevice()? 0 : -150);
 
     const [isZooming, setIsZooming] = useState(false);
     const [curLayer, setCurLayer] = useState(0)
+
+    const [layers, setLayers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedRoom, setSelectedRoom] = useState(null);
 
     function getCenter(p1, p2) {
         return {
@@ -127,10 +135,6 @@ function BuildingMap({isMapActive}) {
             -(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale
         );
     };
-
-    const [layers, setLayers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [selectedRoom, setSelectedRoom] = useState(null);
 
     useEffect(() => {
         fetch("https://staticstorm.ru/map/map_data2").then((response) => {

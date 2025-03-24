@@ -185,12 +185,14 @@ function MapRedactor() {
 
   const renderedRooms = useMemo(() => (
     layers[curLayer]?.rooms.map(room => {
-      if (room.x === undefined) {
+      if (room.type === "room_vectorized") {
         return (
 
             <Path
               key={room.id}
               id={room.id}
+              x={room.x || null}
+              y={room.y || null}
               data={room.data}
               stroke={"black"}
               strokeWidth={1}

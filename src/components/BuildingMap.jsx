@@ -13,36 +13,36 @@ function BuildingMap({isMapActive}) {
   const [isZooming, setIsZooming] = useState(false);
   const [curLayer, setCurLayer] = useState(0)
 
-  function getCenter(p1, p2) {
-    return {
-      x: (p1.x + p2.x) / 2,
-      y: (p1.y + p2.y) / 2,
-    };
-  }
+    function getCenter(p1, p2) {
+        return {
+            x: (p1.x + p2.x) / 2,
+            y: (p1.y + p2.y) / 2,
+        };
+    }
 
-  const lastCenterRef = useRef(null);
-  const lastDistRef = useRef(0);
+    const lastCenterRef = useRef(null);
+    const lastDistRef = useRef(0);
 
-  const handleMultiTouch = (e) => {
-    if (!isMapActive) return;
-    e.evt.preventDefault();
+    const handleMultiTouch = (e) => {
+        if (!isMapActive) return;
+        e.evt.preventDefault();
 
-    var touch1 = e.evt.touches[0];
-    var touch2 = e.evt.touches[1];
-    const stage = e.target.getStage();
+        const touch1 = e.evt.touches[0];
+        const touch2 = e.evt.touches[1];
+        const stage = e.target.getStage();
 
     if (touch1 && touch2) {
       stage.stopDrag();
       setIsZooming(true);
 
-      const p1 = {
-        x: touch1.clientX,
-        y: touch1.clientY,
-      };
-      const p2 = {
-        x: touch2.clientX,
-        y: touch2.clientY,
-      };
+            const p1 = {
+                x: touch1.clientX,
+                y: touch1.clientY,
+            };
+            const p2 = {
+                x: touch2.clientX,
+                y: touch2.clientY,
+            };
 
       if (!lastCenterRef.current || !lastDistRef.current) {
         lastCenterRef.current = getCenter(p1, p2);
@@ -61,7 +61,6 @@ function BuildingMap({isMapActive}) {
         lastDistRef.current = dist;
       }
 
-      // local coordinates of center point
       var pointTo = {
         x: (newCenter.x - stage.x()) / stage.scaleX(),
         y: (newCenter.y - stage.y()) / stage.scaleX(),
@@ -69,10 +68,13 @@ function BuildingMap({isMapActive}) {
 
       var scale = stage.scaleX() * (dist / lastDistRef.current);
 
+	  const minScale = 0.5; // Минимальный масштаб
+	  const maxScale = 3; // Максимальный масштаб
+	  scale = Math.max(minScale, Math.min(scale, maxScale));
+
       stage.scaleX(scale);
       stage.scaleY(scale);
 
-      // calculate new position of the stage
       const dx = newCenter.x - lastCenterRef.current.x;
       const dy = newCenter.y - lastCenterRef.current.y;
 
@@ -107,28 +109,45 @@ function BuildingMap({isMapActive}) {
       y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale,
     };
 
-    const newScale =
-      e.evt.deltaY < 0
-        ? oldScale > 3
-          ? oldScale
-          : oldScale * scaleBy
-        : oldScale < 0.2
-          ? oldScale
-          : oldScale / scaleBy;
+    const multiTouchEnd = () => {
+        lastCenterRef.current = null;
+        lastDistRef.current = 0;
+        setIsZooming(false);
+    };
 
-    setStageScale(newScale);
-    setStageX(
-      -(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale
-    );
-    setStageY(
-      -(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale
-    );
-  };
+    const handleWheel = (e) => {
+        if (!isMapActive) return;
+        e.evt.preventDefault();
 
-  const [layers, setLayers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedRoom, setSelectedRoom] = useState(null);
+        const scaleBy = 1.2;
+        const stage = e.target.getStage();
+        const oldScale = stage.scaleX();
+        const mousePointTo = {
+            x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
+            y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale,
+        };
 
+        const newScale =
+            e.evt.deltaY < 0
+                ? oldScale > 3
+                    ? oldScale
+                    : oldScale * scaleBy
+                : oldScale < 0.2
+                    ? oldScale
+                    : oldScale / scaleBy;
+
+        setStageScale(newScale);
+        setStageX(
+            -(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale
+        );
+        setStageY(
+            -(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale
+        );
+    };
+
+   const [layers, setLayers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedRoom, setSelectedRoom] = useState(null);
 
   useEffect(() => {
     fetch("https://staticstorm.ru/map/map_data2").then((response) => {
@@ -142,16 +161,18 @@ function BuildingMap({isMapActive}) {
     );
   }, []);
 
-  const handleDragStart = (e) => {
-    if (!isMapActive) return;
-    const stage = e.target.getStage();
+    const handleDragStart = (e) => {
+        if (!isMapActive) return;
+        const stage = e.target.getStage();
 
-    if (isZooming) {
-      stage.stopDrag();
-    }
+        if (isZooming) {
+            stage.stopDrag();
+        }
 
-    console.log(stage.isDragging());
-  };
+        console.log(stage.isDragging());
+    };
+
+
 
   //темка для модалки
   const handleRoomClick = (room) => {

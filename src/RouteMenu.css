@@ -21,59 +21,72 @@
     max-width: 400px;
 }
 
-.route-inputs input {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
 .route-menu button {
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #007bff;
+    background-color: #d6322d;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 50px;
     cursor: pointer;
 }
 
 .route-menu button:hover {
-    background-color: #0056b3;
+    background-color: #b52a25;
 }
 
-.react-select-container {
-    width: 100%;
-    margin-bottom: 10px;
+.route-select__control {
+    border: 2px solid #d6322d !important;
+    border-radius: 50px !important;
+    box-shadow: none !important;
 }
 
-.react-select__control {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    min-height: 38px;
+.route-select__control--is-focused {
+    border-color: #d6322d !important;
+    box-shadow: none !important;
 }
 
-.react-select__menu {
-    max-height: 350px; /* Ограничиваем высоту меню */
-    overflow-y: auto; /* Добавляем прокрутку */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-top: 5px; /* Отступ сверху */
-}
-
-.react-select__menu-list {
-    padding: 0; /* Убираем внутренние отступы */
-}
-
-.react-select__option {
-    padding: 8px 12px; /* Отступы для элементов списка */
+.route-select__placeholder {
+    color: #343434;
     font-size: 14px;
-    cursor: pointer;
 }
 
-.react-select__option:hover {
-    background-color: #f0f0f0; /* Эффект при наведении */
+.route-select__single-value {
+    color: #343434;
+    font-size: 14px;
+}
+
+.route-select__option--is-focused {
+    background-color: #db5b57 !important;
+    color: white !important;
+}
+
+.route-select__option--is-selected {
+    background-color: #db5b57 !important;
+    color: white !important;
+}
+
+@media (max-width: 768px) {
+    .route-menu {
+        padding: 15px;
+    }
+
+    .route-inputs {
+        width: 90%;
+    }
+
+    .route-menu button {
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .route-menu {
+        padding: 10px;
+    }
+
+    .route-menu button {
+        font-size: 14px;
+    }
 }

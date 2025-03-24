@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Select from 'react-select';
 import '../RouteMenu.css';
 import useStore from './store.jsx';
@@ -22,16 +22,16 @@ function RouteMenu() {
                     options={roomOptions}
                     value={from}
                     onChange={(selected) => setFrom(selected)}
-                    className="react-select-container"
-                    classNamePrefix="react-select"
+                    className="route-select"
+                    classNamePrefix="route-select"
                 />
                 <Select
                     placeholder="Куда"
                     options={roomOptions}
                     value={to}
                     onChange={(selected) => setTo(selected)}
-                    className="react-select-container"
-                    classNamePrefix="react-select"
+                    className="route-select"
+                    classNamePrefix="route-select"
                 />
             </div>
             <button onClick={() => alert(`Маршрут из ${from?.value} в ${to?.value}`)}>

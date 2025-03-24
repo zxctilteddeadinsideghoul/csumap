@@ -1,0 +1,127 @@
+.header {
+    position: fixed;
+    width: 90%;
+    max-width: 600px;
+    height: 60px;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%); /* Центрирование по горизонтали */
+    z-index: 1000;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+}
+
+.csulogo {
+    width: 130px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.search-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end; /* Прижимаем поиск к правому краю */
+    margin-left: 20px; /* Отступ между логотипом и поиском */
+}
+
+.header-select {
+    width: 100%;
+}
+
+.header-select__control {
+    border: 2px solid #d6322d !important;
+    border-radius: 15px !important;
+    min-height: 38px;
+    box-shadow: none !important;
+    width: 100%;
+}
+
+.header-select__control--is-focused {
+    border-color: #d6322d !important;
+    box-shadow: none !important;
+}
+
+.header-select__placeholder {
+    color: #343434;
+    font-size: 14px;
+}
+
+.header-select__single-value {
+    color: #343434;
+    font-size: 14px;
+}
+
+.header-select__menu {
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.header-select__menu-list {
+    padding: 0;
+}
+
+.header-select__option {
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.header-select__option:hover {
+    background-color: #f0f0f0;
+}
+
+.header-select__option--is-focused {
+    background-color: #db5b57 !important;
+    color: white !important;
+}
+
+.header-select__option--is-selected {
+    background-color: #db5b57 !important;
+    color: white !important;
+}
+
+@media (max-width: 768px) {
+    .header {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .csulogo {
+        width: 110px;
+        height: 25px;
+    }
+
+    .search-container {
+        margin-left: 10px;
+    }
+
+    .header-select__control {
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 10px;
+    }
+
+    .csulogo {
+        width: 110px;
+        height: 25px;
+    }
+
+    .search-container {
+        margin-left: 5px;
+    }
+
+    .header-select__control {
+        max-width: 400px;
+    }
+}

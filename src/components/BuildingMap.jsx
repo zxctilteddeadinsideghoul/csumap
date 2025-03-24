@@ -173,6 +173,9 @@ function BuildingMap({isMapActive}) {
   const renderedWalls = useMemo(() =>
     (layers[curLayer]?.walls.map(wall => (
       <Path
+        key={wall.data}
+        x={wall.x || null}
+        y={wall.y || null}
         data={wall.data}
         stroke={"black"}
       />
@@ -182,6 +185,8 @@ function BuildingMap({isMapActive}) {
   const renderedIcons = useMemo(() => (
     layers[curLayer]?.vectors.map((vector) => (
       <Path
+        x={vector.x || null}
+        y={vector.y || null}
         data={vector.data}
         stroke={"black"}
         strokeWidth={1}
@@ -191,10 +196,12 @@ function BuildingMap({isMapActive}) {
 
   const renderedRooms = useMemo(() => (
     layers[curLayer]?.rooms.map(room => {
-      if (room.x === undefined) {
+      if (room.type === "room_vectorized") {
         return (
 
           <Path
+            x={room.x || null}
+            y={room.y || null}
             key={room.id}
             id={room.id}
             data={room.data}

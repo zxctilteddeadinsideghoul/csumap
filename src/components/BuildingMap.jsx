@@ -137,7 +137,7 @@ function BuildingMap({isMapActive}) {
     };
 
     useEffect(() => {
-        fetch("https://staticstorm.ru/map/map_data2").then((response) => {
+        fetch("http://127.0.0.1:5000/map_data").then((response) => {
                 response.json().then(
                     (response) => {
                         setLayers(response.layers);
@@ -184,6 +184,7 @@ function BuildingMap({isMapActive}) {
         (layers[curLayer]?.walls.map(wall => (
             <Path
                 key={wall.data}
+                fill={"#E8E8E8"}
                 x={wall.x}
                 y={wall.y}
                 data={wall.data}
@@ -206,16 +207,17 @@ function BuildingMap({isMapActive}) {
 
     const renderedRooms = useMemo(() => (
         layers[curLayer]?.rooms.map(room => {
-            if (room.type === "room_vectorized") {
+            if (room.type === "vectorized_room") {
                 return (
 
                     <Path
                         key={room.id}
-                        x={room.x}
-                        y={room.y}
+                        x={room.x || null}
+                        y={room.y || null}
                         id={room.id}
                         data={room.data}
                         stroke={"black"}
+                        fill={"#D5D5D5"}
                         strokeWidth={1}
                         onClick={() => handleRoomClick(room)}
                         onTap={(e) => handleTouchRoom(e, room)}
@@ -232,6 +234,7 @@ function BuildingMap({isMapActive}) {
                         width={room.width}
                         height={room.height}
                         stroke="black"
+                        fill={"#D5D5D5"}
                         strokeWidth={1}
                         onClick={() => handleRoomClick(room)}
                         onTap={(e) => handleTouchRoom(e, room)}
@@ -281,8 +284,9 @@ function BuildingMap({isMapActive}) {
                    x={stageX}
                    y={stageY}
                    draggable
+                   style={{background: "#F3F3F4"}}
             >
-                <Layer>
+              <Layer>
                     {renderedWalls}
                     {renderedRooms}
                     {renderedIcons}

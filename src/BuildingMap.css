@@ -31,6 +31,11 @@
     background-color: #f0f0f0;
 }
 
+.floor-button.active:hover {
+    background-color: #d6322d;
+    color: white;
+}
+
 @media (max-width: 768px) {
     .floor-buttons {
         top: 150px;

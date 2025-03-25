@@ -123,7 +123,7 @@ function BuildingMap({isMapActive}) {
                 ? oldScale > 3
                     ? oldScale
                     : oldScale * scaleBy
-                : oldScale < 0.2
+                : oldScale < 0.4
                     ? oldScale
                     : oldScale / scaleBy;
 
@@ -140,8 +140,11 @@ function BuildingMap({isMapActive}) {
         fetch("https://staticstorm.ru/map/map_data2").then((response) => {
                 response.json().then(
                     (response) => {
-                        setLayers(response.layers)
-                        setLoading(false)
+                        setLayers(response.layers);
+                        setLoading(false);
+
+                        const allRooms = response.layers.flatMap(layer => layer.rooms);
+                        useStore.getState().setRooms(allRooms);
                     }
                 )
             }

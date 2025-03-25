@@ -137,7 +137,7 @@ function BuildingMap({isMapActive}) {
     };
 
     useEffect(() => {
-        fetch("http://127.0.0.1:5000/map_data").then((response) => {
+        fetch("https://staticstorm.ru/map/map_data2").then((response) => {
                 response.json().then(
                     (response) => {
                         setLayers(response.layers);

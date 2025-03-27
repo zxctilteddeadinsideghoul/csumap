@@ -48,6 +48,7 @@
     .bottom-menu {
         padding: 10px;
         gap: 10px;
+        bottom: -25px;
     }
 
     .bottom-menu button {

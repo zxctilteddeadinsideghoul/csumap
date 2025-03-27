@@ -240,10 +240,12 @@ function BuildingMap({isMapActive}) {
                         onTap={(e) => handleTouchRoom(e, room)}
                     />
                     <Text
-                        x={room.x + room.width / 2}
-                        y={room.y + room.height / 2}
-                        offsetX={room.width / 4}
-                        offsetY={7}
+                        x={room.x}
+                        y={room.y}
+                        width={room.width}
+                        height={room.height}
+                        align={'center'}
+                        verticalAlign={'middle'}
                         text={room.id}
                         fontSize={14}
                         fill="black"

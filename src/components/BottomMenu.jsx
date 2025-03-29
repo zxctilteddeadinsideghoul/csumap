@@ -1,20 +1,22 @@
-// BottomMenu.jsx
 import React from 'react';
 import RouteMenu from './RouteMenu.jsx';
 import SettingsMenu from './SettingsMenu.jsx';
 import '../BottomMenu.css';
+import useStore from './store.jsx';
 
-function BottomMenu({activeMenu, setActiveMenu}) {
+function BottomMenu() {
+    const {activeMenu, setActiveMenu} = useStore();
+
     const handleMapClick = () => {
-        setActiveMenu(null); // Закрываем все меню
+        setActiveMenu(null);
     };
 
     const handleRouteClick = () => {
-        setActiveMenu(activeMenu === 'route' ? null : 'route'); // Переключаем меню маршрута
+        setActiveMenu(activeMenu === 'route' ? null : 'route');
     };
 
     const handleSettingsClick = () => {
-        setActiveMenu(activeMenu === 'settings' ? null : 'settings'); // Переключаем меню настроек
+        setActiveMenu(activeMenu === 'settings' ? null : 'settings');
     };
 
     const getIconColor = (menuType) => {

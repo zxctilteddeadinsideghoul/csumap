@@ -1,22 +1,20 @@
 .modal-overlay {
     position: fixed;
-    padding: 2rem;
     top: 0;
+    padding: 1rem;
     right: -100%;
-    bottom: -100%;
-    width: 300px;
-    height: auto;
+    width: 400px;
+    height: 100%;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     z-index: 1000;
-    transition: right 0.3s ease-in-out, bottom 0.3s ease-in-out;
+    transition: right 0.3s ease-in-out;
     pointer-events: none;
 }
 
 .modal-overlay.visible {
     right: 0;
-    bottom: 0;
 }
 
 .modal-content {
@@ -28,6 +26,8 @@
     position: relative;
     border-radius: 15px;
     pointer-events: auto;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .close-button {
@@ -47,50 +47,91 @@
 
 h2 {
     margin-top: 0;
-    color: #343434;
+    color: #d6322d;
 }
 
 p {
-    color: #343434;
+    color: #d6322d;
+    margin: 8px;
 }
 
 p strong {
-    color: #d6322d;
+    color: #343434;
+}
+
+.route-buttons-container {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+    width: 100%
+}
+
+.route-button {
+    flex: 1;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.from-button {
+    background-color: #d6322d;
+    color: white;
+}
+
+.from-button:hover {
+    background-color: #b52a25;
+}
+
+.to-button {
+    background-color: #d6322d;
+    color: white;
+}
+
+.to-button:hover {
+    background-color: #b52a25;
 }
 
 @media (max-width: 768px) {
     .modal-overlay {
-        padding: 0px;
         right: 0;
         width: 100%;
         height: auto;
         align-items: flex-end;
         bottom: -100%;
-        background-color: transparent;
+        top: auto;
+        transition: bottom 0.3s ease-in-out;
+        padding-bottom: 0px;
         z-index: 1003;
     }
 
-    .modal-content {
-        width: 100%;
-        border-radius: 15px 15px 0 0;
-        background-color: white;
+    .modal-overlay.visible {
+        bottom: 20px; /* Появляется на 20px выше низа экрана */
+        right: 0;
     }
 
-    .close-button {
-        top: 5px;
-        right: 5px;
-        font-size: 18px;
+    .modal-content {
+        width: calc(100% - 40px); /* Уменьшаем ширину с отступами */
+        margin: 0 auto; /* Центрируем */
+        border-radius: 15px; /* Скругляем все углы */
+        max-height: 60vh;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15); /* Улучшаем тень */
+    }
+
+    .route-buttons-container {
+        gap: 8px;
+    }
+
+    .route-button {
+        padding: 5px;
     }
 }
 
 @media (max-width: 480px) {
-    .modal-content {
-        padding: 10px;
+    .modal-overlay.visible {
+        bottom: 5px;
     }
-
-    .close-button {
-        top: 5px;
-        right: 5px;
-        font-size: 16px;
+    .modal-content {
+        width: 100%;
     }
 }

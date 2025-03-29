@@ -8,10 +8,26 @@ function RouteMenu() {
     const [to, setTo] = useState(null);
     const rooms = useStore((state) => state.rooms);
 
+    const setFromRoom = useStore((state) => state.setFromRoom);
+    const setToRoom = useStore((state) => state.setToRoom);
+
     const roomOptions = rooms.map((room) => ({
         value: room.id,
-        label: room.id,
+        label: room.name ? `${room.name} (${room.id})` : room.id,
     }));
+
+    const handleBuildRoute = () => {
+        const findRoomById = (id) => rooms.find(r => r.id === id);
+
+        //СТАРОЕ__________________________________________________________________________
+        // const startRoomObject = from ? findRoomById(from.value) : null;
+        // const endRoomObject = to ? findRoomById(to.value) : null;
+        //СТАРОЕ__________________________________________________________________________
+        const startRoomObject = from ? rooms.find(r => r.id === from.value) : null;
+        const endRoomObject = to ? rooms.find(r => r.id === to.value) : null;
+        setFromRoom(startRoomObject);
+        setToRoom(endRoomObject);
+    };
 
     return (
         <div className="route-menu">
@@ -21,7 +37,8 @@ function RouteMenu() {
                     placeholder="Откуда"
                     options={roomOptions}
                     value={from}
-                    onChange={(selected) => setFrom(selected)}
+                    // onChange={(selected) => setFrom(selected)} -----------------------------------------------
+                    onChange={setFrom}
                     className="route-select"
                     classNamePrefix="route-select"
                 />
@@ -29,12 +46,13 @@ function RouteMenu() {
                     placeholder="Куда"
                     options={roomOptions}
                     value={to}
-                    onChange={(selected) => setTo(selected)}
+                    // onChange={(selected) => setTo(selected)}----------------------------------------------
+                    onChange={setTo}
                     className="route-select"
                     classNamePrefix="route-select"
                 />
             </div>
-            <button onClick={() => alert(`Маршрут из ${from?.value} в ${to?.value}`)}>
+            <button onClick={() =>{handleBuildRoute(); alert(`Маршрут из ${from?.value} в ${to?.value}`)}}>
                 Построить маршрут
             </button>
         </div>

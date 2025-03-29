@@ -21,6 +21,9 @@ function BuildingMap({isMapActive}) {
     const [loading, setLoading] = useState(true);
     const [selectedRoom, setSelectedRoom] = useState(null);
 
+    const {selectedSearchRoom} = useStore();
+    const stageRef = useRef(null);
+
     function getCenter(p1, p2) {
         return {
             x: (p1.x + p2.x) / 2,
@@ -150,6 +153,43 @@ function BuildingMap({isMapActive}) {
             }
         );
     }, []);
+
+    //для центрирования выбранной комнаты
+    useEffect(() => {
+        if (selectedSearchRoom) {
+            // Переключение этажа если нужно
+            const targetLayer = mapData.layers.findIndex(layer =>
+                layer.rooms.some(r => r.id === selectedSearchRoom.id)
+            );
+            if (targetLayer !== -1) setCurLayer(targetLayer);
+
+            // Расчет координат центра комнаты
+            let centerX, centerY;
+            if (selectedSearchRoom.type === "vectorized_room") {
+                const bbox = getPathBoundingBox(selectedSearchRoom.data);
+                centerX = (bbox.minX + bbox.maxX)/2 + (selectedSearchRoom.x || 0);
+                centerY = (bbox.minY + bbox.maxY)/2 + (selectedSearchRoom.y || 0);
+            } else {
+                centerX = selectedSearchRoom.x + selectedSearchRoom.width/2;
+                centerY = selectedSearchRoom.y + selectedSearchRoom.height/2;
+            }
+
+            // Расчет новых позиций для центрирования
+            const stage = stageRef.current;
+            const scale = 2.5;
+            const screenCenterX = window.innerWidth / 2;
+            const screenCenterY = window.innerHeight / 2;
+
+            const newX = screenCenterX - centerX * scale;
+            const newY = screenCenterY - centerY * scale;
+
+            // Плавная анимация
+            setStageScale(scale);
+            setStageX(newX);
+            setStageY(newY);
+        }
+    }, [selectedSearchRoom]);
+
 
     const handleDragStart = (e) => {
         if (!isMapActive) return;
@@ -369,6 +409,7 @@ function BuildingMap({isMapActive}) {
                    y={stageY}
                    draggable
                    style={{background: "#F3F3F4"}}
+                   ref={stageRef}
             >
                 <Layer>
                     {renderedWalls}

@@ -50,52 +50,20 @@ function MapRedactor() {
       roads: [],
       others: []
     };
-
     paths.forEach(path => {
-      const id = path.attrs.id?.trim() || "undefined";
-
-      if (
-        /^(Vector|vector)(\s\d+|_\d+(_\d+)?)?$/.test(id) ||
-        /^t\d+_[wm]\d+_\d+$/.test(id) ||
-        /^t\d+_w\d+$/.test(id) ||
-        /^t\d+_m\d+$/.test(id) ||
-        /^museum_\d+$/.test(id) ||
-        /^cash_\d+$/.test(id)
-      ) {
-        groups.vectors.push({
-          ...path.attrs,
-          type: "icon"
-        });
-      } else if (
-        /^(rt\d+_m\d+_\d+|t\d+_m\d+_\d+|[ar]_[a-z\d]+|r\d+[a-z\d]*|rt\d+_[wm]\d+|t\d+_w\d+_\d+)$/.test(id)
-      ) {
-        groups.rooms.push({
-          ...path.attrs,
-          type: "room_vectorized",
-          name: id,
-          description: "",
-          workingtime: ""
-        });
-      } else if (/^(a_walls\d+|grates\d*|undefined|walls\d+)$/.test(id)) {
-        groups.walls.push({
-          ...path.attrs,
-          type: "wall"
-        });
-      } else if (/^inside_roads\d*$/.test(id)) {
-        groups.roads.push({
-          ...path.attrs,
-          type: "road"
-        });
-      } else {
-        groups.others.push({
-          ...path.attrs,
-          type: "other"
-        });
+      if (path.attrs.type === "icon") {
+        groups.vectors.push({...path.attrs})
+      }
+      if (path.attrs.type === "walls") {
+        groups.walls.push({...path.attrs})
+      }
+      if (path.attrs.type === "vectorized_room") {
+        groups.rooms.push({...path.attrs})
       }
     });
 
     rects.forEach(rect => {
-      if (rect.attrs.id) {
+      if (rect.attrs.type === "room") {
         groups.rooms.push({
           ...rect.attrs,
           type: "room",
@@ -106,12 +74,10 @@ function MapRedactor() {
       } else {
         groups.vectors.push({
           ...rect.attrs,
-          type: "icon_box"
         });
       }
     });
-
-    setData(groups);
+    setLayers([groups,groups,groups,groups,groups]);
   };
 
   const sendData = async () => {
@@ -137,7 +103,7 @@ function MapRedactor() {
   };
 
   const [curLayer, setCurLayer] = useState(0);
-  const containerRef = useRef(null);
+
 
   const [layers, setLayers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -158,12 +124,13 @@ function MapRedactor() {
   const renderedWalls = useMemo(() =>
     (layers[curLayer]?.walls.map(wall => (
       <Path
+        type={wall.type}
         key={wall.data}
-        x={wall.x || null}
-        y={wall.y || null}
+        fill={"#E8E8E8"}
+        x={wall.x}
+        y={wall.y}
         data={wall.data}
         stroke={"black"}
-        draggable
       />
     ))),
   )
@@ -171,47 +138,57 @@ function MapRedactor() {
   const renderedIcons = useMemo(() => (
     layers[curLayer]?.vectors.map((vector) => (
       <Path
-        key={vector.data}
+        type={vector.type}
         data={vector.data}
-        x={vector.x || null}
-        y={vector.y || null}
-        stroke={"gray"}
+        stroke={"red"}
         strokeWidth={1}
-        draggable
+        x={vector.x}
+        y={vector.y}
       />
     ))
   ))
 
-
   const renderedRooms = useMemo(() => (
     layers[curLayer]?.rooms.map(room => {
-      if (room.type === "room_vectorized") {
+      if (room.type === "vectorized_room") {
         return (
 
-            <Path
-              key={room.id}
-              id={room.id}
-              x={room.x || null}
-              y={room.y || null}
-              data={room.data}
-              stroke={"black"}
-              strokeWidth={1}
-            />
+          <Path
+            type={room.type}
+            key={room.id}
+            x={room.x || null}
+            y={room.y || null}
+            id={room.id}
+            data={room.data}
+            stroke={"black"}
+            fill={"#D5D5D5"}
+            strokeWidth={1}
+            name={room.name}
+            description={room.description}
+            workingtime={room.workingtime}
+            onClick={(e) => {console.log(e.target.attrs)}}
+            onTap={(e) => {}}
+          />
 
         )
       }
       return (
         <React.Fragment key={room.id}>
           <Rect
+            type={room.type}
             id={room.id}
             x={room.x}
             y={room.y}
             width={room.width}
             height={room.height}
             stroke="black"
+            fill={"#D5D5D5"}
             strokeWidth={1}
-            onClick={() => {}}
-            onTouchStart={() => alert(room.id)}
+            name={room.name}
+            description={room.description}
+            workingtime={room.workingTime}
+            onClick={(e) => {e.target.attrs.fill = "red"}}
+            onTap={(e) => {}}
           />
           <Text
             x={room.x + room.width / 2}
@@ -240,7 +217,7 @@ function MapRedactor() {
       <button onClick={handleSave}>
         save
       </button>
-      <button onClick={sendData}>
+      <button onClick={()=>console.log(data)}>
         send
       </button>
       <button onClick={() => {setCurLayer(curLayer+1)}}>changeLayer</button>

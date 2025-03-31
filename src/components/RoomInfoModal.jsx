@@ -47,8 +47,6 @@ function RoomInfoModal({room, onClose}) {
                 </button>
                 {room?.type === "icon" ? (
                     <div className="info-grid">
-                        <span className="info-label">ID</span>
-                        <span className="info-value">{room.id}</span>
                         {room?.name && (
                             <>
                                 <span className="info-label">Название</span>

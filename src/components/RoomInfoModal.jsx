@@ -46,15 +46,37 @@ function RoomInfoModal({room, onClose}) {
                     </svg>
                 </button>
                 {room?.type === "icon" ? (
-                    <>
-                        {room?.name && <p><strong>Информация:</strong> {room.name}</p>}
-                    </>
+                    <div className="info-grid">
+                        <span className="info-label">ID</span>
+                        <span className="info-value">{room.id}</span>
+                        {room?.name && (
+                            <>
+                                <span className="info-label">Название</span>
+                                <span className="info-value">{room.name}</span>
+                            </>
+                        )}
+                    </div>
                 ) : (
-                    <>
-                        {room?.name && <p><strong>Помещение:</strong> {room.name}</p>}
-                        {room?.description && <p><strong>Информация:</strong> {room.description}</p>}
-                        {room?.workingTime && <p><strong>Часы работы:</strong> {room.workingTime}</p>}
-                    </>
+                    <div className="info-grid">
+                        {room?.name && (
+                            <>
+                                <span className="info-label">Помещение</span>
+                                <span className="info-value">{room.id}</span>
+                            </>
+                        )}
+                        {room?.description && (
+                            <>
+                                <span className="info-label">Информация</span>
+                                <span className="info-value">{room.description}</span>
+                            </>
+                        )}
+                        {room?.workingTime && (
+                            <>
+                                <span className="info-label">Часы работы</span>
+                                <span className="info-value">{room.workingTime}</span>
+                            </>
+                        )}
+                    </div>
                 )}
 
                 {!isTechnicalRoom && (

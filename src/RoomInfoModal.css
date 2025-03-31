@@ -45,18 +45,35 @@
     color: #d6322d;
 }
 
-h2 {
-    margin-top: 0;
-    color: #d6322d;
+/* Новые стили для двухколоночного расположения */
+.info-grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 8px 12px;
+    align-items: baseline;
 }
 
-p {
-    color: #d6322d;
-    margin: 8px;
-}
-
-p strong {
+.info-label {
     color: #343434;
+    font-weight: bold;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.info-label::after {
+    content: ":";
+}
+
+.info-value {
+    color: #d6322d;
+    word-break: break-word;
+    white-space: pre-line;
+}
+
+/* Убираем старые стили для p, которые больше не нужны */
+.modal-content p {
+    margin: 0;
+    display: contents;
 }
 
 .route-buttons-container {
@@ -106,16 +123,36 @@ p strong {
     }
 
     .modal-overlay.visible {
-        bottom: 20px; /* Появляется на 20px выше низа экрана */
+        bottom: 20px;
         right: 0;
     }
 
     .modal-content {
-        width: calc(100% - 40px); /* Уменьшаем ширину с отступами */
-        margin: 0 auto; /* Центрируем */
-        border-radius: 15px; /* Скругляем все углы */
+        width: calc(100% - 40px);
+        margin: 0 auto;
+        border-radius: 15px;
         max-height: 60vh;
-        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15); /* Улучшаем тень */
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Адаптация двухколоночного вида для мобильных */
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    .info-label {
+        text-align: left;
+        margin-top: 8px;
+    }
+
+    .info-label::after {
+        content: "";
+    }
+
+    .info-label:not(:first-child) {
+        border-top: 1px solid #eee;
+        padding-top: 8px;
     }
 
     .route-buttons-container {
@@ -134,4 +171,4 @@ p strong {
     .modal-content {
         width: 100%;
     }
-}
+}   

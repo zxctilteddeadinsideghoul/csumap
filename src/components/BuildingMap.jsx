@@ -209,6 +209,15 @@ function BuildingMap({isMapActive}) {
         setSelectedRoom(room);
     };
 
+    const handleIconClick = (icon) => {
+        if (!isMapActive || !icon.name) return; // Добавлена проверка на наличие name
+        setSelectedRoom({
+            id: icon.id,
+            name: icon.name,
+            type: "icon"
+        });
+    };
+
     const handleTouchRoom = (e, room) => {
         if (!isMapActive) return;
         e.evt.preventDefault(); // Предотвращаем стандартное поведение на мобильных устройствах
@@ -279,14 +288,21 @@ function BuildingMap({isMapActive}) {
     const renderedIcons = useMemo(() => (
         layers[curLayer]?.vectors.map((vector) => (
             <Path
+                key={vector.id}
                 data={vector.data}
                 stroke={"black"}
                 strokeWidth={1}
+                hitStrokeWidth={vector.name ? 10 : 0}
                 x={vector.x}
                 y={vector.y}
+                onClick={() => handleIconClick(vector)}
+                onTap={(e) => {
+                    e.evt.preventDefault();
+                    handleIconClick(vector);
+                }}
             />
         ))
-    ))
+    ), [curLayer, layers]);
 
     const renderedRooms = useMemo(() => (
         layers[curLayer]?.rooms.map(room => {

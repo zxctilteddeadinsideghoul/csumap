@@ -352,8 +352,8 @@ function BuildingMap({ isMapActive }) {
                 } else if (room.data) {
                     const bbox = getPathBoundingBox(room.data);
                     if (!bbox) return null;
-                    const centerX = (bbox.minX + bbox.maxX) / 2;
-                    const centerY = (bbox.minY + bbox.maxY) / 2;
+                    const centerX = (bbox.minX + bbox.maxX) / 2 ;
+                    const centerY = (bbox.minY + bbox.maxY) / 2 ;
                     return (
                         <Group key={room.id}>
                             <Path
@@ -369,10 +369,10 @@ function BuildingMap({ isMapActive }) {
                             <Text
                                 x={centerX}
                                 y={centerY}
-                                offsetX={7}
-                                offsetY={7}
-                                text={room.name || room.id}
-                                fontSize={14}
+                                width={45}
+                                height={40}
+                                text={room.name}
+                                fontSize={12}
                                 fill="black"
                                 listening={false}
                                 perfectDrawEnabled={false}
@@ -396,11 +396,13 @@ function BuildingMap({ isMapActive }) {
                                 perfectDrawEnabled={false}
                             />
                             <Text
-                                x={room.x + room.width / 2}
-                                y={room.y + room.height / 2}
-                                offsetX={7}
-                                offsetY={7}
-                                text={room.name || room.id}
+                                x={room.x}
+                                y={room.y}
+                                width={room.width}
+                                height={room.height}
+                                align={'center'}
+                                verticalAlign={'middle'}
+                                text={room.name}
                                 fontSize={14}
                                 fill="black"
                                 listening={false}

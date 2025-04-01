@@ -59,7 +59,7 @@ function RoomInfoModal({room, onClose}) {
                         {room?.name && (
                             <>
                                 <span className="info-label">Помещение</span>
-                                <span className="info-value">{room.id}</span>
+                                <span className="info-value">{room.name}</span>
                             </>
                         )}
                         {room?.description && (

@@ -1,45 +1,45 @@
 import { Layer, Path, Rect, Stage, Text, Group, Line } from "react-konva";
-import React, {useEffect, useMemo, useRef, useState, useCallback} from "react"; // Исправленный импорт
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import RoomInfoModal from "./RoomInfoModal.jsx";
-import '../BuildingMap.css'
+import '../BuildingMap.css';
 import useStore from './store.jsx';
 import RouteMap from "./RouteMap.jsx";
 
 const MAP_DATA_PATH = 'src/components/ALL_MAP_YUN_V0.1.json';
 
-function BuildingMap({isMapActive}) {
+function BuildingMap({ isMapActive }) {
+    // Utility function to detect mobile devices
     function isMobileDevice() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
+    // State for stage scale and position, adjusted for mobile
     const [stageScale, setStageScale] = useState(isMobileDevice() ? 0.3 : 0.5);
     const [stageX, setStageX] = useState(isMobileDevice() ? -80 : 250);
-    const [stageY, setStageY] = useState(isMobileDevice()? 0 : -150);
+    const [stageY, setStageY] = useState(isMobileDevice() ? 0 : -150);
 
     const [isZooming, setIsZooming] = useState(false);
-    const [curLayer, setCurLayer] = useState(0)
-
+    const [curLayer, setCurLayer] = useState(0);
     const [layers, setLayers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedRoom, setSelectedRoom] = useState(null);
 
-    // function getCenter(p1, p2) {
-    //     return {
-    //         x: (p1.x + p2.x) / 2,
-    //         y: (p1.y + p2.y) / 2,
-    //     };
-    // }
-
+    // Store interactions
     const setRoomsForStore = useStore((state) => state.setRooms);
-    const fromRoom = useStore((state) => state.fromRoom); // Для подсветки
-    const toRoom = useStore((state) => state.toRoom);
+    const fromRoom = useStore((state) => state.fromRoom); // For route start
+    const toRoom = useStore((state) => state.toRoom);     // For route end
+    const selectedSearchRoom = useStore((state) => state.selectedSearchRoom); // For centering
 
+    // Refs for multi-touch and stage
     const lastCenterRef = useRef(null);
     const lastDistRef = useRef(0);
-    //const stageRef = useRef(null);
+    const stageRef = useRef(null);
 
-    function getCenter(p1, p2) { return { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 }; }
-    function getDistance(p1, p2) { return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2)); }
+    // Utility functions for multi-touch
+    const getCenter = (p1, p2) => ({ x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 });
+    const getDistance = (p1, p2) => Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+
+    // Multi-touch handler for zooming
     const handleMultiTouch = useCallback((e) => {
         if (!isMapActive) return;
         e.evt.preventDefault();
@@ -66,35 +66,25 @@ function BuildingMap({isMapActive}) {
             const oldScale = stage.scaleX();
             const pointTo = {
                 x: (newCenter.x - stage.x()) / oldScale,
-                y: (newCenter.y - stage.y()) / oldScale, // <-- Исправлено на oldScale
+                y: (newCenter.y - stage.y()) / oldScale,
             };
-
-            // Используем || newDist для случая, если lastDistRef.current === 0
             let scale = oldScale * (newDist / (lastDistRef.current || newDist));
-
-            const minScale = 0.1; // Уменьшил минимальный масштаб
-            const maxScale = 5.0; // Увеличил максимальный масштаб
+            const minScale = 0.1;
+            const maxScale = 5.0;
             scale = Math.max(minScale, Math.min(scale, maxScale));
-
-            setStageScale(scale); // Обновляем state
-
+            setStageScale(scale);
             const dx = newCenter.x - lastCenterRef.current.x;
             const dy = newCenter.y - lastCenterRef.current.y;
-
             const newPos = {
                 x: newCenter.x - pointTo.x * scale + dx,
                 y: newCenter.y - pointTo.y * scale + dy,
             };
-
-            // Обновляем state вместо прямого вызова stage.position()
             setStageX(newPos.x);
             setStageY(newPos.y);
-            // stage.batchDraw(); // Konva сделает это сама при обновлении state
-
             lastDistRef.current = newDist;
             lastCenterRef.current = newCenter;
         }
-    }, [isMapActive, isZooming, stageX, stageY]);
+    }, [isMapActive, isZooming]);
 
     const multiTouchEnd = useCallback(() => {
         lastCenterRef.current = null;
@@ -102,80 +92,40 @@ function BuildingMap({isMapActive}) {
         setIsZooming(false);
     }, []);
 
-
+    // Wheel handler for zooming with mouse
     const handleWheel = useCallback((e) => {
         if (!isMapActive) return;
         e.evt.preventDefault();
-
-        const scaleBy = 1.1; // Немного уменьшил шаг
+        const scaleBy = 1.1;
         const stage = e.target.getStage();
         const oldScale = stage.scaleX();
         const pointer = stage.getPointerPosition();
-        // Проверка, что pointer не null
         if (!pointer) return;
-
         const mousePointTo = {
             x: (pointer.x - stage.x()) / oldScale,
             y: (pointer.y - stage.y()) / oldScale,
         };
-
-        const direction = e.evt.deltaY > 0 ? -1 : 1; // Стандартное направление прокрутки
+        const direction = e.evt.deltaY > 0 ? -1 : 1;
         const newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-
         const minScale = 0.1;
         const maxScale = 5.0;
-        const clampedScale = Math.max(minScale, Math.min(newScale, maxScale)); // Ограничиваем масштаб
-
+        const clampedScale = Math.max(minScale, Math.min(newScale, maxScale));
         setStageScale(clampedScale);
         setStageX(pointer.x - mousePointTo.x * clampedScale);
         setStageY(pointer.y - mousePointTo.y * clampedScale);
-    }, [isMapActive, stageX, stageY]);
+    }, [isMapActive]);
 
-    // useEffect(() => {
-    //     fetch("https://staticstorm.ru/map/map_data2").then((response) => {
-    //             response.json().then(
-    //                 (response) => {
-    //                     setLayers(response.layers)
-    //                     setLoading(false)
-    //                 }
-    //             )
-    //         }
-    //     );
-    // }, []);
-
-    // useEffect(() => {
-    //     fetch("src/components/ALL_MAP_YUN_V0.1.json").then((response) => {
-    //             response.json().then(
-    //                 (response) => {
-    //                     setLayers(response.layers);
-    //                     setLoading(false);
-    //
-    //                     const allRooms = response.layers.flatMap(layer => layer.rooms);
-    //                     useStore.getState().setRooms(allRooms);
-    //                 }
-    //             )
-    //         }
-    //     );
-    // }, []);
-
+    // Fetch and process map data
     useEffect(() => {
         let isMounted = true;
         setLoading(true);
-        console.log("BuildingMap: Fetching map data...");
-        fetch(MAP_DATA_PATH) // <-- ИСПОЛЬЗУЕМ ПУТЬ В PUBLIC
+        fetch(MAP_DATA_PATH)
             .then((response) => {
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status} fetching ${MAP_DATA_PATH}`);
-                const contentType = response.headers.get("content-type");
-                if (!contentType || contentType.indexOf("application/json") === -1) {
-                    return response.text().then(text => {
-                        throw new Error(`Expected JSON, but got ${contentType}. Content: ${text.slice(0, 100)}...`);
-                    });
-                }
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 return response.json();
             })
             .then((data) => {
                 if (!isMounted) return;
-                console.log("BuildingMap: Map data fetched and parsed.");
                 if (!data || !Array.isArray(data.layers)) {
                     throw new Error("Invalid map data structure: 'layers' array not found.");
                 }
@@ -190,27 +140,23 @@ function BuildingMap({isMapActive}) {
                 setLayers(processedLayers);
                 const allRoomsForStore = processedLayers
                     .flatMap(layer => layer.rooms || [])
-                    .filter(item => item.type !== 'stair'); // Убираем лестницы из списка выбора
+                    .filter(item => item.type !== 'stair');
                 setRoomsForStore(allRoomsForStore);
                 setLoading(false);
             })
             .catch(error => {
                 if (!isMounted) return;
-                console.error("BuildingMap: Error loading or processing map data:", error);
+                console.error("Error loading map data:", error);
                 setLoading(false);
             });
         return () => { isMounted = false; };
     }, [setRoomsForStore]);
 
+    // Drag handlers
     const handleDragStart = useCallback((e) => {
-        if (!isMapActive) return;
-        const stage = e.target.getStage();
-
-        if (isZooming) {
-            stage.stopDrag();
+        if (!isMapActive || isZooming) {
+            e.target.getStage().stopDrag();
         }
-
-         console.log(stage.isDragging()); // Убрали, чтобы не засорять консоль
     }, [isMapActive, isZooming]);
 
     const handleDragEnd = useCallback((e) => {
@@ -219,7 +165,7 @@ function BuildingMap({isMapActive}) {
         setStageY(e.target.y());
     }, [isMapActive]);
 
-    //темка для модалки
+    // Room selection handlers
     const handleRoomClick = useCallback((room) => {
         if (!isMapActive) return;
         setSelectedRoom(room);
@@ -231,184 +177,264 @@ function BuildingMap({isMapActive}) {
         handleRoomClick(room);
     }, [isMapActive, handleRoomClick]);
 
+    // Floor change handler
     const handleLayerChange = useCallback((layerIndex) => {
-        if (!isMapActive) return;
-        // Проверяем, существует ли такой слой *по индексу массива*
-        if (layers[layerIndex]) {
-            setCurLayer(layerIndex);
-        } else if (layers[0]) { // Если запрошенный слой не найден, переключаемся на первый (0)
-            console.warn(`Layer index ${layerIndex} not found, switching to index 0.`);
-            setCurLayer(0);
-        } else {
-            console.warn(`Layer index ${layerIndex} not found, and no layers available.`);
-        }
+        if (!isMapActive || !layers[layerIndex]) return;
+        setCurLayer(layerIndex);
     }, [isMapActive, layers]);
 
-    const currentLayerData = layers[curLayer];
+    // Function to calculate bounding box for Path elements
+    const getPathBoundingBox = (data) => {
+        const points = [];
+        const commands = data.match(/[MLHVCSQTAZ][^MLHVCSQTAZ]*/gi) || [];
+        let currentX = 0;
+        let currentY = 0;
+        commands.forEach((cmd) => {
+            const type = cmd[0];
+            const args = cmd.slice(1).trim().split(/[\s,]+/).map(parseFloat);
+            switch (type) {
+                case 'M':
+                case 'L':
+                    currentX = args[0];
+                    currentY = args[1];
+                    points.push({ x: currentX, y: currentY });
+                    break;
+                case 'H':
+                    currentX = args[0];
+                    points.push({ x: currentX, y: currentY });
+                    break;
+                case 'V':
+                    currentY = args[0];
+                    points.push({ x: currentX, y: currentY });
+                    break;
+            }
+        });
+        if (points.length === 0) return null;
+        const xs = points.map(p => p.x);
+        const ys = points.map(p => p.y);
+        return {
+            minX: Math.min(...xs),
+            minY: Math.min(...ys),
+            maxX: Math.max(...xs),
+            maxY: Math.max(...ys),
+        };
+    };
 
+    // Center map on selectedSearchRoom
+    useEffect(() => {
+        if (selectedSearchRoom) {
+            const targetLayer = selectedSearchRoom.floorIndex;
+            if (targetLayer !== undefined && layers[targetLayer]) {
+                setCurLayer(targetLayer);
+            }
+            let centerX, centerY;
+            if (selectedSearchRoom.data) {
+                const bbox = getPathBoundingBox(selectedSearchRoom.data);
+                if (bbox) {
+                    centerX = (bbox.minX + bbox.maxX) / 2;
+                    centerY = (bbox.minY + bbox.maxY) / 2;
+                }
+            } else {
+                centerX = selectedSearchRoom.x + (selectedSearchRoom.width || 0) / 2;
+                centerY = selectedSearchRoom.y + (selectedSearchRoom.height || 0) / 2;
+            }
+            if (centerX !== undefined && centerY !== undefined) {
+                const scale = 2.5;
+                const screenCenterX = window.innerWidth / 2;
+                const screenCenterY = window.innerHeight / 2;
+                const newX = screenCenterX - centerX * scale;
+                const newY = screenCenterY - centerY * scale;
+                setStageScale(scale);
+                setStageX(newX);
+                setStageY(newY);
+            }
+        }
+    }, [selectedSearchRoom, layers]);
+
+    const currentLayerData = layers[curLayer] || {};
+
+    // Memoized rendering functions
     const renderedWalls = useMemo(() =>
-        (currentLayerData?.walls.map((wall, index) => (
-            <Path
-                key={`wall-${curLayer}-${index}-${wall.data?.slice(0,10)}`}
-                data={wall.data}
-                stroke={wall.stroke || "black"}
-                strokeWidth={wall.strokeWidth || 1}
-                listening={false}
-                perfectDrawEnabled={false}
-            />
-        ))) || [], // Возвращаем пустой массив, если данных нет
-        [currentLayerData, curLayer]); // Зависимость от текущего слоя
+            (currentLayerData.walls?.map((wall, index) => (
+                <Path
+                    key={`wall-${curLayer}-${index}-${wall.data?.slice(0,10)}`}
+                    data={wall.data}
+                    stroke={wall.stroke || "black"}
+                    strokeWidth={wall.strokeWidth || 1}
+                    listening={false}
+                    perfectDrawEnabled={false}
+                />
+            )) || []),
+        [currentLayerData, curLayer]
+    );
 
+    const renderedRoads = useMemo(() =>
+            (currentLayerData.roads?.map(road => (
+                <Line
+                    key={road.id}
+                    points={[road.x1, road.y1, road.x2, road.y2]}
+                    stroke={road.stroke || 'grey'}
+                    strokeWidth={road.strokeWidth || 2}
+                    listening={false}
+                    perfectDrawEnabled={false}
+                />
+            )) || []),
+        [currentLayerData]
+    );
 
-
-    const renderedRoads = useMemo(() => (
-        currentLayerData?.roads?.map(road => ( // Используем ?. для безопасного доступа
-            <Line
-                key={road.id} // Используем уникальный id дороги как ключ
-                points={[road.x1, road.y1, road.x2, road.y2]} // Массив точек [x1, y1, x2, y2]
-                stroke={road.stroke || 'grey'} // Цвет линии (или серый по умолчанию)
-                strokeWidth={road.strokeWidth || 2} // Толщина линии (или 2 по умолчанию)
-               // opacity={0}
-                listening={false}
-                perfectDrawEnabled={false}
-                // Можно добавить обработчики событий onClick/onTap, если нужно
-                // onClick={() => handleRoadClick(road)}
-                // onTap={(e) => handleTouchRoad(e, road)}
-            />
-        ))) || [],
-        [currentLayerData]); // Зависимости для useMemo
-
-    const renderedIcons = useMemo(() => (
-        currentLayerData?.vectors.map((vector, index) => (
-            <Path
-                key={vector.id || `icon-${curLayer}-${index}`}
-                data={vector.data}
-                stroke={"black"}
-                strokeWidth={vector.strokeWidth || 1}
-                fill={vector.fill}
-                listening={false}
-                perfectDrawEnabled={false}
-            />
-        ))) || [],
-        [currentLayerData, curLayer]);
-
+    const renderedIcons = useMemo(() =>
+            (currentLayerData.vectors?.map((vector, index) => (
+                <Path
+                    key={vector.id || `icon-${curLayer}-${index}`}
+                    data={vector.data}
+                    stroke="black"
+                    strokeWidth={vector.strokeWidth || 1}
+                    fill={vector.fill}
+                    listening={false}
+                    perfectDrawEnabled={false}
+                />
+            )) || []),
+        [currentLayerData, curLayer]
+    );
 
     const renderedRooms = useMemo(() =>
-            (currentLayerData?.rooms?.map(room => {
+            (currentLayerData.rooms?.map(room => {
                 const isStartSelected = fromRoom?.id === room.id;
                 const isEndSelected = toRoom?.id === room.id;
                 let fillColor = 'rgba(200, 200, 200, 0.3)';
-                if (room.type === 'stair') fillColor = 'rgba(100, 100, 255, 0.6)';
+                if (room.type === 'stair') fillColor = 'rgba(100, 100, 255 esetben, 0.6)';
                 if (isStartSelected) fillColor = 'rgba(0, 255, 0, 0.6)';
                 if (isEndSelected) fillColor = 'rgba(255, 0, 0, 0.6)';
                 if (isStartSelected && isEndSelected) fillColor = 'rgba(255, 165, 0, 0.7)';
 
-                // --- Рендер лестниц как Rect ---
                 if (room.type === 'stair') {
                     return (
-                        <Rect
-                            key={room.id}
-                            id={room.id}
-                            x={room.x}
-                            y={room.y}
-                            width={room.width || 15}
-                            height={room.height || 15}
-                            fill={fillColor}
-                            stroke="black"
-                            strokeWidth={1}
-                            onClick={() => handleRoomClick(room)}
-                            onTap={(e) => handleTouchRoom(e, room)}
-                            perfectDrawEnabled={false}
-                        />
-                    );
-                }
-                // --- Рендер комнат Path ---
-                else if (room.x === undefined && room.data) {
-                    return (
-                        <Path
-                            key={room.id} // KEY
-                            id={room.id}
-                            data={room.data}
-                            fill={fillColor} // Подсветка
-                            stroke={"black"}
-                            strokeWidth={1}
-                            onClick={() => handleRoomClick(room)}
-                            onTap={(e) => handleTouchRoom(e, room)}
-                            perfectDrawEnabled={false}
-                        />
-                    )
-                }
-                // --- Рендер комнат Rect + Text ---
-                else if (room.x !== undefined && room.y !== undefined) {
-                    return (
-                        // Используем Group как контейнер с общим ключом
                         <Group key={room.id}>
                             <Rect
-                                id={room.id} // ID для Konva
+                                id={room.id}
                                 x={room.x}
                                 y={room.y}
-                                width={room.width}
-                                height={room.height}
-                                fill={fillColor} // Подсветка
+                                width={room.width || 15}
+                                height={room.height || 15}
+                                fill={fillColor}
                                 stroke="black"
                                 strokeWidth={1}
                                 onClick={() => handleRoomClick(room)}
                                 onTap={(e) => handleTouchRoom(e, room)}
                                 perfectDrawEnabled={false}
                             />
-                            {/* ВОЗВРАЩАЕМ КОМПОНЕНТ TEXT ИЗ KONVA */}
                             <Text
-                                // key не нужен, т.к. он есть у родительского Group
-                                x={room.x + room.width / 2}
-                                y={room.y + room.height / 2}
-                                offsetX={room.width / 4} // Ваши смещения
-                                offsetY={7}            // Ваши смещения
-                                text={room.name || room.id} // Отображаем имя или ID
+                                x={room.x + (room.width || 15) / 2}
+                                y={room.y + (room.height || 15) / 2}
+                                offsetX={7}
+                                offsetY={7}
+                                text={room.name || room.id}
                                 fontSize={14}
                                 fill="black"
-                                listening={false} // Текст не интерактивен
+                                listening={false}
+                                perfectDrawEnabled={false}
+                            />
+                        </Group>
+                    );
+                } else if (room.data) {
+                    const bbox = getPathBoundingBox(room.data);
+                    if (!bbox) return null;
+                    const centerX = (bbox.minX + bbox.maxX) / 2;
+                    const centerY = (bbox.minY + bbox.maxY) / 2;
+                    return (
+                        <Group key={room.id}>
+                            <Path
+                                id={room.id}
+                                data={room.data}
+                                fill={fillColor}
+                                stroke="black"
+                                strokeWidth={1}
+                                onClick={() => handleRoomClick(room)}
+                                onTap={(e) => handleTouchRoom(e, room)}
+                                perfectDrawEnabled={false}
+                            />
+                            <Text
+                                x={centerX}
+                                y={centerY}
+                                offsetX={7}
+                                offsetY={7}
+                                text={room.name || room.id}
+                                fontSize={14}
+                                fill="black"
+                                listening={false}
+                                perfectDrawEnabled={false}
+                            />
+                        </Group>
+                    );
+                } else {
+                    return (
+                        <Group key={room.id}>
+                            <Rect
+                                id={room.id}
+                                x={room.x}
+                                y={room.y}
+                                width={room.width}
+                                height={room.height}
+                                fill={fillColor}
+                                stroke="black"
+                                strokeWidth={1}
+                                onClick={() => handleRoomClick(room)}
+                                onTap={(e) => handleTouchRoom(e, room)}
+                                perfectDrawEnabled={false}
+                            />
+                            <Text
+                                x={room.x + room.width / 2}
+                                y={room.y + room.height / 2}
+                                offsetX={7}
+                                offsetY={7}
+                                text={room.name || room.id}
+                                fontSize={14}
+                                fill="black"
+                                listening={false}
                                 perfectDrawEnabled={false}
                             />
                         </Group>
                     );
                 }
-                return null; // Для неизвестных типов
-            })) || [],
-        [currentLayerData, curLayer, fromRoom, toRoom, handleRoomClick, handleTouchRoom]);
+            }) || []),
+        [currentLayerData, curLayer, fromRoom, toRoom, handleRoomClick, handleTouchRoom]
+    );
 
+    // Loading state
     if (loading) {
         return <div>Loading...</div>;
     }
-
 
     return (
         <>
             <div className="floor-buttons">
                 {[4, 0, 1, 2, 3].map((layerIndex) => (
                     layers[layerIndex] ? (
-                    <button
-                        key={layerIndex} // Используем индекс как ключ (как было у вас)
-                        className={`floor-button ${curLayer === layerIndex ? 'active' : ''}`}
-                        onClick={() => handleLayerChange(layerIndex)}
-                    >
-                        {/* Ваша логика отображения номера этажа */}
-                        {layerIndex === 4 ? '0' : `${layerIndex + 1}`}
-                    </button>
-                ) : null
+                        <button
+                            key={layerIndex}
+                            className={`floor-button ${curLayer === layerIndex ? 'active' : ''}`}
+                            onClick={() => handleLayerChange(layerIndex)}
+                        >
+                            {layerIndex === 4 ? '0' : `${layerIndex + 1}`}
+                        </button>
+                    ) : null
                 ))}
             </div>
-            <Stage height={window.innerHeight}
-                   width={window.innerWidth}
-                   onWheel={handleWheel}
-                   onTouchMove={handleMultiTouch}
-                   onTouchEnd={multiTouchEnd}
-                   onDragStart={handleDragStart}
-                   onDragEnd={handleDragEnd}
-                   scaleX={stageScale}
-                   scaleY={stageScale}
-                   x={stageX}
-                   y={stageY}
-                   draggable={isMapActive && !isZooming}
+            <Stage
+                height={window.innerHeight}
+                width={window.innerWidth}
+                onWheel={handleWheel}
+                onTouchMove={handleMultiTouch}
+                onTouchEnd={multiTouchEnd}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                scaleX={stageScale}
+                scaleY={stageScale}
+                x={stageX}
+                y={stageY}
+                draggable={isMapActive && !isZooming}
+                ref={stageRef}
+                style={{ background: "#F3F3F4" }}
             >
                 <Layer>
                     {renderedWalls}
@@ -418,10 +444,9 @@ function BuildingMap({isMapActive}) {
                     <RouteMap currentFloorIndex={curLayer} mapDataPath={MAP_DATA_PATH} />
                 </Layer>
             </Stage>
-            <RoomInfoModal room={selectedRoom} onClose={() => setSelectedRoom(null)}/>
+            <RoomInfoModal room={selectedRoom} onClose={() => setSelectedRoom(null)} />
         </>
     );
-
 }
 
 export default BuildingMap;

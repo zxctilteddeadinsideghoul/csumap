@@ -6,17 +6,19 @@ import '../Header.css';
 function Header() {
     const [searchQuery, setSearchQuery] = useState(null);
     const rooms = useStore((state) => state.rooms);
+    const {setSelectedSearchRoom} = useStore();
 
-    const roomOptions = rooms.map((room) => ({
-        value: room.id,
-        label: room.id,
-    }));
+    const roomOptions = rooms
+        .filter(room => room.name !== null && room.name !== undefined && room.name !== '')
+        .map((room) => ({
+            value: room.id,
+            label: room.name || room.id,
+        }));
 
-    // временная темка
     const handleSearchChange = (selectedOption) => {
-        setSearchQuery(selectedOption);
         if (selectedOption) {
-            alert(`Выбран кабинет: ${selectedOption.label}`);
+            const room = rooms.find(r => r.id === selectedOption.value);
+            setSelectedSearchRoom(room);
         }
     };
 
@@ -55,7 +57,6 @@ function Header() {
                         fill="#D6322D"/>
                 </g>
             </svg>
-
             <div className="search-container">
                 <Select
                     placeholder="Поиск кабинета"

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import '../RouteMenu.css';
 import useStore from './store.jsx';
@@ -7,26 +7,43 @@ function RouteMenu() {
     const [from, setFrom] = useState(null);
     const [to, setTo] = useState(null);
     const rooms = useStore((state) => state.rooms);
-
+    const fromRoom = useStore((state) => state.fromRoom);
+    const toRoom = useStore((state) => state.toRoom);
     const setFromRoom = useStore((state) => state.setFromRoom);
     const setToRoom = useStore((state) => state.setToRoom);
 
-    const roomOptions = rooms.map((room) => ({
-        value: room.id,
-        label: room.name ? `${room.name} (${room.id})` : room.id,
-    }));
+    // Фильтрация только тех комнат, у которых есть name
+    const roomOptions = rooms
+        .filter(room => room.name !== null && room.name !== undefined && room.name !== '')
+        .map((room) => ({
+            value: room.id,
+            label: room.name ? `${room.name} (${room.id})` : room.id,
+        }));
+
+    useEffect(() => {
+        if (fromRoom) {
+            setFrom({
+                value: fromRoom.id,
+                label: fromRoom.name ? `${fromRoom.name} (${fromRoom.id})` : fromRoom.id
+            });
+        }
+    }, [fromRoom]);
+
+    useEffect(() => {
+        if (toRoom) {
+            setTo({
+                value: toRoom.id,
+                label: toRoom.name ? `${toRoom.name} (${toRoom.id})` : toRoom.id
+            });
+        }
+    }, [toRoom]);
 
     const handleBuildRoute = () => {
-        const findRoomById = (id) => rooms.find(r => r.id === id);
-
-        //СТАРОЕ__________________________________________________________________________
-        // const startRoomObject = from ? findRoomById(from.value) : null;
-        // const endRoomObject = to ? findRoomById(to.value) : null;
-        //СТАРОЕ__________________________________________________________________________
-        const startRoomObject = from ? rooms.find(r => r.id === from.value) : null;
-        const endRoomObject = to ? rooms.find(r => r.id === to.value) : null;
-        setFromRoom(startRoomObject);
-        setToRoom(endRoomObject);
+        const startRoom = from ? rooms.find(r => r.id === from.value) : null;
+        const endRoom = to ? rooms.find(r => r.id === to.value) : null;
+        setFromRoom(startRoom);
+        setToRoom(endRoom);
+        alert(`Маршрут из ${from?.label} в ${to?.label}`);
     };
 
     return (
@@ -37,8 +54,13 @@ function RouteMenu() {
                     placeholder="Откуда"
                     options={roomOptions}
                     value={from}
-                    // onChange={(selected) => setFrom(selected)} -----------------------------------------------
-                    onChange={setFrom}
+                    onChange={(selected) => {
+                        const room = rooms.find(r => r.id === selected.value);
+                        setFrom({
+                            value: room.id,
+                            label: room.name ? `${room.name} (${room.id})` : room.id
+                        });
+                    }}
                     className="route-select"
                     classNamePrefix="route-select"
                 />
@@ -46,13 +68,18 @@ function RouteMenu() {
                     placeholder="Куда"
                     options={roomOptions}
                     value={to}
-                    // onChange={(selected) => setTo(selected)}----------------------------------------------
-                    onChange={setTo}
+                    onChange={(selected) => {
+                        const room = rooms.find(r => r.id === selected.value);
+                        setTo({
+                            value: room.id,
+                            label: room.name ? `${room.name} (${room.id})` : room.id
+                        });
+                    }}
                     className="route-select"
                     classNamePrefix="route-select"
                 />
             </div>
-            <button onClick={() =>{handleBuildRoute(); alert(`Маршрут из ${from?.value} в ${to?.value}`)}}>
+            <button onClick={handleBuildRoute}>
                 Построить маршрут
             </button>
         </div>

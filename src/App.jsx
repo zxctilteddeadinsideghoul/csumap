@@ -6,7 +6,7 @@ import useStore from './components/store.jsx';
 import Header from './components/Header.jsx';
 
 function App() {
-    const [activeMenu, setActiveMenu] = useState(null); // null, 'route', или 'settings'
+    const {activeMenu, setActiveMenu} = useStore();
     const {fromRoom, toRoom} = useStore();
 
     return (

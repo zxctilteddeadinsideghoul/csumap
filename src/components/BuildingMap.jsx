@@ -5,7 +5,7 @@ import '../BuildingMap.css';
 import useStore from './store.jsx';
 import RouteMap from "./RouteMap.jsx";
 
-const MAP_DATA_PATH = 'src/components/ALL_MAP_YUN_V0.1.json';
+const MAP_DATA_PATH = 'src/components/ALL_MAP_YUN_V0.2.json';
 
 function BuildingMap({ isMapActive }) {
     // Utility function to detect mobile devices

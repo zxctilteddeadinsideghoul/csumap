@@ -1,4 +1,4 @@
-// src/components/map/pathfinding/dijkstra.js
+// src/components/dijkstra.js
 import TinyQueue from 'tinyqueue'; // Потребуется установить: npm install tinyqueue
 
 export function findShortestPath(graph, nodeCoords, startNodeId, endNodeId) {

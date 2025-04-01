@@ -69,8 +69,8 @@ function BuildingMap({ isMapActive }) {
                 y: (newCenter.y - stage.y()) / oldScale,
             };
             let scale = oldScale * (newDist / (lastDistRef.current || newDist));
-            const minScale = 0.1;
-            const maxScale = 5.0;
+            const minScale = 0.3;
+            const maxScale = 3;
             scale = Math.max(minScale, Math.min(scale, maxScale));
             setStageScale(scale);
             const dx = newCenter.x - lastCenterRef.current.x;
@@ -107,8 +107,8 @@ function BuildingMap({ isMapActive }) {
         };
         const direction = e.evt.deltaY > 0 ? -1 : 1;
         const newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-        const minScale = 0.1;
-        const maxScale = 5.0;
+        const minScale = 0.4;
+        const maxScale = 3;
         const clampedScale = Math.max(minScale, Math.min(newScale, maxScale));
         setStageScale(clampedScale);
         setStageX(pointer.x - mousePointTo.x * clampedScale);

@@ -183,6 +183,15 @@ function BuildingMap({ isMapActive }) {
         setCurLayer(layerIndex);
     }, [isMapActive, layers]);
 
+    const handleIconClick = (icon) => {
+        if (!isMapActive || !icon.name) return; // Добавлена проверка на наличие name
+        setSelectedRoom({
+            id: icon.id,
+            name: icon.name,
+            type: "icon"
+        });
+    };
+
     // Function to calculate bounding box for Path elements
     const getPathBoundingBox = (data) => {
         const points = [];
@@ -282,20 +291,24 @@ function BuildingMap({ isMapActive }) {
         [currentLayerData]
     );
 
-    const renderedIcons = useMemo(() =>
-            (currentLayerData.vectors?.map((vector, index) => (
-                <Path
-                    key={vector.id || `icon-${curLayer}-${index}`}
-                    data={vector.data}
-                    stroke="black"
-                    strokeWidth={vector.strokeWidth || 1}
-                    fill={vector.fill}
-                    listening={false}
-                    perfectDrawEnabled={false}
-                />
-            )) || []),
-        [currentLayerData, curLayer]
-    );
+    const renderedIcons = useMemo(() => (
+        layers[curLayer]?.vectors.map((vector) => (
+            <Path
+                key={vector.id}
+                data={vector.data}
+                stroke={"black"}
+                strokeWidth={1}
+                hitStrokeWidth={vector.name ? 10 : 0}
+                x={vector.x}
+                y={vector.y}
+                onClick={() => handleIconClick(vector)}
+                onTap={(e) => {
+                    e.evt.preventDefault();
+                    handleIconClick(vector);
+                }}
+            />
+        ))
+    ), [curLayer, layers]);
 
     const renderedRooms = useMemo(() =>
             (currentLayerData.rooms?.map(room => {

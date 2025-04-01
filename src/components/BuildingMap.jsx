@@ -268,6 +268,8 @@ function BuildingMap({ isMapActive }) {
                 <Path
                     key={`wall-${curLayer}-${index}-${wall.data?.slice(0,10)}`}
                     data={wall.data}
+                    x={wall.x}
+                    y={wall.y}
                     stroke={wall.stroke || "black"}
                     strokeWidth={wall.strokeWidth || 1}
                     listening={false}

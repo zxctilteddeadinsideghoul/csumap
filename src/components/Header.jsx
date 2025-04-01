@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Select from 'react-select';
 import useStore from './store.jsx';
 import '../Header.css';
@@ -6,7 +6,7 @@ import '../Header.css';
 function Header() {
     const [searchQuery, setSearchQuery] = useState(null);
     const rooms = useStore((state) => state.rooms);
-    const {setSelectedSearchRoom} = useStore();
+    const { setSelectedSearchRoom } = useStore();
 
     const roomOptions = rooms
         .filter(room => room.name !== null && room.name !== undefined && room.name !== '')
@@ -16,6 +16,7 @@ function Header() {
         }));
 
     const handleSearchChange = (selectedOption) => {
+        setSearchQuery(selectedOption);
         if (selectedOption) {
             const room = rooms.find(r => r.id === selectedOption.value);
             setSelectedSearchRoom(room);

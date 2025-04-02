@@ -1,384 +1,417 @@
 // src/components/map/pathfinding/graph.js
 
-// --- Вспомогательные функции ---
+// Функции distance, getClosestPointOnSegment, getIconCoords, parseSvgPathRoad - без изменений (берем из предыдущего ответа)
 function distance(x1, y1, x2, y2) {
-    // Проверка на валидные числа, возврат 0 если нет
-    if (isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2)) {
-        console.warn(`Invalid coordinates for distance calculation: (${x1},${y1}) to (${x2},${y2})`);
-        return 0;
-    }
+    if (typeof x1 !== 'number' || typeof y1 !== 'number' || typeof x2 !== 'number' || typeof y2 !== 'number' ||
+        isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2)) { return NaN; }
     return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
 
-// Находит ближайшую точку на отрезке (x1,y1) - (x2,y2) к точке (px,py)
 function getClosestPointOnSegment(px, py, x1, y1, x2, y2) {
-    // Проверка на валидные числа
-    if (isNaN(px) || isNaN(py) || isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2)) {
-        console.warn(`Invalid coordinates for getClosestPointOnSegment: p=(${px},${py}), seg=(${x1},${y1})-(${x2},${y2})`);
-        // Возвращаем точку начала отрезка как запасной вариант
-        return { x: x1, y: y1, distSq: distance(px, py, x1, y1)**2 };
-    }
-
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    const lenSq = dx * dx + dy * dy;
-
-    // Если отрезок - точка
-    if (lenSq < 0.000001) return { x: x1, y: y1, distSq: distance(px, py, x1, y1)**2 };
-
-    // Проекция точки P на прямую, содержащую отрезок AB
+    if (typeof px !== 'number' || typeof py !== 'number' || typeof x1 !== 'number' || typeof y1 !== 'number' || typeof x2 !== 'number' || typeof y2 !== 'number' ||
+        isNaN(px) || isNaN(py) || isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2)) { return { x: NaN, y: NaN, distSq: Infinity }; }
+    const dx = x2 - x1, dy = y2 - y1, lenSq = dx * dx + dy * dy;
+    if (lenSq < 1e-9) { const dSq = distance(px, py, x1, y1)**2; return { x: x1, y: y1, distSq: isNaN(dSq)?Infinity:dSq }; }
     let t = ((px - x1) * dx + (py - y1) * dy) / lenSq;
-    t = Math.max(0, Math.min(1, t)); // Ограничиваем проекцию рамками отрезка
-
-    const closestX = x1 + t * dx;
-    const closestY = y1 + t * dy;
+    if (isNaN(t) || !isFinite(t)) { return { x: NaN, y: NaN, distSq: Infinity }; }
+    t = Math.max(0, Math.min(1, t));
+    const closestX = x1 + t * dx, closestY = y1 + t * dy;
+    if (isNaN(closestX) || isNaN(closestY)) { return { x: NaN, y: NaN, distSq: Infinity }; }
     const distSq = distance(px, py, closestX, closestY)**2;
-
-    return { x: closestX, y: closestY, distSq };
+    return { x: closestX, y: closestY, distSq: isNaN(distSq)?Infinity:distSq };
 }
 
-// --- НОВАЯ Вспомогательная функция для парсинга координат иконки ---
 function getIconCoords(vector) {
-    if (!vector || !vector.data) {
-        console.warn(`Icon ${vector?.id} has no data for coordinate parsing.`);
-        return null;
-    }
-    // Ищем первую команду M (MoveTo) с координатами
-    const match = vector.data.match(/M\s*([-+]?\d*\.?\d+)\s*[,\s]\s*([-+]?\d*\.?\d+)/i);
+    if (!vector || !vector.data) return null;
+    const match = vector.data.match(/M\s*([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s*[,\s]\s*([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)/i);
     if (match && match.length >= 3) {
-        const x = parseFloat(match[1]);
-        const y = parseFloat(match[2]);
-        if (!isNaN(x) && !isNaN(y)) {
-            return { x, y };
-        }
+        const x = parseFloat(match[1]); const y = parseFloat(match[2]);
+        if (!isNaN(x) && !isNaN(y)) return { x, y };
     }
-    console.warn(`Cannot parse entry point for icon ${vector.id}. Data: ${vector.data.substring(0, 50)}...`);
-    return null; // Не удалось извлечь координаты
+    return null;
+}
+
+function parseSvgPathRoad(roadData, roadId, floorIndex) {
+    const segments = []; const points = [];
+    const commands = roadData.match(/[MLHVCSQTAZ][^MLHVCSQTAZ]*/gi) || [];
+    let currentX = NaN, currentY = NaN; let startX = NaN, startY = NaN;
+
+    commands.forEach((cmd) => {
+        const type = cmd[0].toUpperCase();
+        const argsStr = cmd.slice(1).trim();
+        const args = (argsStr.match(/[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?/g) || []).map(parseFloat);
+        let nextX = currentX, nextY = currentY; const isCurrentValid = !isNaN(currentX) && !isNaN(currentY);
+
+        switch (type) {
+            case 'M': {
+                if (args.length >= 2 && !isNaN(args[0]) && !isNaN(args[1])) {
+                    if (cmd[0] === 'm' && isCurrentValid) { nextX = currentX + args[0]; nextY = currentY + args[1]; }
+                    else { nextX = args[0]; nextY = args[1]; }
+                    if (!isNaN(nextX) && !isNaN(nextY)) {
+                        if (!isCurrentValid) { points.push({ x: nextX, y: nextY }); startX = nextX; startY = nextY; }
+                        else { points.push({ x: nextX, y: nextY }); }
+                        currentX = nextX; currentY = nextY;
+                        for (let i = 2; i < args.length; i += 2) {
+                            if (args.length > i+1 && !isNaN(args[i]) && !isNaN(args[i+1])) {
+                                let pointX, pointY;
+                                if (cmd[0] === 'm' && !isNaN(currentX)) { pointX = currentX + args[i]; pointY = currentY + args[i + 1]; }
+                                else { pointX = args[i]; pointY = args[i + 1]; }
+                                if (!isNaN(pointX) && !isNaN(pointY) && !isNaN(currentX)) { segments.push({ x1: currentX, y1: currentY, x2: pointX, y2: pointY, roadId, floorIndex }); points.push({ x: pointX, y: pointY }); currentX = pointX; currentY = pointY; }
+                            }
+                        }
+                    }
+                } break; }
+            case 'L': { if (!isCurrentValid) break;
+                for (let i = 0; i < args.length; i += 2) {
+                    if (args.length > i+1 && !isNaN(args[i]) && !isNaN(args[i+1])) {
+                        let pointX, pointY;
+                        if (cmd[0] === 'l') { pointX = currentX + args[i]; pointY = currentY + args[i + 1]; }
+                        else { pointX = args[i]; pointY = args[i + 1]; }
+                        if (!isNaN(pointX) && !isNaN(pointY)) { segments.push({ x1: currentX, y1: currentY, x2: pointX, y2: pointY, roadId, floorIndex }); points.push({ x: pointX, y: pointY }); currentX = pointX; currentY = pointY; }
+                    } } break; }
+            case 'H': { if (!isCurrentValid) break;
+                for(const arg of args){ if (!isNaN(arg)) { let pointX; if (cmd[0] === 'h') { pointX = currentX + arg; } else { pointX = arg; } if (!isNaN(pointX)) { segments.push({ x1: currentX, y1: currentY, x2: pointX, y2: currentY, roadId, floorIndex }); points.push({ x: pointX, y: currentY }); currentX = pointX; } } } break; }
+            case 'V': { if (!isCurrentValid) break;
+                for(const arg of args){ if (!isNaN(arg)) { let pointY; if (cmd[0] === 'v') { pointY = currentY + arg; } else { pointY = arg; } if (!isNaN(pointY)) { segments.push({ x1: currentX, y1: currentY, x2: currentX, y2: pointY, roadId, floorIndex }); points.push({ x: currentX, y: pointY }); currentY = pointY; } } } break; }
+            case 'Z': { if (isCurrentValid && !isNaN(startX) && !isNaN(startY)) { if (Math.abs(currentX - startX) > 1e-6 || Math.abs(currentY - startY) > 1e-6) { segments.push({ x1: currentX, y1: currentY, x2: startX, y2: startY, roadId, floorIndex }); currentX = startX; currentY = startY; } } break; }
+            case 'C': case 'S': case 'Q': case 'T': case 'A': {
+                const lastCoordIndex = args.length >= 2 ? args.length - 2 : -1;
+                if (lastCoordIndex >= 0 && !isNaN(args[lastCoordIndex]) && !isNaN(args[lastCoordIndex + 1])) { let tempX = NaN, tempY = NaN; if (cmd[0] === cmd[0].toLowerCase() && isCurrentValid) { tempX = currentX + args[lastCoordIndex]; tempY = currentY + args[lastCoordIndex + 1]; } else { tempX = args[lastCoordIndex]; tempY = args[lastCoordIndex + 1]; } if (!isNaN(tempX) && !isNaN(tempY)) { currentX = tempX; currentY = tempY; } } break; } }
+    });
+    const uniquePoints = points.filter((p, i, arr) => { if (isNaN(p.x) || isNaN(p.y)) return false; if (i === 0) return true; const prev = arr[i - 1]; if (isNaN(prev.x) || isNaN(prev.y)) return true; return Math.abs(p.x - prev.x) > 1e-6 || Math.abs(p.y - prev.y) > 1e-6; });
+    const uniqueSegments = [];
+    if (uniquePoints.length > 1) { for (let i = 0; i < uniquePoints.length - 1; i++) { const p1 = uniquePoints[i]; const p2 = uniquePoints[i + 1]; if(!isNaN(p1.x) && !isNaN(p1.y) && !isNaN(p2.x) && !isNaN(p2.y)) { if (Math.abs(p1.x - p2.x) > 1e-6 || Math.abs(p1.y - p2.y) > 1e-6) { uniqueSegments.push({ x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, roadId, floorIndex }); } } } }
+    return { segments: uniqueSegments, points: uniquePoints };
 }
 
 
-// --- Основная функция построения графа ---
 export function buildGraph(layers) {
-    console.log("Building graph with layers:", layers); // Лог входных данных
-    const graph = new Map(); // Adjacency list: Map<nodeId, Map<neighborId, weight>>
-    const nodeCoords = new Map(); // Map<nodeId, {x, y, floorIndex}>
-    const roadEndpoints = new Map(); // Храним конечные точки дорог для связывания: Map<floorIndex, Array<{id, x, y}>>
-    const stairs = new Map(); // Храним лестницы для связывания: Map<logicalId, Array<{id, x, y, floorIndex}>>
-    // --- ИЗМЕНЕНИЕ: Map для хранения виртуальных узлов *для каждой дороги* ---
-    const virtualNodesOnRoads = new Map(); // Map<roadId, Array<{id, x, y, distFromStart}>>
+    console.log("--- Начинаем построение графа ---");
+    const graph = new Map();
+    const nodeCoords = new Map(); // Map<nodeId, {x, y, floorIndex, roadId?}>
+    const roadEndpoints = new Map(); // Map<floorIndex, Array<{id, x, y, roadId}>>
+    const allRoadSegments = []; // Array<{x1, y1, x2, y2, startNodeId, endNodeId, roadId, floorIndex, weight}>
+    const stairIconsMap = new Map(); // Map<logicalId, Array<{id, x, y, floorIndex}>>
+    const nodeToRoadIdMap = new Map(); // Map<nodeId, roadId> // НОВОЕ: Для отслеживания принадлежности узла дороге
 
-    const CONNECTION_THRESHOLD_SQ = 150 * 150; // Квадрат макс. расстояния от иконки/лестницы до дороги
-    const INTERSECTION_THRESHOLD_SQ = 10 * 10; // Квадрат макс. расстояния для соединения конечных точек дорог
-    const STAIR_FLOOR_CHANGE_WEIGHT = 1000; // "Стоимость" перехода по лестнице
+    // === ПОРОГИ ===
+    // Увеличен порог для соединения иконок с дорогами, т.к. иконки могут быть не точно на линии
+    const CONNECTION_THRESHOLD_SQ = 70*70; // 70 пикселей - довольно много, можно уменьшить если будут нелогичные соединения
+    // Порог для соединения КОНЦОВ сегментов (перекрестки) - должен быть маленьким для точности
+    const INTERSECTION_THRESHOLD_SQ = 10*10 ; // 10 пикселей
+    // !!! НОВЫЙ ПОРОГ !!! для соединения ЛЮБЫХ близких точек на РАЗНЫХ дорогах
+    // Должен быть достаточно маленьким, чтобы не соединять через стены, но позволять "срезать" углы коридоров
+    const PROXIMITY_CONNECTION_THRESHOLD_SQ = 30 * 30; // 30 пикселей - НАСТРАИВАЕМЫЙ ПАРАМЕТР
+    // ================
+
+    const STAIR_FLOOR_CHANGE_WEIGHT = 500;
 
     function addEdge(node1, node2, weight) {
-        // Проверка на NaN перед добавлением ребра
-        if (isNaN(weight)) {
-            console.warn(`Attempted to add edge with NaN weight between ${node1} and ${node2}`);
-            return;
-        }
-        if (weight < 0) { // Не добавляем ребра с отрицательным весом
-            console.warn(`Attempted to add edge with negative weight (${weight}) between ${node1} and ${node2}`);
-            return;
-        }
+        if (isNaN(weight) || weight < 0 || !node1 || !node2 || node1 === node2) return;
         if (!graph.has(node1)) graph.set(node1, new Map());
         if (!graph.has(node2)) graph.set(node2, new Map());
-        // Добавляем ребра в обе стороны
-        graph.get(node1).set(node2, weight);
-        graph.get(node2).set(node1, weight);
-
+        if (!graph.get(node1).has(node2) || weight < graph.get(node1).get(node2)) {
+            graph.get(node1).set(node2, weight);
+            graph.get(node2).set(node1, weight);
+        }
+    }
+    function removeEdge(node1, node2) {
+        let removed = false;
+        if (graph.has(node1) && graph.get(node1).delete(node2)) removed = true;
+        if (graph.has(node2) && graph.get(node2).delete(node1)) removed = true;
+        return removed;
     }
 
-    // 1. Обработка дорог, лестниц и ИКОНОК, сбор узлов
+    // ==================================================
+    // Этап 1: Сбор узлов и базовых ребер
+    // ==================================================
+    console.log("--- Этап 1: Сбор узлов и базовых ребер ---");
     layers.forEach((layer, floorIndex) => {
-        roadEndpoints.set(floorIndex, []); // Инициализация массива для этажа
+        if (!layer || typeof layer !== 'object') return;
+        console.log(`Обработка этажа ${floorIndex}`);
+        roadEndpoints.set(floorIndex, []);
 
-        // Дороги
-        (layer.roads || []).forEach(road => {
-            const startNodeId = `road-${road.id}-start`;
-            const endNodeId = `road-${road.id}-end`;
+        // 1а: Простые дороги
+        (layer.roads || []).filter(road => road && !isNaN(road.x1) && !isNaN(road.y1) && !isNaN(road.x2) && !isNaN(road.y2))
+            .forEach((road, roadIndex) => {
+                const roadId = road.id || `road-${floorIndex}-${roadIndex}`;
+                const startNodeId = `road-${roadId}-start`, endNodeId = `road-${roadId}-end`;
+                const weight = distance(road.x1, road.y1, road.x2, road.y2);
+                if (isNaN(weight) || weight < 1e-6) return;
 
-            // Проверяем координаты дороги
-            if (isNaN(road.x1) || isNaN(road.y1) || isNaN(road.x2) || isNaN(road.y2)) {
-                console.warn(`Road ${road.id} has invalid coordinates. Skipping.`);
-                return; // Пропускаем дорогу с невалидными координатами
-            }
-
-            const weight = distance(road.x1, road.y1, road.x2, road.y2);
-
-            nodeCoords.set(startNodeId, { x: road.x1, y: road.y1, floorIndex });
-            nodeCoords.set(endNodeId, { x: road.x2, y: road.y2, floorIndex });
-
-            // --- ИЗМЕНЕНИЕ: Инициализируем массив для виртуальных узлов этой дороги ---
-            if (!virtualNodesOnRoads.has(road.id)) {
-                virtualNodesOnRoads.set(road.id, []);
-            }
-
-            // Изначально соединяем концы дороги, если вес валидный
-            if (!isNaN(weight) && weight >= 0) {
+                nodeCoords.set(startNodeId, { x: road.x1, y: road.y1, floorIndex });
+                nodeCoords.set(endNodeId, { x: road.x2, y: road.y2, floorIndex });
+                nodeToRoadIdMap.set(startNodeId, roadId); // Запоминаем принадлежность
+                nodeToRoadIdMap.set(endNodeId, roadId);   // Запоминаем принадлежность
                 addEdge(startNodeId, endNodeId, weight);
-            } else {
-                console.warn(`Invalid weight (${weight}) calculated for road ${road.id}. Edge not added initially.`);
-            }
 
+                roadEndpoints.get(floorIndex).push({ id: startNodeId, x: road.x1, y: road.y1, roadId: roadId });
+                roadEndpoints.get(floorIndex).push({ id: endNodeId, x: road.x2, y: road.y2, roadId: roadId });
+                allRoadSegments.push({ x1: road.x1, y1: road.y1, x2: road.x2, y2: road.y2, startNodeId, endNodeId, roadId, floorIndex, weight });
+            });
 
-            // Сохраняем конечные точки для поиска пересечений
-            roadEndpoints.get(floorIndex).push({ id: startNodeId, x: road.x1, y: road.y1, roadId: road.id });
-            roadEndpoints.get(floorIndex).push({ id: endNodeId, x: road.x2, y: road.y2, roadId: road.id });
-        });
+        // 1б: Дороги из SVG path
+        (layer.roads || []).filter(road => road && road.data && typeof road.data === 'string')
+            .forEach((road, roadIndex) => {
+                const roadId = road.id || `pathroad-${floorIndex}-${roadIndex}`;
+                try {
+                    const { segments, points } = parseSvgPathRoad(road.data, roadId, floorIndex);
+                    if (points.length > 1 && segments.length > 0) {
+                        const nodeIdsMap = new Map();
+                        const validPathNodeIds = [];
 
-        // Лестницы: создаем узлы
-        (layer.rooms || []).filter(r => r.type === 'stair').forEach(stair => {
-            const nodeId = `stair-${stair.id}`;
-            // Проверяем координаты лестницы
-            if (isNaN(stair.x) || isNaN(stair.y)) {
-                console.warn(`Stair ${stair.id} has invalid coordinates. Skipping node creation.`);
-                return;
-            }
-            const entryX = stair.x + (stair.width ? stair.width / 2 : 0);
-            const entryY = stair.y + (stair.height ? stair.height / 2 : 0);
-            nodeCoords.set(nodeId, { x: entryX, y: entryY, floorIndex });
-            if (!graph.has(nodeId)) graph.set(nodeId, new Map());
+                        points.forEach((p, i) => {
+                            if(isNaN(p.x) || isNaN(p.y)) return;
+                            const nodeId = `path-${roadId}-node-${i}`;
+                            nodeCoords.set(nodeId, { x: p.x, y: p.y, floorIndex });
+                            nodeToRoadIdMap.set(nodeId, roadId); // Запоминаем принадлежность
+                            if (!graph.has(nodeId)) graph.set(nodeId, new Map());
+                            nodeIdsMap.set(i, nodeId);
+                            validPathNodeIds.push(nodeId);
+                        });
 
-            // Группировка лестниц
-            const logicalId = stair.id.replace(/_floor\d+$/, '');
-            if (!stairs.has(logicalId)) stairs.set(logicalId, []);
-            stairs.get(logicalId).push({ id: nodeId, x: entryX, y: entryY, floorIndex });
-        });
+                        if(validPathNodeIds.length < 2) return;
 
-        // --- НОВОЕ: Иконки: создаем узлы ---
-        (layer.vectors || []).filter(v => v.type === 'icon').forEach(icon => {
-            if (!icon.id) {
-                console.warn("Found an icon without an ID, skipping node creation:", icon);
-                return;
-            }
+                        segments.forEach((seg) => {
+                            const p1Index = points.findIndex(p => Math.abs(p.x - seg.x1) < 1e-6 && Math.abs(p.y - seg.y1) < 1e-6);
+                            const p2Index = points.findIndex(p => Math.abs(p.x - seg.x2) < 1e-6 && Math.abs(p.y - seg.y2) < 1e-6);
+                            if (p1Index !== -1 && p2Index !== -1) {
+                                const id1 = nodeIdsMap.get(p1Index);
+                                const id2 = nodeIdsMap.get(p2Index);
+                                if (id1 && id2 && id1 !== id2) {
+                                    const w = distance(seg.x1, seg.y1, seg.x2, seg.y2);
+                                    if (!isNaN(w) && w > 1e-6) {
+                                        addEdge(id1, id2, w);
+                                        allRoadSegments.push({ ...seg, startNodeId: id1, endNodeId: id2, weight: w });
+                                    }
+                                }
+                            }
+                        });
+
+                        const startNodeId = validPathNodeIds[0];
+                        const endNodeId = validPathNodeIds[validPathNodeIds.length - 1];
+                        const startPoint = nodeCoords.get(startNodeId);
+                        const endPoint = nodeCoords.get(endNodeId);
+                        if(startPoint) roadEndpoints.get(floorIndex).push({ id: startNodeId, x: startPoint.x, y: startPoint.y, roadId });
+                        if(endPoint && startNodeId !== endNodeId) roadEndpoints.get(floorIndex).push({ id: endNodeId, x: endPoint.x, y: endPoint.y, roadId });
+                    }
+                } catch (e) { console.error(`Ошибка парсинга SVG дороги ${roadId}:`, e); }
+            });
+
+        // 1в: Иконки и лестницы
+        (layer.vectors || []).filter(v => v && v.type === 'icon' && v.id).forEach(icon => {
             const nodeId = `icon-${icon.id}`;
             const coords = getIconCoords(icon);
-            if (coords) {
+            if (coords && !isNaN(coords.x) && !isNaN(coords.y)) {
                 nodeCoords.set(nodeId, { x: coords.x, y: coords.y, floorIndex });
                 if (!graph.has(nodeId)) graph.set(nodeId, new Map());
-            } else {
-                console.warn(`Could not get coordinates for icon ${nodeId}. Node not added.`);
+                nodeToRoadIdMap.set(nodeId, `icon_${floorIndex}`); // Принадлежность иконки условна
+                const stairMatch = icon.id.match(/^ladder(\d+)_(\d+)$/);
+                if (stairMatch) {
+                    const logicalId = stairMatch[1];
+                    const currentFloorActualIndex = floorIndex;
+                    if (!stairIconsMap.has(logicalId)) stairIconsMap.set(logicalId, []);
+                    stairIconsMap.get(logicalId).push({ id: nodeId, x: coords.x, y: coords.y, floorIndex: currentFloorActualIndex });
+                }
             }
         });
-    }); // Конец layers.forEach (этап 1)
+    }); // Конец Этапа 1
 
-    // 2. Соединение пересечений дорог на каждом этаже
+    // ==================================================
+    // Этап 2: Соединение ТОЧНЫХ пересечений (концов дорог)
+    // ==================================================
+    console.log("--- Этап 2: Соединение точных пересечений (концов дорог) ---");
     layers.forEach((_, floorIndex) => {
         const endpoints = roadEndpoints.get(floorIndex) || [];
-        const connectedPairs = new Set(); // Отслеживаем уже соединенные пары
-
+        const connectedPairs = new Set();
         for (let i = 0; i < endpoints.length; i++) {
             for (let j = i + 1; j < endpoints.length; j++) {
-                const p1 = endpoints[i];
-                const p2 = endpoints[j];
-
-                // --- ДОБАВЛЕНО: Не соединяем конечные точки одной и той же дороги ---
-                if (p1.roadId === p2.roadId) {
-                    continue;
-                }
-
-                // Ключ для отслеживания пары
-                const pairKey = [p1.id, p2.id].sort().join('-');
-                if (connectedPairs.has(pairKey)) {
-                    continue; // Пропускаем, если уже соединили
-                }
-
-                // Проверка координат перед вычислением расстояния
-                if (isNaN(p1.x) || isNaN(p1.y) || isNaN(p2.x) || isNaN(p2.y)) {
-                    console.warn(`Skipping intersection check due to invalid coordinates: ${p1.id} or ${p2.id}`);
-                    continue;
-                }
-
-                const distSq = distance(p1.x, p1.y, p2.x, p2.y) ** 2;
-
-                if (!isNaN(distSq) && distSq < INTERSECTION_THRESHOLD_SQ) {
-                    // Соединяем близкие конечные точки дорог нулевым весом
-                    addEdge(p1.id, p2.id, 0);
-                    connectedPairs.add(pairKey); // Отмечаем пару как соединенную
-                    // console.log(`Connecting intersection: ${p1.id} <-> ${p2.id}`); // Лог соединения
+                const p1 = endpoints[i]; const p2 = endpoints[j];
+                if (p1.roadId === p2.roadId || isNaN(p1.x) || isNaN(p1.y) || isNaN(p2.x) || isNaN(p2.y)) continue;
+                const pairKey = [p1.id, p2.id].sort().join('--');
+                if (connectedPairs.has(pairKey)) continue;
+                const distSq = (p1.x - p2.x)**2 + (p1.y - p2.y)**2;
+                if (!isNaN(distSq) && distSq < INTERSECTION_THRESHOLD_SQ) { // Маленький порог для концов
+                    // console.log(`   -> Соединяем ТОЧНОЕ пересечение F${floorIndex}: ${p1.id}(${p1.roadId}) <-> ${p2.id}(${p2.roadId})`);
+                    addEdge(p1.id, p2.id, 0); // Нулевой вес для точного совпадения
+                    connectedPairs.add(pairKey);
                 }
             }
         }
-    }); // Конец layers.forEach (этап 2)
+    }); // Конец Этапа 2
 
-    // 3. Соединение ИКОНОК и ЛЕСТНИЦ с ближайшими дорогами
+    // ==================================================
+    // Этап 3: Соединение ИКОНОК с дорогами (создание вирт. узлов)
+    // ==================================================
+    console.log("--- Этап 3: Соединение Иконок с Дорогами ---");
+    const virtualNodeMap = new Map();
+    const nodesToProcessForProximity = []; // Собираем все узлы для этапа 4
+
     nodeCoords.forEach((nodeInfo, nodeId) => {
-        // --- ИЗМЕНЕНИЕ: Обрабатываем только узлы ИКОНОК и ЛЕСТНИЦ ---
-        if (nodeId.startsWith('icon-') || nodeId.startsWith('stair-')) {
-            // Проверка координат узла
-            if (isNaN(nodeInfo.x) || isNaN(nodeInfo.y)) {
-                console.warn(`Node ${nodeId} has invalid coordinates. Skipping road connection.`);
-                return;
-            }
+        // Добавляем все узлы дорог и иконок в список для проверки близости
+        if (nodeId.startsWith('road-') || nodeId.startsWith('path-') || nodeId.startsWith('icon-')) {
+            nodesToProcessForProximity.push(nodeId);
+        }
 
-            let closestRoadPointInfo = null;
-            let minDistanceSq = CONNECTION_THRESHOLD_SQ;
+        if (nodeId.startsWith('icon-')) {
+            if (isNaN(nodeInfo.x) || isNaN(nodeInfo.y)) return;
+            let closestDistSq = CONNECTION_THRESHOLD_SQ;
+            let connectionCandidate = null;
+            const currentFloor = nodeInfo.floorIndex;
 
-            const currentLayer = layers.find(l => l.floorIndex === nodeInfo.floorIndex);
-
-            if (currentLayer && currentLayer.roads) {
-                currentLayer.roads.forEach(road => {
-                    // Проверяем координаты дороги перед использованием
-                    if (isNaN(road.x1) || isNaN(road.y1) || isNaN(road.x2) || isNaN(road.y2)) {
-                        // console.warn(`Skipping connection check for node ${nodeId} to road ${road.id} due to invalid road coordinates.`);
-                        return; // Пропускаем эту дорогу
+            // 3a. Ищем ближайший существующий узел дороги
+            nodeCoords.forEach((roadNodeInfo, roadNodeId) => {
+                if ((roadNodeId.startsWith('road-') || roadNodeId.startsWith('path-')) && roadNodeInfo.floorIndex === currentFloor) {
+                    if (isNaN(roadNodeInfo.x) || isNaN(roadNodeInfo.y)) return;
+                    const distSq = (nodeInfo.x - roadNodeInfo.x)**2 + (nodeInfo.y - roadNodeInfo.y)**2;
+                    if (!isNaN(distSq) && distSq < closestDistSq) {
+                        closestDistSq = distSq;
+                        connectionCandidate = { type: 'node', id: roadNodeId, point: { x: roadNodeInfo.x, y: roadNodeInfo.y }, distSq: distSq };
                     }
-
-                    const closestOnSeg = getClosestPointOnSegment(
-                        nodeInfo.x, nodeInfo.y,
-                        road.x1, road.y1,
-                        road.x2, road.y2
-                    );
-
-                    // Проверяем результат getClosestPointOnSegment
-                    if (isNaN(closestOnSeg.distSq)) {
-                        // console.warn(`NaN distance calculated for node ${nodeId} to road ${road.id}. Skipping this road segment.`);
-                        return;
-                    }
-
-
-                    if (closestOnSeg.distSq < minDistanceSq) {
-                        minDistanceSq = closestOnSeg.distSq;
-                        closestRoadPointInfo = {
-                            x: closestOnSeg.x,
-                            y: closestOnSeg.y,
-                            roadId: road.id,
-                            roadStartNodeId: `road-${road.id}-start`,
-                            roadEndNodeId: `road-${road.id}-end`,
-                            roadStartX: road.x1,
-                            roadStartY: road.y1,
-                            roadEndX: road.x2,
-                            roadEndY: road.y2,
-                        };
-                    }
-                });
-            }
-
-
-            if (closestRoadPointInfo) {
-                const { roadId, x, y, roadStartX, roadStartY, roadEndX, roadEndY, roadStartNodeId, roadEndNodeId } = closestRoadPointInfo;
-
-                // Проверка координат ближайшей точки и концов дороги
-                if (isNaN(x) || isNaN(y) || isNaN(roadStartX) || isNaN(roadStartY) || isNaN(roadEndX) || isNaN(roadEndY)) {
-                    console.warn(`Invalid coordinates involved in connecting node ${nodeId} to road ${roadId}. Skipping connection.`);
-                    return;
                 }
+            });
 
-
-                const distToClosest = Math.sqrt(minDistanceSq);
-                // Создаем ID для "виртуального" узла
-                // Заменяем недопустимые символы (например, '/') на '_' в nodeId для создания virtualNodeId
-                const sanitizedNodeId = nodeId.replace(/[^a-zA-Z0-9-_]/g, '_');
-                const virtualNodeId = `virt-${sanitizedNodeId}-on-${roadId}`;
-
-
-                const distFromStart = distance(x, y, roadStartX, roadStartY);
-
-                // Проверка рассчитанных расстояний
-                if (isNaN(distToClosest) || isNaN(distFromStart)) {
-                    console.warn(`NaN distance calculated for node ${nodeId} connection to road ${roadId}. Skipping connection. distToClosest=${distToClosest}, distFromStart=${distFromStart}`);
-                    return;
+            // 3b. Ищем ближайшую точку на сегменте дороги
+            allRoadSegments.filter(seg => seg.floorIndex === currentFloor).forEach((segment) => {
+                if (isNaN(segment.x1) || isNaN(segment.y1) || isNaN(segment.x2) || isNaN(segment.y2) || !segment.startNodeId || !segment.endNodeId) return;
+                const closestOnSeg = getClosestPointOnSegment(nodeInfo.x, nodeInfo.y, segment.x1, segment.y1, segment.x2, segment.y2);
+                if (isNaN(closestOnSeg.distSq) || closestOnSeg.distSq === Infinity) return;
+                if (closestOnSeg.distSq < closestDistSq) {
+                    closestDistSq = closestOnSeg.distSq;
+                    connectionCandidate = { type: 'segment', id: { startNodeId: segment.startNodeId, endNodeId: segment.endNodeId }, point: { x: closestOnSeg.x, y: closestOnSeg.y }, distSq: closestOnSeg.distSq, segmentData: segment };
                 }
+            });
 
+            // 3c. Создаем соединение
+            if (connectionCandidate) {
+                const dist = Math.sqrt(connectionCandidate.distSq);
+                if (isNaN(dist)) return;
+                let targetNodeId = '';
+                let connectionWeight = dist;
 
-                nodeCoords.set(virtualNodeId, { x, y, floorIndex: nodeInfo.floorIndex });
-                if (!graph.has(virtualNodeId)) graph.set(virtualNodeId, new Map());
+                if (connectionCandidate.type === 'node') {
+                    targetNodeId = connectionCandidate.id;
+                } else { // 'segment'
+                    const { x, y } = connectionCandidate.point;
+                    const { startNodeId: segStartId, endNodeId: segEndId, weight: segWeight, x1: sx1, y1: sy1, x2: sx2, y2: sy2, roadId: _segRoadId } = connectionCandidate.segmentData;
+                    if (isNaN(x) || isNaN(y) || !segStartId || !segEndId || isNaN(sx1) || isNaN(sy1) || isNaN(sx2) || isNaN(sy2) || isNaN(segWeight)) return;
+                    const vNodeKey = `${x.toFixed(2)},${y.toFixed(2)},${currentFloor}`;
 
-                // 1. Соединяем иконку/лестницу с виртуальным узлом
-                addEdge(nodeId, virtualNodeId, distToClosest);
-                // console.log(`Connecting node ${nodeId} to virtual node ${virtualNodeId} on road ${roadId} with weight ${distToClosest}`); // Лог
+                    if (virtualNodeMap.has(vNodeKey)) {
+                        targetNodeId = virtualNodeMap.get(vNodeKey);
+                    } else {
+                        const sanitizedIconId = nodeId.replace(/^icon-/, '').replace(/[^a-zA-Z0-9-_]/g, '_');
+                        let counter = 0;
+                        let potentialVNodeId = `virt-${sanitizedIconId}-on-${segStartId.split('-').pop()}-${segEndId.split('-').pop()}`;
+                        targetNodeId = potentialVNodeId;
+                        while (nodeCoords.has(targetNodeId)) targetNodeId = `${potentialVNodeId}-${counter++}`;
 
-                // 2. Вставляем виртуальный узел в цепочку дороги
-                const existingVirtuals = virtualNodesOnRoads.get(roadId);
-                if (!existingVirtuals) {
-                    console.error(`Could not find virtual node list for road ${roadId} when connecting ${nodeId}`);
-                    return; // Должен существовать, так как инициализировали ранее
-                }
+                        nodeCoords.set(targetNodeId, { x, y, floorIndex: currentFloor });
+                        nodeToRoadIdMap.set(targetNodeId, _segRoadId); // Вирт. узел принадлежит дороге сегмента
+                        if (!graph.has(targetNodeId)) graph.set(targetNodeId, new Map());
+                        virtualNodeMap.set(vNodeKey, targetNodeId);
+                        nodesToProcessForProximity.push(targetNodeId); // Добавляем вирт. узел для проверки близости
 
-                // Проверяем, существует ли уже такой виртуальный узел (по координатам или ID)
-                const alreadyExists = existingVirtuals.some(v => v.id === virtualNodeId || (Math.abs(v.x - x) < 0.1 && Math.abs(v.y - y) < 0.1));
+                        const weightStartToVirtual = distance(sx1, sy1, x, y);
+                        const weightVirtualToEnd = distance(x, y, sx2, sy2);
 
-                if (!alreadyExists) {
-                    const newVirtualInfo = { id: virtualNodeId, x, y, distFromStart };
-                    existingVirtuals.push(newVirtualInfo);
-                    existingVirtuals.sort((a, b) => a.distFromStart - b.distFromStart); // Сортируем
-
-                    // 3. Перестраиваем ребра вдоль дороги
-                    const startNodeData = nodeCoords.get(roadStartNodeId);
-                    const endNodeData = nodeCoords.get(roadEndNodeId);
-
-                    if (!startNodeData || !endNodeData) {
-                        console.warn(`Missing start/end node data for road ${roadId} when rebuilding edges.`);
-                        return;
-                    }
-
-                    // Полная цепочка: [start, ...sortedVirtuals, end]
-                    const fullChain = [
-                        { id: roadStartNodeId, x: startNodeData.x, y: startNodeData.y, distFromStart: 0 },
-                        ...existingVirtuals, // Уже отсортированные виртуальные узлы
-                        { id: roadEndNodeId, x: endNodeData.x, y: endNodeData.y, distFromStart: distance(startNodeData.x, startNodeData.y, endNodeData.x, endNodeData.y) }
-                    ];
-
-                    // Удаляем старое ребро между началом и концом (если оно было напрямую)
-                    graph.get(roadStartNodeId)?.delete(roadEndNodeId);
-                    graph.get(roadEndNodeId)?.delete(roadStartNodeId);
-
-                    // Добавляем новые ребра между соседними узлами в цепочке
-                    for (let i = 0; i < fullChain.length - 1; i++) {
-                        const nodeA = fullChain[i];
-                        const nodeB = fullChain[i + 1];
-
-                        // Проверка координат перед расчетом веса
-                        if (isNaN(nodeA.x) || isNaN(nodeA.y) || isNaN(nodeB.x) || isNaN(nodeB.y)) {
-                            console.warn(`Invalid coordinates for edge weight calculation between ${nodeA.id} and ${nodeB.id} on road ${roadId}. Skipping edge.`);
-                            continue;
+                        if (!isNaN(weightStartToVirtual) && !isNaN(weightVirtualToEnd) && weightStartToVirtual >= 0 && weightVirtualToEnd >= 0 &&
+                            (segWeight < 1e-6 || Math.abs(weightStartToVirtual + weightVirtualToEnd - segWeight) < 1e-3))
+                        {
+                            const _oldEdgeRemoved = removeEdge(segStartId, segEndId); // Гарантированно удаляем старое ребро
+                            // if (!_oldEdgeRemoved) console.warn(`   - Старое ребро ${segStartId} <-> ${segEndId} НЕ НАЙДЕНО для удаления при создании ${targetNodeId}`);
+                            addEdge(segStartId, targetNodeId, weightStartToVirtual);
+                            addEdge(targetNodeId, segEndId, weightVirtualToEnd);
+                        } else {
+                            console.warn(`Невалидные веса при разбиении сегмента ${segStartId}-${segEndId} -> ${targetNodeId}. Пропуск перестроения.`);
+                            // Если не удалось перестроить, не устанавливаем targetNodeId, чтобы иконка не повисла в воздухе
+                            targetNodeId = '';
                         }
-
-                        // Вес - прямое расстояние между точками A и B
-                        const weight = distance(nodeA.x, nodeA.y, nodeB.x, nodeB.y);
-
-                        // Удаляем старые связи между этими узлами (особенно между виртуальными)
-                        graph.get(nodeA.id)?.delete(nodeB.id);
-                        graph.get(nodeB.id)?.delete(nodeA.id);
-
-                        // Добавляем новое ребро
-                        addEdge(nodeA.id, nodeB.id, weight);
-                        // console.log(`Rebuilding edge: ${nodeA.id} <-> ${nodeB.id} on road ${roadId} with weight ${weight}`); // Лог
                     }
-                } else {
-                    // Если виртуальный узел уже существует, просто добавляем ребро от icon/stair к нему
-                    addEdge(nodeId, virtualNodeId, distToClosest);
-                    // console.log(`Node ${nodeId} connects to existing virtual node ${virtualNodeId} on road ${roadId}`); // Лог
                 }
 
-
-            } // else {
-            // console.log(`Node ${nodeId} on floor ${nodeInfo.floorIndex} is too far from any road.`);
-            //}
-        }
-    }); // Конец nodeCoords.forEach (этап 3)
-
-
-    // 4. Соединение лестниц между этажами
-    stairs.forEach((stairNodes) => {
-        if (stairNodes.length > 1) {
-            stairNodes.sort((a, b) => a.floorIndex - b.floorIndex);
-            for (let i = 0; i < stairNodes.length - 1; i++) {
-                const s1 = stairNodes[i];
-                const s2 = stairNodes[i + 1];
-                if (Math.abs(s1.floorIndex - s2.floorIndex) === 1) {
-                    // Проверка координат перед добавлением ребра лестницы
-                    if (isNaN(s1.x) || isNaN(s1.y) || isNaN(s2.x) || isNaN(s2.y)) {
-                        console.warn(`Invalid coordinates for stair connection between ${s1.id} and ${s2.id}. Skipping edge.`);
-                        continue;
-                    }
-                    addEdge(s1.id, s2.id, STAIR_FLOOR_CHANGE_WEIGHT);
-                    // console.log(`Connecting stairs: ${s1.id} (floor ${s1.floorIndex}) <-> ${s2.id} (floor ${s2.floorIndex})`); // Лог
+                if (targetNodeId) {
+                    addEdge(nodeId, targetNodeId, connectionWeight);
                 }
             }
         }
-    });
-    console.log("Graph construction finished. Graph size:", graph.size, "Node coords size:", nodeCoords.size); // Финальный лог
+    }); // Конец Этапа 3
+
+    // ==================================================
+    // !!! НОВЫЙ ЭТАП 3.5: Соединение БЛИЗКИХ точек на РАЗНЫХ дорогах !!!
+    // ==================================================
+    console.log("--- Этап 3.5: Соединение близких точек разных дорог ---");
+    layers.forEach((_, floorIndex) => {
+        // Фильтруем узлы для текущего этажа
+        const floorNodes = nodesToProcessForProximity.filter(nodeId => nodeCoords.get(nodeId)?.floorIndex === floorIndex);
+        console.log(`  Этаж ${floorIndex}: ${floorNodes.length} узлов для проверки близости.`);
+        const connectedProximityPairs = new Set();
+
+        for (let i = 0; i < floorNodes.length; i++) {
+            for (let j = i + 1; j < floorNodes.length; j++) {
+                const id1 = floorNodes[i];
+                const id2 = floorNodes[j];
+
+                const node1Info = nodeCoords.get(id1);
+                const node2Info = nodeCoords.get(id2);
+
+                // Получаем roadId для каждого узла (иконки имеют условный roadId)
+                const roadId1 = nodeToRoadIdMap.get(id1);
+                const roadId2 = nodeToRoadIdMap.get(id2);
+
+                // Соединяем только если узлы принадлежат РАЗНЫМ дорогам
+                // И не соединяем две иконки напрямую (они должны идти через дороги)
+                if (!roadId1 || !roadId2 || roadId1 === roadId2 || (id1.startsWith('icon-') && id2.startsWith('icon-'))) {
+                    continue;
+                }
+
+                if (!node1Info || !node2Info || isNaN(node1Info.x) || isNaN(node1Info.y) || isNaN(node2Info.x) || isNaN(node2Info.y)) {
+                    continue; // Пропускаем невалидные узлы
+                }
+
+                const pairKey = [id1, id2].sort().join('--');
+                if (connectedProximityPairs.has(pairKey)) continue;
+
+                const distSq = (node1Info.x - node2Info.x)**2 + (node1Info.y - node2Info.y)**2;
+
+                if (!isNaN(distSq) && distSq < PROXIMITY_CONNECTION_THRESHOLD_SQ) {
+                    const weight = Math.sqrt(distSq);
+                    // console.log(`   -> Соединяем близкие точки F${floorIndex}: ${id1}(${roadId1}) <-> ${id2}(${roadId2}), dist=${weight.toFixed(2)}`);
+                    addEdge(id1, id2, weight); // Вес равен фактическому расстоянию
+                    connectedProximityPairs.add(pairKey);
+                }
+            }
+        }
+    }); // Конец Этапа 3.5
+
+    // ==================================================
+    // Этап 4: Соединение иконок ЛЕСТНИЦ между этажами
+    // ==================================================
+    console.log("--- Этап 4: Соединение иконок лестниц ---");
+    stairIconsMap.forEach((stairNodesGroup) => {
+        if (stairNodesGroup.length > 1) {
+            const nodesByFloor = new Map();
+            stairNodesGroup.forEach(node => {
+                if (!nodeCoords.has(node.id)) return;
+                if (!nodesByFloor.has(node.floorIndex)) nodesByFloor.set(node.floorIndex, []);
+                nodesByFloor.get(node.floorIndex).push(node);
+            });
+            const sortedFloors = Array.from(nodesByFloor.keys()).sort((a, b) => a - b);
+            for (let i = 0; i < sortedFloors.length - 1; i++) {
+                const floorN_idx = sortedFloors[i];
+                const floorN1_idx = sortedFloors[i + 1];
+                if (floorN1_idx === floorN_idx + 1) {
+                    const nodesFloorN = nodesByFloor.get(floorN_idx);
+                    const nodesFloorN1 = nodesByFloor.get(floorN1_idx);
+                    if (nodesFloorN && nodesFloorN1) {
+                        nodesFloorN.forEach(s1 => {
+                            nodesFloorN1.forEach(s2 => {
+                                if (isNaN(s1.x) || isNaN(s1.y) || isNaN(s2.x) || isNaN(s2.y)) return;
+                                // console.log(`     > Соединение лестницы: ${s1.id} <-> ${s2.id}`);
+                                addEdge(s1.id, s2.id, STAIR_FLOOR_CHANGE_WEIGHT);
+                            }); }); } } } }
+    }); // Конец Этапа 4
+
+    console.log("--- Построение графа завершено --- Размер графа:", graph.size, "Координат узлов:", nodeCoords.size);
     return { graph, nodeCoords };
 }

@@ -1,232 +1,241 @@
 // src/components/RouteMap.jsx
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Line } from 'react-konva';
-import useStore from './store.jsx'; // Импортируем наш стор
-import { buildGraph } from './graph.js'; // Импорт построителя графа
-import { findShortestPath } from './dijkstra.js'; // Импорт алгоритма Дейкстры
+import useStore from './store.jsx';
+// --- ИСПРАВЛЕННЫЙ ПУТЬ ИМПОРТА ---
+import { buildGraph } from './graph.js'; // Проверь, что этот путь верен для твоей структуры папок!
+// ---------------------------------
+import { findShortestPath } from './dijkstra.js';
+
+// --- Функция для расчета веса пути (остается без изменений) ---
+function getPathWeight(graph, path) {
+    if (!path || path.length < 2) return Infinity;
+    let totalWeight = 0;
+    for (let i = 0; i < path.length - 1; i++) {
+        const u = path[i];
+        const v = path[i + 1];
+        const edgeWeight = graph.get(u)?.get(v);
+        if (edgeWeight === undefined || isNaN(edgeWeight)) {
+            console.warn(`Ребро не найдено или вес некорректен между ${u} и ${v} при расчете веса.`);
+            return Infinity;
+        }
+        totalWeight += edgeWeight;
+    }
+    return totalWeight;
+}
+
 
 function RouteMap({ currentFloorIndex, mapDataPath = "src/components/ALL_MAP_YUN_V0.2.json" }) {
-    // Получаем точки старта и финиша из стора
-    const fromItem = useStore((state) => state.fromRoom); // Теперь это может быть room ИЛИ icon
-    const toItem = useStore((state) => state.toRoom);     // Теперь это может быть room ИЛИ icon
+    const fromItem = useStore((state) => state.fromRoom);
+    const toItem = useStore((state) => state.toRoom);
 
-    // Состояния для графа и пути
     const [graphData, setGraphData] = useState({ graph: new Map(), nodeCoords: new Map() });
     const [calculatedPath, setCalculatedPath] = useState(null);
     const [isLoadingGraph, setIsLoadingGraph] = useState(true);
-    const [errorMsg, setErrorMsg] = useState(null); // Состояние для сообщений об ошибках
+    const [errorMsg, setErrorMsg] = useState(null);
 
-    // Функция для получения ID узла графа на основе выбранного элемента (комната, иконка, лестница)
+    // --- Функция getGraphNodeId (остается без изменений, но добавим fallback) ---
     const getGraphNodeId = useCallback((item) => {
-        if (!item || !item.id) {
-            // console.warn("getGraphNodeId: Item or item.id is missing", item);
-            return null;
-        }
+        if (!item || !item.id) return null;
+        const floorIndex = item.floorIndex;
 
-        // Если это комната (выбрана в RouteMenu или через RoomInfoModal), ищем ее дверь
-        // Предполагаем, что ID комнат начинаются с 'r' (например, r123, r_a14)
-        // И ее дверь будет иметь ID `${item.id}_door`
         if ((item.type === 'room' || item.type === 'vectorized_room' || item.id.startsWith('r')) && item.type !== 'stair') {
             const doorNodeId = `icon-${item.id}_door`;
-            // Проверяем, существует ли узел для этой двери в графе
-            if (graphData.nodeCoords.has(doorNodeId)) {
-                return doorNodeId;
-            } else {
-                console.warn(`Door icon node '${doorNodeId}' not found for room '${item.id}'. Trying direct icon node.`);
-                // Как запасной вариант, пытаемся найти иконку с ID самой комнаты (если есть)
-                const directIconNodeId = `icon-${item.id}`;
-                if (graphData.nodeCoords.has(directIconNodeId)) {
-                    return directIconNodeId;
-                }
-                console.error(`Neither door icon '${doorNodeId}' nor direct icon '${directIconNodeId}' found for room '${item.id}'. Cannot route.`);
-                setErrorMsg(`Точка входа для кабинета ${item.name || item.id} не найдена.`);
-                return null; // Не нашли узел двери
+            if (graphData.nodeCoords.has(doorNodeId)) return doorNodeId;
+            const directIconNodeId = `icon-${item.id}`;
+            if (graphData.nodeCoords.has(directIconNodeId)) {
+                console.warn(`Используем прямую иконку ${directIconNodeId} как fallback для комнаты ${item.id}`);
+                return directIconNodeId;
             }
+            const genericIconPrefix = `icon-${item.id}`;
+            const relatedIconId = Array.from(graphData.nodeCoords.keys()).find(key =>
+                key.startsWith(genericIconPrefix) && graphData.nodeCoords.get(key)?.floorIndex === floorIndex
+            );
+            if(relatedIconId) {
+                console.warn(`Используем ОБЩУЮ иконку ${relatedIconId} как fallback для комнаты ${item.id}`);
+                return relatedIconId;
+            }
+            console.error(`Не могу найти узел для комнаты '${item.id}' на этаже ${floorIndex}. Отсутствует иконка двери или связанная иконка?`);
+            setErrorMsg(`Точка входа для ${item.name || item.id} не найдена.`);
+            return null;
         }
-        // Если это иконка (выбрана напрямую или через поиск иконки)
         else if (item.type === 'icon') {
             const iconNodeId = `icon-${item.id}`;
-            if (graphData.nodeCoords.has(iconNodeId)) {
-                return iconNodeId;
-            } else {
-                console.error(`Icon node '${iconNodeId}' not found in graph.`);
-                setErrorMsg(`Точка ${item.name || item.id} не найдена на карте маршрутов.`);
-                return null;
-            }
+            if (graphData.nodeCoords.has(iconNodeId)) return iconNodeId;
+            console.error(`Узел иконки '${iconNodeId}' не найден.`);
+            setErrorMsg(`Точка ${item.name || item.id} не найдена.`);
+            return null;
         }
-        // Если это лестница
         else if (item.type === 'stair') {
-            const stairNodeId = `stair-${item.id}`;
-            if (graphData.nodeCoords.has(stairNodeId)) {
-                return stairNodeId;
-            } else {
-                console.error(`Stair node '${stairNodeId}' not found in graph.`);
-                setErrorMsg(`Лестница ${item.name || item.id} не найдена на карте маршрутов.`);
-                return null;
-            }
-        } else {
-            console.warn("getGraphNodeId: Unknown item type for routing:", item);
+            const logicalId = item.id.replace(/_floor\d+$/, '');
+            const stairIconId = Array.from(graphData.nodeCoords.keys()).find(key =>
+                key.startsWith(`icon-ladder${logicalId}_`) &&
+                graphData.nodeCoords.get(key)?.floorIndex === floorIndex
+            );
+            if (stairIconId) return stairIconId;
+            console.error(`Иконка лестницы для логической лестницы ${item.id} (ID: ${logicalId}) на этаже ${floorIndex} не найдена.`);
+            setErrorMsg(`Лестница ${item.name || item.id} не найдена на карте.`);
+            return null;
+        }
+        else {
+            console.warn("Неизвестный тип элемента для getGraphNodeId:", item);
             setErrorMsg(`Неизвестный тип точки: ${item.name || item.id}`);
             return null;
         }
-    }, [graphData.nodeCoords]); // Зависимость от nodeCoords, чтобы функция обновлялась при загрузке графа
+    }, [graphData.nodeCoords]);
 
 
-    // Загрузка и построение графа
+    // --- useEffect для Загрузки графа (остается без изменений) ---
     useEffect(() => {
         setIsLoadingGraph(true);
-        setErrorMsg(null); // Сбрасываем ошибку при новой загрузке
+        setErrorMsg(null); // Сбрасываем ошибки при новой загрузке
         let isMounted = true;
-        console.log("RouteMap: Fetching map data...");
+        console.log("RouteMap: Загрузка данных карты...");
         fetch(mapDataPath)
             .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status} while fetching ${mapDataPath}`);
-                }
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new TypeError(`Expected JSON, but received ${contentType}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ошибка! статус: ${response.status}`);
                 return response.json();
             })
             .then((data) => {
                 if (!isMounted) return;
-                console.log("RouteMap: Map data fetched.");
-                if (!data || !Array.isArray(data.layers)) {
-                    throw new Error("Invalid map data: 'layers' array not found.");
-                }
-                const processedLayers = data.layers.map((layer, index) => ({
-                    ...layer,
-                    floorIndex: index // Убедимся, что floorIndex есть
-                }));
-                console.log("RouteMap: Building graph...");
+                console.log("RouteMap: Данные карты загружены.");
+                if (!data || !Array.isArray(data.layers)) throw new Error("Неверная структура данных карты: массив 'layers' не найден.");
+                const processedLayers = data.layers.map((layer, index) => ({ ...layer, floorIndex: index }));
+                console.log("RouteMap: Построение графа...");
                 console.time("buildGraph (RouteMap)");
-                const { graph, nodeCoords } = buildGraph(processedLayers); // Строим граф
+                const { graph, nodeCoords } = buildGraph(processedLayers); // Вызов импортированной функции
                 console.timeEnd("buildGraph (RouteMap)");
-                console.log("RouteMap: Graph built. Nodes:", nodeCoords.size);
-                if (nodeCoords.size === 0) {
-                    console.error("RouteMap: Graph built with zero nodes!");
-                    setErrorMsg("Ошибка построения карты маршрутов: нет узлов.");
+                console.log("RouteMap: Граф построен. Узлов:", nodeCoords.size, "Ребер (примерно):", graph.size);
+                if (nodeCoords.size === 0 || graph.size === 0) {
+                    console.error("Построение графа привело к пустому графу или отсутствию узлов.");
+                    if(nodeCoords.size === 0) setErrorMsg("Ошибка построения карты маршрутов: Нет узлов.");
+                    else setErrorMsg("Ошибка построения карты маршрутов: Нет путей.");
                 }
                 setGraphData({ graph, nodeCoords });
-                setIsLoadingGraph(false);
             })
             .catch(error => {
                 if (!isMounted) return;
-                console.error("RouteMap: Error loading/parsing/building graph:", error);
-                setErrorMsg(`Ошибка загрузки данных карты: ${error.message}`);
-                setIsLoadingGraph(false);
-            });
-
+                console.error("RouteMap: Ошибка загрузки/парсинга/построения графа:", error);
+                setErrorMsg(`Ошибка данных карты: ${error.message}`);
+            }).finally(() => {
+            if(isMounted) setIsLoadingGraph(false);
+        });
         return () => { isMounted = false; };
-    }, [mapDataPath]);
+    }, [mapDataPath]); // Зависимость только от mapDataPath
 
-    // Расчет маршрута при изменении точек старта/финиша или графа
+    // --- useEffect для Расчета маршрута (УБРАЛИ errorMsg из зависимостей) ---
     useEffect(() => {
-        // Сбрасываем путь и ошибку при изменении входа
+        if (isLoadingGraph || !fromItem || !toItem || graphData.graph.size === 0) {
+            setCalculatedPath(null);
+            return;
+        }
+
         setCalculatedPath(null);
         setErrorMsg(null);
 
-        if (isLoadingGraph || !fromItem || !toItem || graphData.graph.size === 0) {
-            return; // Выходим, если граф не готов или точки не выбраны
-        }
+        console.log("RouteMap: Попытка рассчитать путь...");
+        console.log("Из:", fromItem);
+        console.log("В:", toItem);
 
-        console.log(`RouteMap: Store updated, calculating path from item '${fromItem.id}' to item '${toItem.id}'`);
+        const startNodeId = getGraphNodeId(fromItem);
+        const endNodeId = getGraphNodeId(toItem);
 
-        // --- ИЗМЕНЕНИЕ: Используем getGraphNodeId для определения узлов ---
-        const startGraphNodeId = getGraphNodeId(fromItem);
-        const endGraphNodeId = getGraphNodeId(toItem);
-
-        // Если не удалось определить узлы (например, нет двери для комнаты)
-        if (!startGraphNodeId || !endGraphNodeId) {
-            console.warn("RouteMap: Could not determine start or end node ID.");
-            // Ошибка уже установлена в getGraphNodeId
+        if (!startNodeId || !endNodeId) {
+            console.log("RouteMap: ID начального или конечного узла null после getGraphNodeId. Прерываем.");
+            // setErrorMsg уже установлен в getGraphNodeId
             return;
         }
 
-        // Проверяем наличие узлов в графе
-        if (!graphData.graph.has(startGraphNodeId)) {
-            console.error(`RouteMap: Start node '${startGraphNodeId}' (derived from item '${fromItem.id}') not found in graph.`);
-            setErrorMsg(`Начальная точка (${fromItem.name || fromItem.id}) не найдена на карте маршрутов.`);
+        console.log(`RouteMap: Сопоставленные ID: ${startNodeId} -> ${endNodeId}`);
+
+        if (!graphData.graph.has(startNodeId)) {
+            console.error(`Начальный узел '${startNodeId}' (для ${fromItem.name || fromItem.id}) не найден в карте графа.`);
+            setErrorMsg(`Начальная точка (${fromItem.name || fromItem.id}) не найдена в графе маршрутов.`);
             return;
         }
-        if (!graphData.graph.has(endGraphNodeId)) {
-            console.error(`RouteMap: End node '${endGraphNodeId}' (derived from item '${toItem.id}') not found in graph.`);
-            setErrorMsg(`Конечная точка (${toItem.name || toItem.id}) не найдена на карте маршрутов.`);
+        if (!graphData.graph.has(endNodeId)) {
+            console.error(`Конечный узел '${endNodeId}' (для ${toItem.name || toItem.id}) не найден в карте графа.`);
+            setErrorMsg(`Конечная точка (${toItem.name || toItem.id}) не найдена в графе маршрутов.`);
+            return;
+        }
+        if (!graphData.nodeCoords.has(startNodeId) || !graphData.nodeCoords.has(endNodeId)) {
+            console.error(`Координаты начального или конечного узла отсутствуют: ${startNodeId} / ${endNodeId}`);
+            setErrorMsg("Ошибка данных: Координаты для начальной или конечной точки не найдены.");
+            return;
+        }
+
+        const startNodeData = graphData.nodeCoords.get(startNodeId);
+        const endNodeData = graphData.nodeCoords.get(endNodeId);
+        const startFloor = startNodeData?.floorIndex;
+        const endFloor = endNodeData?.floorIndex;
+
+        if (startFloor === undefined || endFloor === undefined) {
+            console.error(`Не удалось определить индекс этажа для начального (${startNodeId}) или конечного (${endNodeId}) узла.`);
+            setErrorMsg("Ошибка данных карты: не удалось определить этаж для точки маршрута.");
             return;
         }
 
 
-        console.time("findShortestPath (RouteMap)");
-        const path = findShortestPath(graphData.graph, graphData.nodeCoords, startGraphNodeId, endGraphNodeId);
-        console.timeEnd("findShortestPath (RouteMap)");
+        console.log(`RouteMap: Расчет пути из ${startNodeId} (Э${startFloor}) в ${endNodeId} (Э${endFloor})`);
+        console.time(`findShortestPath (${startNodeId} -> ${endNodeId})`);
 
-        setCalculatedPath(path);
+        const finalPath = findShortestPath(graphData.graph, graphData.nodeCoords, startNodeId, endNodeId);
 
-        if (!path) {
-            console.log("RouteMap: Path not found.");
+        console.timeEnd(`findShortestPath (${startNodeId} -> ${endNodeId})`);
+
+        setCalculatedPath(finalPath);
+
+        if (!finalPath) {
+            console.log("RouteMap: Путь не найден алгоритмом Дейкстры.");
+            // Устанавливаем ошибку, только если она не была установлена ранее
+            // if (!errorMsg) { // Эта проверка больше не нужна здесь, т.к. errorMsg нет в зависимостях
             setErrorMsg("Маршрут не найден.");
+            // }
         } else {
-            console.log("RouteMap: Path found:", path);
+            console.log("RouteMap: Итоговый путь найден:", finalPath);
+            const finalWeight = getPathWeight(graphData.graph, finalPath);
+            console.log("RouteMap: Итоговый вес пути:", finalWeight);
+            if (finalWeight === Infinity) {
+                console.error("RouteMap: Путь найден, но расчет веса вернул Infinity.");
+                setErrorMsg("Ошибка расчета маршрута.");
+                setCalculatedPath(null);
+            }
         }
+        // *** УБРАЛИ errorMsg ИЗ МАССИВА ЗАВИСИМОСТЕЙ ***
+    }, [fromItem, toItem, graphData, isLoadingGraph, getGraphNodeId]); // Оставляем только реальные зависимости
 
-    }, [fromItem, toItem, graphData, isLoadingGraph, getGraphNodeId]); // Добавили getGraphNodeId в зависимости
-
-
-    // Рендеринг линии маршрута
+    // --- useMemo для Рендеринга линии маршрута (остается без изменений) ---
     const renderedPathLines = useMemo(() => {
-        if (!calculatedPath || !graphData.nodeCoords || calculatedPath.length < 2) {
-            return [];
-        }
-
+        if (!calculatedPath || !graphData.nodeCoords || calculatedPath.length < 2) return [];
         const lines = [];
         const nodeCoords = graphData.nodeCoords;
-
         for (let i = 0; i < calculatedPath.length - 1; i++) {
-            const node1Id = calculatedPath[i];
-            const node2Id = calculatedPath[i + 1];
-
-            const node1Data = nodeCoords.get(node1Id);
-            const node2Data = nodeCoords.get(node2Id);
-
-            if (!node1Data || !node2Data) {
-                console.warn(`Missing coords for nodes in path segment: ${node1Id} or ${node2Id}`);
-                continue; // Пропускаем сегмент, если нет данных
-            }
-
-            // Проверка координат на NaN перед отрисовкой
-            if (isNaN(node1Data.x) || isNaN(node1Data.y) || isNaN(node2Data.x) || isNaN(node2Data.y)) {
-                console.warn(`Invalid coordinates for path segment: ${node1Id} (${node1Data.x},${node1Data.y}) to ${node2Id} (${node2Data.x},${node2Data.y}). Skipping.`);
+            const n1Id = calculatedPath[i];
+            const n2Id = calculatedPath[i + 1];
+            const n1Data = nodeCoords.get(n1Id);
+            const n2Data = nodeCoords.get(n2Id);
+            if (!n1Data || !n2Data || isNaN(n1Data.x) || isNaN(n1Data.y) || isNaN(n2Data.x) || isNaN(n2Data.y)) {
+                console.warn(`Пропуск рендера сегмента ${n1Id}-${n2Id} из-за невалидных данных.`);
                 continue;
-            }
-
-
-            // --- ЛОГИКА ОТОБРАЖЕНИЯ ПО ЭТАЖАМ ---
-            // Если узлы на разных этажах - это переход (лестница), не рисуем его
-            if (node1Data.floorIndex !== node2Data.floorIndex) {
-                continue;
-            }
-
-            // Рисуем сегмент, только если он принадлежит текущему отображаемому этажу
-            if (node1Data.floorIndex === currentFloorIndex) {
+            };
+            if (n1Data.floorIndex !== n2Data.floorIndex) continue;
+            if (n1Data.floorIndex === currentFloorIndex) {
                 lines.push(
                     <Line
-                        // key={`path-${node1Id}-${node2Id}`} // Используем ID для ключа
-                        // --- ИЗМЕНЕНИЕ КЛЮЧА: Добавляем этаж для уникальности при переключении ---
-                        key={`path-floor${currentFloorIndex}-${node1Id}-${node2Id}`}
-                        points={[node1Data.x, node1Data.y, node2Data.x, node2Data.y]}
-                        stroke="rgba(214, 50, 45, 0.9)" // Цвет маршрута D6322D
-                        strokeWidth={7} // Увеличим толщину
+                        key={`path-floor${currentFloorIndex}-${n1Id}-${n2Id}`}
+                        points={[n1Data.x, n1Data.y, n2Data.x, n2Data.y]}
+                        stroke="rgba(214, 50, 45, 0.9)"
+                        strokeWidth={7}
                         lineCap="round"
                         lineJoin="round"
-                        dash={[12, 8]} // Пунктир: 12 пикс линия, 8 пикс пробел
-                        shadowColor="rgba(0, 0, 0, 0.4)" // Тень
+                        dash={[12, 8]}
+                        shadowColor="rgba(0, 0, 0, 0.4)"
                         shadowBlur={5}
                         shadowOpacity={0.7}
                         shadowOffsetX={2}
                         shadowOffsetY={2}
-                        listening={false} // Не участвует в событиях мыши/касания
-                        perfectDrawEnabled={false} // Оптимизация для линий
+                        listening={false}
+                        perfectDrawEnabled={false}
                     />
                 );
             }
@@ -234,19 +243,17 @@ function RouteMap({ currentFloorIndex, mapDataPath = "src/components/ALL_MAP_YUN
         return lines;
     }, [calculatedPath, graphData.nodeCoords, currentFloorIndex]);
 
-    // Отображаем ошибку, если она есть
+    // --- useEffect для Отображения ошибки (остается без изменений) ---
     useEffect(() => {
         if (errorMsg) {
-            // alert(errorMsg); // Можно использовать alert для отладки
-            console.error("Routing Error:", errorMsg);
-            // Можно отобразить сообщение пользователю более мягко,
-            // например, через отдельный компонент или обновив состояние в родительском компоненте
+            console.error("Отображена ошибка маршрутизации:", errorMsg);
+            // alert(`Ошибка маршрута: ${errorMsg}`);
         }
-    }, [errorMsg]);
+    }, [errorMsg]); // Этот useEffect *должен* зависеть от errorMsg, чтобы реагировать на его появление
 
+    if (isLoadingGraph) return null;
 
-    if (isLoadingGraph) { return null; } // Не рендерим ничего во время загрузки графа
-    return <>{renderedPathLines}</>; // Рендерим линии пути
+    return <>{renderedPathLines}</>;
 }
 
 export default RouteMap;

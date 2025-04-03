@@ -5,7 +5,7 @@ import '../BuildingMap.css';
 import useStore from './store.jsx';
 import RouteMap from "./RouteMap.jsx";
 
-const MAP_DATA_PATH = 'https://staticstorm.ru/map/map_data';
+const MAP_DATA_PATH = 'https://staticstorm.ru/map/map_data2';
 
 function BuildingMap({ isMapActive }) {
     // Utility function to detect mobile devices

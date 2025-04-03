@@ -91,7 +91,7 @@ function RouteMap({ currentFloorIndex}) {
         setErrorMsg(null); // Сбрасываем ошибки при новой загрузке
         let isMounted = true;
         console.log("RouteMap: Загрузка данных карты...");
-        fetch("https://staticstorm.ru/map/map_data2.json")
+        fetch("https://staticstorm.ru/map/map_data2")
             .then((response) => {
                 if (!response.ok) throw new Error(`HTTP ошибка! статус: ${response.status}`);
                 return response.json();

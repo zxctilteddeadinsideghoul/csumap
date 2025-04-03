@@ -25,7 +25,7 @@ function getPathWeight(graph, path) {
 }
 
 
-function RouteMap({ currentFloorIndex, mapDataPath = "src/components/ALL_MAP_YUN_V0.2.json" }) {
+function RouteMap({ currentFloorIndex}) {
     const fromItem = useStore((state) => state.fromRoom);
     const toItem = useStore((state) => state.toRoom);
 
@@ -91,7 +91,7 @@ function RouteMap({ currentFloorIndex, mapDataPath = "src/components/ALL_MAP_YUN
         setErrorMsg(null); // Сбрасываем ошибки при новой загрузке
         let isMounted = true;
         console.log("RouteMap: Загрузка данных карты...");
-        fetch(mapDataPath)
+        fetch("https://staticstorm.ru/map/map_data2.json")
             .then((response) => {
                 if (!response.ok) throw new Error(`HTTP ошибка! статус: ${response.status}`);
                 return response.json();
@@ -121,7 +121,7 @@ function RouteMap({ currentFloorIndex, mapDataPath = "src/components/ALL_MAP_YUN
             if(isMounted) setIsLoadingGraph(false);
         });
         return () => { isMounted = false; };
-    }, [mapDataPath]); // Зависимость только от mapDataPath
+    }, []); // Зависимость только от mapDataPath
 
     // --- useEffect для Расчета маршрута (УБРАЛИ errorMsg из зависимостей) ---
     useEffect(() => {
@@ -229,11 +229,7 @@ function RouteMap({ currentFloorIndex, mapDataPath = "src/components/ALL_MAP_YUN
                         lineCap="round"
                         lineJoin="round"
                         dash={[12, 8]}
-                        shadowColor="rgba(0, 0, 0, 0.4)"
-                        shadowBlur={5}
-                        shadowOpacity={0.7}
-                        shadowOffsetX={2}
-                        shadowOffsetY={2}
+
                         listening={false}
                         perfectDrawEnabled={false}
                     />

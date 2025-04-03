@@ -12,7 +12,7 @@ function Header() {
         .filter(room => room.name !== null && room.name !== undefined && room.name !== '')
         .map((room) => ({
             value: room.id,
-            label: room.name || room.id,
+            label: room.description ? `${room.name} (${room.description})` : room.name
         }));
 
     const handleSearchChange = (selectedOption) => {

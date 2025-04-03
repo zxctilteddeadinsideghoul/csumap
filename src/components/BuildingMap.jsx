@@ -5,7 +5,7 @@ import '../BuildingMap.css';
 import useStore from './store.jsx';
 import RouteMap from "./RouteMap.jsx";
 
-const MAP_DATA_PATH = 'src/components/ALL_MAP_YUN_V0.2.json';
+const MAP_DATA_PATH = 'https://staticstorm.ru/map/map_data';
 
 function BuildingMap({ isMapActive }) {
     // Utility function to detect mobile devices
@@ -118,8 +118,8 @@ function BuildingMap({ isMapActive }) {
     // Fetch and process map data
     useEffect(() => {
         let isMounted = true;
-        setLoading(true);
-        fetch(MAP_DATA_PATH)
+        console.log("RouteMap: Загрузка данных карты...");
+        fetch("https://staticstorm.ru/map/map_data2")
             .then((response) => {
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 return response.json();
@@ -284,7 +284,7 @@ function BuildingMap({ isMapActive }) {
                 <Line
                     key={road.id}
                     points={[road.x1, road.y1, road.x2, road.y2]}
-                    stroke={road.stroke || 'grey'}
+                    stroke={road.stroke || 'transparent'}
                     strokeWidth={road.strokeWidth || 2}
                     listening={false}
                     perfectDrawEnabled={false}
@@ -318,8 +318,8 @@ function BuildingMap({ isMapActive }) {
                 const isEndSelected = toRoom?.id === room.id;
                 let fillColor = 'rgba(200, 200, 200, 0.3)';
                 if (room.type === 'stair') fillColor = 'rgba(100, 100, 255 esetben, 0.6)';
-                if (isStartSelected) fillColor = 'rgba(0, 255, 0, 0.6)';
-                if (isEndSelected) fillColor = 'rgba(255, 0, 0, 0.6)';
+                if (isStartSelected) fillColor = 'rgba(255, 0, 0, 0.4)';
+                if (isEndSelected) fillColor = 'rgba(255, 0, 0, 0.4)';
                 if (isStartSelected && isEndSelected) fillColor = 'rgba(255, 165, 0, 0.7)';
 
                 if (room.type === 'stair') {
@@ -369,9 +369,9 @@ function BuildingMap({ isMapActive }) {
                                 perfectDrawEnabled={false}
                             />
                             <Text
-                                x={centerX}
+                                x={centerX-20}
                                 y={centerY}
-                                width={45}
+                                width={40}
                                 height={40}
                                 text={room.name}
                                 fontSize={12}

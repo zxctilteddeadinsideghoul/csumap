@@ -4,8 +4,8 @@ import {Layer, Line, Path, Rect, Stage, Text, Transformer} from "react-konva";
 
 function MapRedactor() {
   const stageRef = useRef()
-  const [stageScale, setStageScale] = useState(0.3);
-  const [stageX, setStageX] = useState(350);
+  const [stageScale, setStageScale] = useState(1);
+  const [stageX, setStageX] = useState(0);
   const [stageY, setStageY] = useState(0);
 
   const [data, setData] = useState({});
@@ -112,6 +112,19 @@ function MapRedactor() {
   const [vLines, setVLines] = useState([]);
   const transformerRef = useRef();
 
+  const formatToScale = (coordinate, isX) => {
+    const stage = stageRef.current.getStage();
+    const oldScale = stage.scaleX();
+
+    if (isX) {
+      return coordinate / oldScale - stage.x() / oldScale
+    }
+    else{
+      return coordinate / oldScale - stage.y() / oldScale
+    }
+
+  }
+
   const getSnapLines = (excludedShape) => {
     const stage = stageRef.current;
     if (!stage) return;
@@ -121,8 +134,10 @@ function MapRedactor() {
     stage.find("Rect").filter((node) => node.attrs.type === "room" || node.attrs.type === "vectorized_room").forEach((shape) => {
       if (shape === excludedShape) return;
       const box = shape.getClientRect();
-      vertical.push([box.x, box.x + box.width, box.x + box.width / 2]);
-      horizontal.push([box.y, box.y + box.height, box.y + box.height / 2]);
+      const x = box.x
+      const y = box.y
+      vertical.push([x, x + box.width, x + box.width / 2]);
+      horizontal.push([y, y + box.height,  + box.height / 2]);
     });
 
     return {
@@ -132,43 +147,46 @@ function MapRedactor() {
   };
 
   const getShapeSnappingEdges = () => {
-    const stage = stageRef.current;
     const tr = transformerRef.current;
     const box = tr.findOne(".back").getClientRect();
     const absPos = tr.findOne(".back").getClientRect();
+    const boxX = box.x
+    const boxY = box.y
+    const absPosX = absPos.x
+    const absPosY = absPos.y
 
     return {
       vertical: [
         {
-          guide: box.x,
-          offset: absPos.x - box.x,
+          guide: boxX,
+          offset: absPosX - boxX,
           snap: "start",
         },
         {
-          guide: box.x + box.width / 2,
-          offset: absPos.x - box.x - box.width / 2,
+          guide: boxX + box.width / 2,
+          offset: absPosX - boxX - box.width / 2,
           snap: "center",
         },
         {
-          guide: box.x + box.width,
-          offset: absPos.x - box.x - box.width,
+          guide: boxX + box.width,
+          offset: absPosX - boxX - box.width,
           snap: "end",
         },
       ],
       horizontal: [
         {
-          guide: box.y,
-          offset: absPos.y - box.y,
+          guide: boxY,
+          offset: absPosY - boxY,
           snap: "start",
         },
         {
-          guide: box.y + box.height / 2,
-          offset: absPos.y - box.y - box.height / 2,
+          guide: boxY + box.height / 2,
+          offset: absPosY - boxY - box.height / 2,
           snap: "center",
         },
         {
-          guide: box.y + box.height,
-          offset: absPos.y - box.y - box.height,
+          guide: boxY + box.height,
+          offset: absPosY - boxY - box.height,
           snap: "end",
         },
       ],
@@ -214,7 +232,7 @@ function MapRedactor() {
         stroke: "red",
         strokeWidth: 1,
         name: "guid-line",
-        visible: false
+
       };
 
       const hLines = [];
@@ -285,10 +303,38 @@ function MapRedactor() {
     const nodeAbsPos = selectedNode.getAbsolutePosition();
     const newPos = {
       x: nodeAbsPos.x - vecDiff.x,
-      y: nodeAbsPos.y - vecDiff.y,
+      y: nodeAbsPos.y  - vecDiff.y,
     };
 
     selectedNode.setAbsolutePosition(newPos);
+  };
+
+  const [coords, setCoords] = useState({"x": 0, "y": 0});
+  const [mode, setMode] = useState("move");
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [newRect, setNewRect] = useState(null);
+  const [rectangles, setRectangles] = useState([]);
+
+  const handleDrawing = () => {
+    setNewRect({x: coords.x, y: coords.y, width: 0, height: 0});
+    setIsDrawing(true);
+  }
+
+  const handleMouseMove = () => {
+    if (!isDrawing || !newRect) return;
+    setNewRect((prevRect) => ({
+      ...prevRect,
+      width: coords.x - prevRect.x,
+      height: coords.y - prevRect.y,
+    }));
+  };
+
+  const handleMouseUp = () => {
+    if (newRect) {
+      setRectangles([...rectangles, newRect]);
+      setNewRect(null);
+    }
+    setIsDrawing(false);
   };
 
 
@@ -352,10 +398,12 @@ function MapRedactor() {
             onClick={(e) => {
               console.log(e.target.attrs)
             }}
-            draggable
-            onMouseDown={(e) =>
-              transformerRef.current.nodes([e.currentTarget])
-            }
+            draggable={mode === "move"}
+            onMouseDown={(e) => {
+              if (mode === "move") {
+                transformerRef.current.nodes([e.currentTarget])
+              }
+            }}
           />
 
         )
@@ -373,10 +421,13 @@ function MapRedactor() {
             fill={"#D5D5D5"}
             strokeWidth={1}
             name={room.name}
-            draggable
-            onMouseDown={(e) =>
-              transformerRef.current.nodes([e.currentTarget])
-            }
+            draggable={mode === "move"}
+            onMouseDown={(e) => {
+              if (mode === "move") {
+                transformerRef.current.nodes([e.currentTarget])
+              }
+            }}
+
             description={room.description}
             workingtime={room.workingTime}
           />
@@ -395,11 +446,6 @@ function MapRedactor() {
 
   ), [curLayer, layers]);
 
-  const [coords, setCoords] = useState({"x": 0, "y": 0});
-  const [rects, setRects] = useState([])
-  const [firstTapCoords, setFirstTapCoords] = useState({});
-  const [firstTap, setFirstTap] = useState(true)
-  const [isDrawing, setIsDrawing] = useState(false);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -419,36 +465,34 @@ function MapRedactor() {
       }}>changeLayer
       </button>
       <button onClick={() => {
-        setIsDrawing(!isDrawing)
-        setFirstTap(true)
-      }}>changeDrawing
+        setMode("edit");
+      }}>Edit mode
+      </button>
+      <button onClick={() => {
+        setMode("draw")
+      }}>Drawing mode
+      </button>
+      <button onClick={() => {
+        setMode("move");
+      }}
+      >Move mode
       </button>
       <Stage height={window.innerHeight}
              width={window.innerWidth}
              ref={stageRef}
              onClick={(e) => {
-               e.target === stageRef.current && transformerRef.current.nodes([])
-               if (isDrawing) {
-                 if (firstTap) {
-                   setFirstTapCoords({"x": coords.x, "y": coords.y})
-                   setFirstTap(false)
-                 } else {
-                   setRects([...rects, {
-                     "x": firstTapCoords.x,
-                     "y": firstTapCoords.y,
-                     "width": coords.x - firstTapCoords.x,
-                     "height": coords.y - firstTapCoords.y
-                   }])
-                   setFirstTap(true)
-                 }
-               }
+               if (mode === "move")
+                 e.target === stageRef.current && transformerRef.current.nodes([])
              }}
              onWheel={handleWheel}
              scaleX={stageScale}
              scaleY={stageScale}
              x={stageX}
              y={stageY}
-             draggable={!isDrawing}
+             draggable={mode === "move"}
+             onMouseDown={() => {
+               if (mode === "draw") handleDrawing()
+             }}
              onMouseMove={(e) => {
                const stage = e.target.getStage();
                const oldScale = stage.scaleX();
@@ -457,33 +501,55 @@ function MapRedactor() {
                    "y": stage.getPointerPosition().y / oldScale - stage.y() / oldScale
                  }
                )
+               if (mode === "draw") handleMouseMove()
+             }}
+             onMouseUp={() => {
+               if (mode === "draw") handleMouseUp()
              }}
       >
         <Layer>
           {renderedWalls}
           {renderedRooms}
           {renderedIcons}
-          {rects.map((rect, index) => (
+          {rectangles.map((rect, i) => (
             <Rect
-              key={index}
+              key={i}
+              type="room"
               x={rect.x}
               y={rect.y}
               width={rect.width}
               height={rect.height}
-              fill={"red"}
-              draggable
-              onMouseDown={(e) =>
-                transformerRef.current.nodes([e.currentTarget])
+              stroke="black"
+              fill={"#D5D5D5"}
+              strokeWidth={1}
+              draggable={mode === "move"}
+              onMouseDown={(e) => {
+                if (mode === "move") {
+                  transformerRef.current.nodes([e.currentTarget])
+                }
               }
-              type={"room"}
+              }
+
             />
           ))}
+          {newRect && (
+            <Rect
+              x={newRect.x}
+              y={newRect.y}
+              width={newRect.width}
+              height={newRect.height}
+              stroke="red"
+              strokeWidth={2}
+
+              dash={[4, 4]}
+            />
+          )}
           <Transformer ref={transformerRef} onDragMove={onDragMove}/>
           {hLines.map((item, i) => (
-            <Line key={`h-${i}`} {...item} />
+            <Line key={`h-${i}`} {...item} x={formatToScale(item.x, true)} y={formatToScale(item.y, false)} />
           ))}
           {vLines.map((item, i) => (
-            <Line key={`v-${i}`} {...item} />
+            <Line key={`v-${i}`} {...item} x={formatToScale(item.x, true)} y={formatToScale(item.y, false)} />
           ))}
         </Layer>
       </Stage>

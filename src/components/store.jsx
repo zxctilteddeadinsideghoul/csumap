@@ -3,7 +3,7 @@ import {create} from 'zustand';
 const useStore = create((set) => ({
     fromRoom: null,
     toRoom: null,
-    rooms: [],
+    rooms: [ ],
     activeMenu: null,
     selectedSearchRoom: null,
     setFromRoom: (room) => set({fromRoom: room}),

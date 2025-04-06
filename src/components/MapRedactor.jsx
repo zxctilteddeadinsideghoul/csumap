@@ -4,9 +4,9 @@ import {Layer, Line, Path, Rect, Stage, Text, Transformer} from "react-konva";
 
 function MapRedactor() {
   const stageRef = useRef()
-  const [stageScale, setStageScale] = useState(1);
-  const [stageX, setStageX] = useState(0);
-  const [stageY, setStageY] = useState(0);
+  const [stageScale, setStageScale] = useState(0.5);
+  const [stageX, setStageX] = useState(250);
+  const [stageY, setStageY] = useState(-150);
 
   const [data, setData] = useState({});
 
@@ -339,7 +339,7 @@ function MapRedactor() {
 
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/map_data").then((response) => {
+    fetch("https://staticstorm.ru/map/map_data2").then((response) => {
         response.json().then(
           (response) => {
             setLayers(response.layers)
@@ -544,13 +544,15 @@ function MapRedactor() {
               dash={[4, 4]}
             />
           )}
-          <Transformer ref={transformerRef} onDragMove={onDragMove}/>
+          { mode === "move" && (
+              <>
+          <Transformer ref={transformerRef} onDragMove={() => onDragMove()} onDragEnd={() => {setHLines([]); setVLines([])}}/>
           {hLines.map((item, i) => (
             <Line key={`h-${i}`} {...item} x={formatToScale(item.x, true)} y={formatToScale(item.y, false)} />
           ))}
           {vLines.map((item, i) => (
             <Line key={`v-${i}`} {...item} x={formatToScale(item.x, true)} y={formatToScale(item.y, false)} />
-          ))}
+          ))}</>)}
         </Layer>
       </Stage>
     </>

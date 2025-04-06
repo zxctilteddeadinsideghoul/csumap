@@ -1,5 +1,6 @@
 import React, {use, useEffect, useMemo, useRef, useState} from "react";
 import {Layer, Line, Path, Rect, Stage, Text, Transformer} from "react-konva";
+import RoomEditorDialog from "./RoomEditorDialog.jsx";
 
 
 function MapRedactor() {
@@ -350,6 +351,8 @@ function MapRedactor() {
     );
   }, []);
 
+  const [selectedRoom, setSelectedRoom] = useState(null);
+
   const renderedWalls = useMemo(() =>
     (layers[curLayer]?.walls.map(wall => (
       <Path
@@ -427,6 +430,7 @@ function MapRedactor() {
                 transformerRef.current.nodes([e.currentTarget])
               }
             }}
+            onClick={() => {if (mode === "edit") setSelectedRoom(room)}}
 
             description={room.description}
             workingtime={room.workingTime}
@@ -553,8 +557,13 @@ function MapRedactor() {
           {vLines.map((item, i) => (
             <Line key={`v-${i}`} {...item} x={formatToScale(item.x, true)} y={formatToScale(item.y, false)} />
           ))}</>)}
+
         </Layer>
       </Stage>
+      <RoomEditorDialog
+          room={selectedRoom}
+          onClose={() => setSelectedRoom(null)}
+      />
     </>
   );
 }

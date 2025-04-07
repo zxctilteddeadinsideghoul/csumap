@@ -21,3 +21,9 @@
     font-size: 16px;
     color: #333;
 }
+
+@media (max-width: 480px) {
+    .settings-menu p{
+        font-size: 14px;
+    }
+}

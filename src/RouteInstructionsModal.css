@@ -1,0 +1,162 @@
+/* src/RouteInstructionsModal.css */
+.route-instructions-overlay {
+    position: fixed;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 500px;
+    z-index: 1002;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+}
+
+.route-instructions-content {
+    background-color: white;
+    padding: 15px 20px;
+    border-radius: 15px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+    position: relative;
+    pointer-events: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.instruction-text-container {
+    flex-grow: 1; /* Занимает основное пространство */
+    text-align: center; /* Центрируем текст и счетчик */
+    min-width: 0; /* Позволяет тексту сужаться */
+}
+
+.instruction-text-container p {
+    margin: 0 0 2px 0; /* Небольшой отступ снизу */
+    color: #343434;
+    font-size: 15px;
+    line-height: 1.4;
+    word-wrap: break-word; /* Перенос длинных слов */
+}
+
+.instruction-step-counter {
+    display: block; /* На новой строке */
+    font-size: 12px;
+    color: #666;
+}
+
+
+.instruction-nav-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0; /* Не сжимаем кнопки */
+}
+
+.instruction-nav-button svg path {
+    transition: stroke 0.2s ease;
+}
+
+.instruction-nav-button:hover:not(:disabled) {
+    background-color: #f0f0f0;
+}
+
+.instruction-nav-button:disabled {
+    cursor: default;
+    opacity: 0.3; /* Делаем неактивные кнопки полупрозрачными */
+}
+
+.instruction-nav-button:disabled svg path {
+    stroke: #aaa; /* Серый цвет для стрелок неактивных кнопок */
+}
+
+.prev-button {
+    /* Слева */
+}
+
+.next-button {
+    /* Справа */
+}
+
+
+.route-instructions-close-button {
+    position: absolute;
+    top: 5px;       /* Перемещаем немного выше */
+    right: 5px;     /* Перемещаем немного левее */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px; /* Уменьшаем padding */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    z-index: 2; /* Чтобы кнопка была над текстом, если перекроются */
+}
+
+.route-instructions-close-button svg {
+    display: block;
+    width: 12px; /* Уменьшаем размер крестика */
+    height: 12px;
+}
+
+
+.route-instructions-close-button:hover {
+    background-color: #f0f0f0;
+}
+
+.route-instructions-close-button:hover svg path {
+    fill: #d6322d;
+}
+
+
+@media (max-width: 768px) {
+    .route-instructions-overlay {
+        bottom: 90px;
+    }
+    .instruction-text-container p {
+        font-size: 14px;
+    }
+    .instruction-step-counter {
+        font-size: 11px;
+    }
+    .instruction-nav-button {
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .route-instructions-overlay {
+        bottom: 90px;
+        width: calc(100% - 20px);
+    }
+    .route-instructions-content {
+        padding: 10px 15px;
+        gap: 5px;
+    }
+    .instruction-text-container p {
+        font-size: 13px;
+    }
+
+    .instruction-nav-button {
+        padding: 5px;
+    }
+    .route-instructions-close-button {
+        padding: 4px;
+        top: 4px;
+        right: 4px;
+    }
+    .route-instructions-close-button svg {
+        width: 10px;
+        height: 10px;
+    }
+}

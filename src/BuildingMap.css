@@ -15,6 +15,9 @@
 }
 
 .floor-button {
+    font-family: "Nunito", sans-serif;
+    font-weight: 500;
+    font-style: normal;
     height: 43px;
     width: 43px;
     padding: 10px 15px;
@@ -51,7 +54,7 @@
     .floor-button {
         height: 43px;
         width: 43px;
-        font-size: 16px;
+        font-size: 18px;
         background-color: #ffffff;
     }
 }
@@ -64,7 +67,7 @@
     .floor-button {
         height: 43px;
         width: 43px;
-        font-size: 14px;
+        font-size: 18px;
         color: black;
         background-color: #ffffff;
     }

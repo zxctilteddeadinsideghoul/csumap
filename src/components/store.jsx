@@ -16,15 +16,20 @@ const useStore = create((set, get) => ({
     fromRoom: null,
     toRoom: null,
     rooms: [],
+    faculties: [], // <--- НОВОЕ: для хранения факультетов
     activeMenu: null,
     selectedSearchRoom: null,
     buildRouteTrigger: null,
     isBuildingModalOpen: false,
     selectedBuilding: availableBuildings[0],
     isFeedbackFormOpen: false,
-    graphData: {graph: null, nodeCoords: null},
+    graphData: { graph: null, nodeCoords: null },
     currentMapFloor: initialFloor,
     pendingFromRoomId: null,
+
+    // --- НОВЫЕ СОСТОЯНИЯ ДЛЯ РЕЖИМОВ ---
+    appMode: 'normal', // 'normal' | 'abiturient'
+    isAbiturientModalOpen: false,
 
     // --- СОСТОЯНИЯ ДЛЯ НОВЫХ ФИЧ ---
     isRouteInstructionsVisible: false,
@@ -36,39 +41,43 @@ const useStore = create((set, get) => ({
 
     // --- ACTIONS ---
 
+    setAppMode: (mode) => set({
+        appMode: mode,
+        // Сбрасываем все состояния при смене режима
+        fromRoom: null,
+        toRoom: null,
+        calculatedPath: null,
+        buildRouteTrigger: null,
+        specialSearch: null,
+        highlightedObjectIds: [],
+        isAbiturientModalOpen: false,
+    }),
+
+    setFaculties: (faculties) => set({ faculties }),
+    setIsAbiturientModalOpen: (isOpen) => set({ isAbiturientModalOpen: isOpen }),
+
     // Базовые
-    setFromRoom: (room) => set({fromRoom: room}),
-    setToRoom: (room) => set({toRoom: room}),
-    setRooms: (rooms) => {
-        const pendingId = get().pendingFromRoomId;
-        if (pendingId && rooms?.length > 0) {
-            const foundRoom = rooms.find(r => r.id === pendingId);
-            if (foundRoom) {
-                set({rooms, fromRoom: foundRoom, activeMenu: 'route', selectedSearchRoom: foundRoom, pendingFromRoomId: null});
-            } else {
-                set({rooms, pendingFromRoomId: null});
-            }
-        } else {
-            set({rooms});
-        }
-    },
-    setActiveMenu: (menu) => set({activeMenu: menu}),
-    setSelectedSearchRoom: (room) => set({selectedSearchRoom: room}),
-    setCurrentMapFloor: (floorIndex) => set({currentMapFloor: floorIndex}),
-    setGraphData: (graph, nodeCoords) => set({graphData: {graph, nodeCoords}}),
-    setPendingFromRoomId: (roomId) => set({pendingFromRoomId: roomId}),
+    setFromRoom: (room) => set({ fromRoom: room }),
+    setToRoom: (room) => set({ toRoom: room }),
+    setRooms: (rooms) => set({ rooms }),
+    setActiveMenu: (menu) => set({ activeMenu: menu }),
+    setSelectedSearchRoom: (room) => set({ selectedSearchRoom: room }),
+    setCurrentMapFloor: (floorIndex) => set({ currentMapFloor: floorIndex }),
+    setGraphData: (graph, nodeCoords) => set({ graphData: { graph, nodeCoords } }),
+    setPendingFromRoomId: (roomId) => set({ pendingFromRoomId: roomId }),
 
     // Модальные окна
-    setIsBuildingModalOpen: (isOpen) => set({isBuildingModalOpen: isOpen}),
-    setIsFeedbackFormOpen: (isOpen) => set({isFeedbackFormOpen: isOpen}),
+    setIsBuildingModalOpen: (isOpen) => set({ isBuildingModalOpen: isOpen }),
+    setIsFeedbackFormOpen: (isOpen) => set({ isFeedbackFormOpen: isOpen }),
 
     // Управление маршрутом
     triggerRouteBuild: () => {
         if (get().fromRoom && get().toRoom) {
-            set({buildRouteTrigger: Date.now()});
+            set({ buildRouteTrigger: Date.now() });
         }
     },
-    setCalculatedPath: (path) => set({calculatedPath: path}),
+    setCalculatedPath: (path) => set({ calculatedPath: path }),
+
 
     // Инструкции
     setIsRouteInstructionsVisible: (isVisible) => set({isRouteInstructionsVisible: isVisible}),

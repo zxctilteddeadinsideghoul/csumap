@@ -21,9 +21,14 @@ export const SPECIAL_OBJECT_CONFIG = {
             { id: 'accessible', label: 'ИНВ', searchKeyword: 'для лиц с' }, // Уточнено для поиска
         ]
     },
-    'фонтанчик': {
-        searchKeywords: ['фонтан', 'фонтанчик', 'питьевой'],
-        targetCategory: 'фонтанчик',
+    'автомат с едой': {
+        searchKeywords: ['автомат', 'авт', 'авто', 'автом', 'еда', 'вендинг', 'снеки', 'кофе', 'вода'],
+        targetCategory: 'автомат',
+        isFilterable: false,
+    },
+    'гардероб': {
+        searchKeywords: ['гардероб', 'гар', 'гард', 'гарде', 'одежда', 'куртка', 'куртку'],
+        targetCategory: 'Гардероб',
         isFilterable: false,
     },
     'выход': {
@@ -40,12 +45,18 @@ export const SPECIAL_OBJECT_CONFIG = {
  */
 export const getSpecialConfigByQuery = (query) => {
     if (!query) return null;
-    const lowerCaseQuery = query.toLowerCase();
+    const lowerCaseQuery = query.toLowerCase().trim();
+    // Ищем самое длинное совпадение, чтобы "туалет" был важнее чем "ту"
+    let bestMatch = null;
     for (const key in SPECIAL_OBJECT_CONFIG) {
         const config = SPECIAL_OBJECT_CONFIG[key];
-        if (config.searchKeywords.some(keyword => lowerCaseQuery.includes(keyword))) {
-            return { ...config, key: key };
+        for (const keyword of config.searchKeywords) {
+            if (lowerCaseQuery.includes(keyword)) {
+                if (!bestMatch || keyword.length > bestMatch.keyword.length) {
+                    bestMatch = { ...config, key: key, keyword: keyword };
+                }
+            }
         }
     }
-    return null;
+    return bestMatch;
 };

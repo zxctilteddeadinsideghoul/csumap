@@ -1,74 +1,33 @@
 // src/components/SpecialSearchUI.jsx
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import useStore from './store.jsx';
+import '../SpecialSearchUI.css';
 
-const containerStyle = {
-    position: 'fixed',
-    bottom: '80px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    zIndex: 1003,
-    background: 'white',
-    padding: '15px',
-    borderRadius: '15px',
-    boxShadow: '0 0 10px rgba(0,0,0,0.2)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-    alignItems: 'center',
-    width: '90%',
-    maxWidth: '450px'
-};
-const buttonStyle = {
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: '#ccc',
-    background: 'white',
-    padding: '8px 12px',
-    borderRadius: '8px',
-    cursor: 'pointer'
-};
-const activeButtonStyle = {...buttonStyle, background: '#d6322d', color: 'white', borderColor: '#d6322d'};
-const closeButtonStyle = {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    background: '#d6322d',
-    color: 'white',
-    border: '2px solid white',
-    borderRadius: '50%',
-    width: '25px',
-    height: '25px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '14px',
-    lineHeight: '1'
-};
+// Уберем стили из компонента
 
-const FilterBar = ({config, activeFilterId, onFilterChange}) => (
-    <div style={{display: 'flex', gap: '10px', padding: '5px 0'}}>
+const FilterBar = ({ config, activeFilterId, onFilterChange }) => (
+    <div className="filter-bar"> {/* <-- Добавим классы */}
         {config.filterProperties.map(filter => (
-            <button key={filter.id} onClick={() => onFilterChange(filter.id)}
-                    style={activeFilterId === filter.id ? activeButtonStyle : buttonStyle}>
+            <button
+                key={filter.id}
+                onClick={() => onFilterChange(filter.id)}
+                className={activeFilterId === filter.id ? 'active' : ''}
+            >
                 {filter.label}
             </button>
         ))}
     </div>
 );
-const NearestObjectSelector = ({candidates, selectedIndex, onSelect, onConfirm}) => (
-    <div style={{display: 'flex', alignItems: 'center', gap: '10px', width: '100%', justifyContent: 'space-between'}}>
-        <button onClick={() => onSelect(selectedIndex - 1)} disabled={selectedIndex <= 0}
-                style={buttonStyle}>{'<'}</button>
-        <div style={{textAlign: 'center'}}>
+
+const NearestObjectSelector = ({ candidates, selectedIndex, onSelect, onConfirm }) => (
+    <div className="nearest-object-selector"> {/* <-- Добавим классы */}
+        <button onClick={() => onSelect(selectedIndex - 1)} disabled={selectedIndex <= 0}>{'<'}</button>
+        <div className="candidate-info">
             <div>{candidates[selectedIndex]?.room.name || candidates[selectedIndex]?.room.description}</div>
-            <div style={{fontSize: '12px', color: '#666'}}>~{candidates[selectedIndex]?.distance.toFixed(0) / 25} м
-            </div>
+            <div className="distance-info">~{Math.round(candidates[selectedIndex]?.distance / 25)} м</div>
         </div>
-        <button onClick={() => onSelect(selectedIndex + 1)} disabled={selectedIndex >= candidates.length - 1}
-                style={buttonStyle}>{'>'}</button>
-        <button onClick={onConfirm} style={activeButtonStyle}>Маршрут</button>
+        <button onClick={() => onSelect(selectedIndex + 1)} disabled={selectedIndex >= candidates.length - 1}>{'>'}</button>
+        <button onClick={onConfirm} className="confirm-button">Маршрут</button>
     </div>
 );
 
@@ -84,7 +43,7 @@ function SpecialSearchUI() {
         setToRoom,
         triggerRouteBuild,
         clearSpecialSearch,
-        setSelectedSearchRoom
+        setSelectedSearchRoom,
     } = useStore.getState();
 
     const activeFilterId = specialSearch?.activeFilterId;
@@ -96,10 +55,10 @@ function SpecialSearchUI() {
         if (fromRoom && status?.startsWith('pending')) {
             calculateNearestObjects();
         }
-    }, [fromRoom, activeFilterId, status, calculateNearestObjects]);
+    }, [fromRoom, status, calculateNearestObjects]);
 
     useEffect(() => {
-        if (status === 'selection' && candidates && candidates.length > 0) {
+        if (status === 'selection' && candidates?.length > 0) {
             const selectedCandidateRoom = candidates[selectedIndex]?.room;
             if (selectedCandidateRoom) {
                 setSelectedSearchRoom(selectedCandidateRoom);
@@ -111,35 +70,33 @@ function SpecialSearchUI() {
 
     const handleConfirmSelection = () => {
         const selectedRoom = candidates[selectedIndex]?.room;
-        if (selectedRoom) {
+        if (selectedRoom && fromRoom) {
             setToRoom(selectedRoom);
             triggerRouteBuild();
+            setSelectedSearchRoom(fromRoom);
             clearSpecialSearch();
         }
     };
 
     return (
-        <div style={containerStyle}>
+        <div className="special-search-container">
             {status === 'pending_filters' && (
                 <>
-                    <p style={{margin: 0, fontWeight: 'bold'}}>Куда вы хотите пойти?</p>
-                    <FilterBar config={specialSearch.config} activeFilterId={activeFilterId}
-                               onFilterChange={setSpecialSearchFilter}/>
-                    <p style={{margin: 0, fontSize: '14px', color: '#555'}}>Выберите фильтр, а затем укажите ваше
-                        местоположение на карте.</p>
+                    <p>Куда вы хотите пойти?</p>
+                    <FilterBar config={specialSearch.config} activeFilterId={activeFilterId} onFilterChange={setSpecialSearchFilter} />
+                    <p className="prompt-text">Выберите фильтр, а затем укажите ваше местоположение на карте или воспользуйтесь поиском.</p>
                 </>
             )}
 
             {status === 'pending_start_point' && (
                 <>
-                    <p style={{margin: 0, fontWeight: 'bold'}}>Откуда начать поиск?</p>
+                    <p>Откуда начать поиск?</p>
                     {!fromRoom ? (
-                        <p style={{margin: 0, fontSize: '14px', color: '#555'}}>Укажите ваше местоположение на
-                            карте.</p>
+                        <p className="prompt-text">Укажите ваше местоположение на карте.</p>
                     ) : (
-                        <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
-                            <span>{fromRoom.name}</span>
-                            <button onClick={resetStartPointSelection} style={buttonStyle}>Изменить</button>
+                        <div className="start-point-info">
+                            <span>{fromRoom.name || fromRoom.description}</span>
+                            <button onClick={resetStartPointSelection}>Изменить</button>
                         </div>
                     )}
                 </>
@@ -149,16 +106,15 @@ function SpecialSearchUI() {
 
             {status === 'selection' && (
                 candidates.length > 0 ? (
-                    <NearestObjectSelector candidates={candidates} selectedIndex={selectedIndex}
-                                           onSelect={setSpecialSearchIndex} onConfirm={handleConfirmSelection}/>
+                    <NearestObjectSelector candidates={candidates} selectedIndex={selectedIndex} onSelect={setSpecialSearchIndex} onConfirm={handleConfirmSelection} />
                 ) : (
                     <div>
                         <p>Объекты не найдены с учетом фильтров.</p>
-                        <button onClick={resetStartPointSelection} style={buttonStyle}>Попробовать снова</button>
+                        <button onClick={resetStartPointSelection}>Попробовать снова</button>
                     </div>
                 )
             )}
-            <button onClick={clearSpecialSearch} style={closeButtonStyle}>✕</button>
+            <button onClick={clearSpecialSearch} className="close-button-special">✕</button>
         </div>
     );
 }

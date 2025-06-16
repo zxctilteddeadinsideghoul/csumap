@@ -1,5 +1,3 @@
-// src/components/BuildingMap.jsx
-
 import {Group, Layer, Line, Path, Rect, Stage, Text} from "react-konva";
 import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import RoomInfoModal from "./RoomInfoModal.jsx";
@@ -7,8 +5,8 @@ import '../BuildingMap.css';
 import useStore from './store.jsx';
 import RouteMap from "./RouteMap.jsx";
 
-const MAP_DATA_URL_NORMAL = 'https://staticstorm.ru/map/map_data2';
-const MAP_DATA_URL_ABITURIENT = 'src/components/ALL_MAP_YUN_V0.2.json';
+const MAP_DATA_URL_DEFAULT = 'src/components/Default_mode_data.json';
+const MAP_DATA_URL_ABITURIENT = 'src/components/Abiturient_mode_data.json';
 const DETAILED_LOGGING = false;
 
 // --- КОМПОНЕНТ ПЕРЕПИСАН ДЛЯ СТАБИЛЬНОСТИ ---
@@ -147,7 +145,7 @@ function BuildingMap({isMapActive}) {
         setLoadError(null);
 
         // Выбираем URL на основе текущего режима
-        const dataUrl = appMode === 'abiturient' ? MAP_DATA_URL_ABITURIENT : MAP_DATA_URL_NORMAL;
+        const dataUrl = appMode === 'abiturient' ? MAP_DATA_URL_ABITURIENT : MAP_DATA_URL_DEFAULT;
         console.log(`[BuildingMap] Loading data for mode: ${appMode} from ${dataUrl}`);
 
         fetch(dataUrl)
@@ -349,7 +347,7 @@ function BuildingMap({isMapActive}) {
               strokeWidth={2} listening={false}
               perfectDrawEnabled={false}/>), [currentLayerData.roads, currentMapFloor]);
     const renderedIcons = useMemo(() => currentLayerData.vectors.map(v => v.data ?
-        <Path key={`v-${currentMapFloor}-${v.id}`} id={v.id.toString()} data={v.data} stroke={v.stroke || "grey"}
+        <Path key={`v-${currentMapFloor}-${v.id}`} id={v.id.toString()} data={v.data} stroke={v.stroke}
               strokeWidth={v.strokeWidth ?? 1} fill={v.fill} hitStrokeWidth={10} onClick={() => handleIconClick(v)}
               onTap={(e) => {
                   e.evt.preventDefault();
@@ -472,7 +470,7 @@ function BuildingMap({isMapActive}) {
                     {renderedRoads}
                     {renderedIcons}
                     {renderedRooms}
-                    <RouteMap currentFloorIndex={currentMapFloor} mapDataPath={appMode === 'abiturient' ? MAP_DATA_URL_ABITURIENT : MAP_DATA_URL_NORMAL}/>
+                    <RouteMap currentFloorIndex={currentMapFloor} mapDataPath={appMode === 'abiturient' ? MAP_DATA_URL_ABITURIENT : MAP_DATA_URL_DEFAULT}/>
                 </Layer>
             </Stage>
             <RoomInfoModal room={selectedRoom} onClose={() => setSelectedRoom(null)}/>

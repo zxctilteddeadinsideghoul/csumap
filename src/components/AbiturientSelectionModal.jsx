@@ -23,7 +23,7 @@ function AbiturientSelectionModal() {
     return (
         <div className="building-modal-overlay">
             <div className="building-modal-content" onClick={(e) => e.stopPropagation()}>
-                <h2>Куда вы хотите пройти?</h2>
+                <h2>На какой факультет вы планируете поступить?</h2>
                 <div className="building-options">
                     {faculties.length > 0 ? (
                         faculties.map((faculty) => (

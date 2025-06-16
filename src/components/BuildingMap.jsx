@@ -347,13 +347,23 @@ function BuildingMap({isMapActive}) {
               strokeWidth={2} listening={false}
               perfectDrawEnabled={false}/>), [currentLayerData.roads, currentMapFloor]);
     const renderedIcons = useMemo(() => currentLayerData.vectors.map(v => v.data ?
-        <Path key={`v-${currentMapFloor}-${v.id}`} id={v.id.toString()} data={v.data} stroke={v.stroke}
-              strokeWidth={v.strokeWidth ?? 1} fill={v.fill} hitStrokeWidth={10} onClick={() => handleIconClick(v)}
+        <Path key={`v-${currentMapFloor}-${v.id}`}
+              id={v.id.toString()}
+              data={v.data}
+              stroke={v.stroke}
+              strokeWidth={v.strokeWidth ?? 1}
+              fill={v.fill}
+              hitStrokeWidth={10}
+              onClick={() => handleIconClick(v)}
               onTap={(e) => {
                   e.evt.preventDefault();
                   handleIconClick(v)
-              }} listening={!!(v.name || v.description)} perfectDrawEnabled={false} x={v.x || 0}
-              y={v.y || 0}/> : null), [currentLayerData.vectors, currentMapFloor, handleIconClick]);
+              }}
+              listening={!!(v.name || v.description)}
+              perfectDrawEnabled={false}
+              x={v.x || 0}
+              y={v.y || 0}/> : null),
+        [currentLayerData.vectors, currentMapFloor, handleIconClick]);
 
     const renderedRooms = useMemo(() => {
         return currentLayerData.rooms?.map(room => {
@@ -466,10 +476,10 @@ function BuildingMap({isMapActive}) {
                 style={{background: "#F3F3F4", cursor: isMapActive ? 'grab' : 'default'}}
             >
                 <Layer>
-                    {renderedWalls}
                     {renderedRoads}
-                    {renderedIcons}
                     {renderedRooms}
+                    {renderedWalls}
+                    {renderedIcons}
                     <RouteMap currentFloorIndex={currentMapFloor} mapDataPath={appMode === 'abiturient' ? MAP_DATA_URL_ABITURIENT : MAP_DATA_URL_DEFAULT}/>
                 </Layer>
             </Stage>

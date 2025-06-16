@@ -203,7 +203,12 @@ const useStore = create((set, get) => ({
         let potentialCandidates = rooms.filter(r => {
             const name = r.name?.toLowerCase() || '';
             const description = r.description?.toLowerCase() || '';
-            return name.includes(config.targetCategory) || description.includes(config.targetCategory);
+            const id = r.id?.toLowerCase() || '';
+
+            // Ищем точное совпадение категории в одном из полей
+            return name.includes(config.targetCategory) ||
+                description.includes(config.targetCategory) ||
+                id.includes(config.targetCategory);
         });
 
         if (activeFilterId && config.isFilterable) {

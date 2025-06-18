@@ -86,35 +86,71 @@ const useStore = create((set, get) => ({
         currentInstructionIndex: 0,
         isRouteInstructionsVisible: !!(instructions && instructions.length > 0),
     }),
-    goToNextInstruction: () => set((state) => {
+
+    goToNextInstruction: () => set(state => {
         const nextIndex = state.currentInstructionIndex + 1;
-        if (nextIndex < state.routeInstructions.length) {
-            const nextInstruction = state.routeInstructions[nextIndex];
-            const floorMatch = nextInstruction.text.match(/на (\d+) этаж/);
-            const newFloorIndex = floorMatch ? parseInt(floorMatch[1], 10) : null;
+        if (nextIndex >= state.routeInstructions.length) return {};
 
-            const newState = {currentInstructionIndex: nextIndex};
+        const nextInstruction = state.routeInstructions[nextIndex];
+        const { nodeCoords } = state.graphData;
+        const targetNodeInfo = nodeCoords.get(nextInstruction.nodeId);
 
-            if (newFloorIndex !== null && newFloorIndex !== state.currentMapFloor) {
-                newState.currentMapFloor = newFloorIndex;
-                newState.selectedSearchRoom = {
-                    id: `floor-${newFloorIndex}-center`,
-                    floorIndex: newFloorIndex,
-                    isCenteringCommand: true,
-                };
+        const newState = { currentInstructionIndex: nextIndex };
+
+        if (targetNodeInfo) {
+            // Центрируемся на конкретном узле (лестнице) следующего шага
+            newState.selectedSearchRoom = {
+                id: nextInstruction.nodeId,
+                x: targetNodeInfo.x,
+                y: targetNodeInfo.y,
+                floorIndex: targetNodeInfo.floorIndex,
+            };
+            // И переключаем этаж, если он отличается
+            if (targetNodeInfo.floorIndex !== state.currentMapFloor) {
+                newState.currentMapFloor = targetNodeInfo.floorIndex;
             }
+        }
 
-            return newState;
-        }
-        return {};
+        return newState;
     }),
-    goToPreviousInstruction: () => set((state) => {
+
+    goToPreviousInstruction: () => set(state => {
         const prevIndex = state.currentInstructionIndex - 1;
-        if (prevIndex >= 0) {
-            return {currentInstructionIndex: prevIndex};
+        if (prevIndex < 0) return {};
+
+        const newState = { currentInstructionIndex: prevIndex };
+        const { fromRoom, routeInstructions, graphData } = state;
+        const { nodeCoords } = graphData;
+
+        // Если мы вернулись к самому первому шагу, центрируемся на fromRoom
+        if (prevIndex === 0) {
+            if (fromRoom) {
+                newState.selectedSearchRoom = fromRoom;
+                if (fromRoom.floorIndex !== state.currentMapFloor) {
+                    newState.currentMapFloor = fromRoom.floorIndex;
+                }
+            }
+        } else {
+            // Для любого другого шага центрируемся на узле, к которому относится этот шаг
+            const prevInstruction = routeInstructions[prevIndex];
+            const targetNodeInfo = nodeCoords.get(prevInstruction.nodeId);
+
+            if (targetNodeInfo) {
+                newState.selectedSearchRoom = {
+                    id: prevInstruction.nodeId,
+                    x: targetNodeInfo.x,
+                    y: targetNodeInfo.y,
+                    floorIndex: targetNodeInfo.floorIndex,
+                };
+                if (targetNodeInfo.floorIndex !== state.currentMapFloor) {
+                    newState.currentMapFloor = targetNodeInfo.floorIndex;
+                }
+            }
         }
-        return {};
+
+        return newState;
     }),
+
     clearRouteAndInstructions: () => set({
         buildRouteTrigger: null,
         isRouteInstructionsVisible: false,

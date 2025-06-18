@@ -103,7 +103,7 @@ function RouteMap({currentFloorIndex, mapDataPath}) {
     useEffect(() => {
         if (isLoadingGraph) return;
 
-        const {setIsRouteInstructionsVisible, setRouteInstructions, setCalculatedPath} = useStore.getState();
+        const { setIsRouteInstructionsVisible, setRouteInstructions, setCalculatedPath } = useStore.getState();
 
         if (buildRouteTrigger === null) {
             if (calculatedPath !== null) {
@@ -116,11 +116,8 @@ function RouteMap({currentFloorIndex, mapDataPath}) {
 
         if (processedTriggerRef.current === buildRouteTrigger) return;
 
-        const {graph, nodeCoords} = graphDataRef.current;
-        if (!graph) {
-            setErrorMsg("Данные для маршрута не готовы.");
-            return;
-        }
+        const { graph, nodeCoords } = graphDataRef.current;
+        if (!graph) { setErrorMsg("Данные для маршрута не готовы."); return; }
 
         setCalculatedPath(null);
         setErrorMsg(null);
@@ -153,9 +150,15 @@ function RouteMap({currentFloorIndex, mapDataPath}) {
                     if (!prevNodeData || !currNodeData) continue;
                     if (prevNodeData.floorIndex !== currNodeData.floorIndex) {
                         if (i - lastSignificantNodeIndex > 1) {
-                            instructions.push({text: `Следуйте по маршруту на ${getFloorDisplayName(prevNodeData.floorIndex)} этаже`});
+                            instructions.push({
+                                text: `Следуйте по маршруту на ${getFloorDisplayName(prevNodeData.floorIndex)} этаже`,
+                                nodeId: finalPath[lastSignificantNodeIndex] // Узел, с которого начинается сегмент
+                            });
                         } else if (instructions.length === 0) {
-                            instructions.push({text: `Начните движение на ${getFloorDisplayName(prevNodeData.floorIndex)} этаже`});
+                            instructions.push({
+                                text: `Начните движение на ${getFloorDisplayName(prevNodeData.floorIndex)} этаже`,
+                                nodeId: startNodeId // Первый узел
+                            });
                         }
 
                         let finalTransitionNodeIndex = i;
@@ -179,7 +182,10 @@ function RouteMap({currentFloorIndex, mapDataPath}) {
                         if (verb) {
                             let step = `${verb} на ${targetFloorName} этаж`;
                             if (usesStairs) step += " по лестнице";
-                            instructions.push({text: step});
+                            instructions.push({
+                                text: step,
+                                nodeId: finalPath[finalTransitionNodeIndex] // Узел, где переход заканчивается (лестница на новом этаже)
+                            });
                         }
                         i = finalTransitionNodeIndex;
                         lastSignificantNodeIndex = finalTransitionNodeIndex;
@@ -187,10 +193,13 @@ function RouteMap({currentFloorIndex, mapDataPath}) {
                 }
             }
             if (finalPath.length - 1 - lastSignificantNodeIndex > 0) {
-                instructions.push({text: `Следуйте до пункта назначения: ${toRoom.name || toRoom.description}`});
+                instructions.push({
+                    text: `Следуйте до пункта назначения: ${toRoom.name || toRoom.description}`,
+                    nodeId: endNodeId // Конечный узел
+                });
             }
 
-            setRouteInstructions(instructions.length > 0 ? instructions : [{text: `Маршрут до ${toRoom.name || toRoom.description} построен.`}]);
+            setRouteInstructions(instructions.length > 0 ? instructions : [{ text: `Маршрут до ${toRoom.name || toRoom.description} построен.`, nodeId: endNodeId }]);
         } else {
             setErrorMsg("Маршрут не найден.");
         }

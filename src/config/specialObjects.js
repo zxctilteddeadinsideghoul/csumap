@@ -18,7 +18,7 @@ export const SPECIAL_OBJECT_CONFIG = {
         filterProperties: [
             { id: 'male', label: 'М', searchKeyword: 'мужской' }, // Ключевое слово для этого фильтра
             { id: 'female', label: 'Ж', searchKeyword: 'женский' },
-            { id: 'accessible', label: 'ИНВ', searchKeyword: 'для лиц с' }, // Уточнено для поиска
+            { id: 'accessible', label: 'ОВЗ', searchKeyword: 'для лиц с' }, // Уточнено для поиска
         ]
     },
     'автомат с едой': {
@@ -28,7 +28,7 @@ export const SPECIAL_OBJECT_CONFIG = {
     },
     'гардероб': {
         searchKeywords: ['гардероб', 'гар', 'гард', 'гарде', 'одежда', 'куртка', 'куртку'],
-        targetCategory: 'Гардероб',
+        targetCategory: 'гардероб',
         isFilterable: false,
     },
     'выход': {

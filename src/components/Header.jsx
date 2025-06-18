@@ -69,7 +69,7 @@ function Header() {
                     return matchesSearch && !isSpecial && !isTechnical;
                 })
                 .map(room => ({
-                    label: room.name || room.description,
+                    label: (room.name && room.description) ? room.name + " (" + room.description + ")" : room.name || room.description,
                     value: room.id,
                     data: room,
                 }));

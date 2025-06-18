@@ -178,10 +178,29 @@ const useStore = create((set, get) => ({
 
         const getGraphNodeIdForCalc = (item) => {
             if (!item?.id || !nodeCoords) return null;
-            const candidates = Array.from(nodeCoords.keys()).filter(key => key.startsWith(`icon-${item.id}`));
-            if (candidates.length > 0) return candidates[0];
 
-            console.warn(`Узел для объекта "${item.id}" не найден в графе.`);
+            // Порядок важен: сначала ищем специальную дверь (_door), потом сам объект как иконку.
+            const possibleNodeIds = [
+                `icon-${item.id}_door`,
+                `icon-${item.id}`,      // Для простых иконок (выходы, фонтанчики)
+                `${item.id}_door`,     // если у объекта нет префикса icon-
+                item.id                // если id объекта и есть id узла
+            ];
+
+            for (const nodeId of possibleNodeIds) {
+                if (nodeCoords.has(nodeId)) {
+                    return nodeId;
+                }
+            }
+
+            // Запасной вариант да
+            const prefix = `icon-${item.id}`;
+            const candidates = Array.from(nodeCoords.keys()).filter(key => key.startsWith(prefix));
+            if (candidates.length > 0) {
+                return candidates[0];
+            }
+
+            console.warn(`[calculateNearestObjects] Узел для объекта "${item.name || item.id}" не найден.`);
             return null;
         };
 

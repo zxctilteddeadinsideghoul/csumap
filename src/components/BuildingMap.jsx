@@ -120,7 +120,7 @@ function BuildingMap() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://staticstorm.ru/map/map_data2").then((response) => {
+    fetch("https://staticstorm.ru/map/default_map_data").then((response) => {
         response.json().then(
           (response) => {
             setLayers(response.layers)

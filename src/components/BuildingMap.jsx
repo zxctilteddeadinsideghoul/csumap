@@ -5,8 +5,8 @@ import '../BuildingMap.css';
 import useStore from './store.jsx';
 import RouteMap from "./RouteMap.jsx";
 
-const MAP_DATA_URL_DEFAULT = 'https://staticstorm.ru/map/default_map_data';
-const MAP_DATA_URL_ABITURIENT = 'https://staticstorm.ru/map/abiturient_map_data';
+const MAP_DATA_URL_DEFAULT = 'src/components/Default_mode_data.json';
+const MAP_DATA_URL_ABITURIENT = 'src/components/Abiturient_mode_data.json';
 const DETAILED_LOGGING = false;
 
 // --- КОМПОНЕНТ ПЕРЕПИСАН ДЛЯ СТАБИЛЬНОСТИ ---
@@ -343,7 +343,7 @@ function BuildingMap({isMapActive}) {
     const renderedRoads = useMemo(() => currentLayerData.roads.map((r, i) =>
         <Line key={`rd-${currentMapFloor}-${i}`}
               points={[r.x1, r.y1, r.x2, r.y2]}
-              stroke={'transparent'}
+              stroke={"grey"}
               strokeWidth={2} listening={false}
               perfectDrawEnabled={false}/>), [currentLayerData.roads, currentMapFloor]);
     const renderedIcons = useMemo(() => currentLayerData.vectors.map(v => v.data ?

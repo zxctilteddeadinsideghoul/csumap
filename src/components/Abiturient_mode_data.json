@@ -1533,6 +1533,15 @@
           "y2": 450
         },
         {
+          "id": "road_coffe_2_to_a_toilet",
+          "stroke": "",
+          "strokeWidth": 1,
+          "x1": 1180,
+          "x2": 1150,
+          "y1": 520,
+          "y2": 520
+        },
+        {
           "id": "road_a1_2_1",
           "stroke": "",
           "strokeWidth": 1,

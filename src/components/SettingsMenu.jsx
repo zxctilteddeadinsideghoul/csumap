@@ -26,7 +26,7 @@ function SettingsMenu() {
     }, [clickCount]);
 
     const handleRickroll = () => {
-        window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+        window.open('', '_blank');
     };
 
     const handleCloseButtonClick = () => setActiveMenu(null);
@@ -70,7 +70,7 @@ function SettingsMenu() {
                             Разраб. системы навигации:{' '}
                             <span
                                 className="author-name rickroll"
-                                onClick={handleRickroll}
+                                //onClick={handleRickroll}
                                 style={{cursor: 'pointer'}}
                                 title="Нажми на меня!"
                             >
@@ -90,7 +90,10 @@ function SettingsMenu() {
             </div>
 
             <div className={`cat-easter-egg ${showCat ? 'show' : ''}`}>
-                <img src="https://media.tenor.com/gjTjxUCoP3sAAAAi/jumping-gatito.gif" alt="Прыгающий котик"/>
+                <img src="https://media.tenor.com/4YCgHLAsE3UAAAAi/rick-roll.gif" alt="Рик Ролл"/>
+
+                {/* <img src="https://media.tenor.com/gjTjxUCoP3sAAAAi/jumping-gatito.gif" alt="Прыгающий котик"/> */}
+
             </div>
 
         </div>

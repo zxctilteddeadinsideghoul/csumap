@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useEffect } from 'react';
 import './App.css';
 import BuildingMap from "./components/BuildingMap.jsx";
@@ -9,6 +8,7 @@ import RouteInstructionsModal from './components/RouteInstructionsModal.jsx';
 import SpecialSearchUI from './components/SpecialSearchUI.jsx';
 import HighlightOverlay from './components/HighlightOverlay.jsx';
 import AbiturientSelectionModal from "./components/AbiturientSelectionModal.jsx";
+import ModeNotification from "./components/ModeNotification.jsx";
 
 function App() {
     // Получаем actions и данные из стора
@@ -17,7 +17,6 @@ function App() {
     const appMode = useStore(state => state.appMode);
     const pendingFromRoomId = useStore(state => state.pendingFromRoomId);
     const {
-        setAppMode,
         setPendingFromRoomId,
         setFromRoom,
         setSelectedSearchRoom,
@@ -25,23 +24,16 @@ function App() {
         setActiveMenu
     } = useStore.getState();
 
-    // Этот useEffect остается без изменений. Он только считывает URL.
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const mode = urlParams.get('mode');
-        setAppMode(mode === 'abiturient' ? 'abiturient' : 'normal');
-
         const fromRoomId = urlParams.get('fromRoomId');
         if (fromRoomId) {
-            console.log(`[App] Found fromRoomId in URL: ${fromRoomId}`);
             setPendingFromRoomId(fromRoomId);
-            const newUrl = `${window.location.pathname}${mode ? `?mode=${mode}` : ''}`;
+            const newUrl = `${window.location.pathname}${urlParams.get('mode') ? `?mode=${urlParams.get('mode')}` : ''}`;
             window.history.replaceState({}, document.title, newUrl);
-            console.log('[App] Cleaned fromRoomId parameter.');
         }
-    }, [setAppMode, setPendingFromRoomId]);
+    }, [setPendingFromRoomId]);
 
-    // --- НОВЫЙ useEffect ДЛЯ ОБРАБОТКИ QR-кода ---
     // Этот эффект срабатывает, когда `pendingFromRoomId` установлен и `rooms` загружены
     useEffect(() => {
         // Условие: есть ID из QR и список комнат уже не пустой
@@ -79,9 +71,7 @@ function App() {
         setActiveMenu,
         setPendingFromRoomId
     ]);
-    // ---------------------------------------------
 
-    // Этот useEffect тоже без изменений
     const currentRouteNodeId = useStore(state => state.currentRouteNodeId);
     const graphData = useStore(state => state.graphData);
     useEffect(() => {
@@ -105,6 +95,7 @@ function App() {
             <HighlightOverlay />
             <SpecialSearchUI />
             <AbiturientSelectionModal />
+            <ModeNotification />
         </>
     );
 }

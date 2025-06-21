@@ -30,6 +30,7 @@ const useStore = create((set, get) => ({
     // --- НОВЫЕ СОСТОЯНИЯ ДЛЯ РЕЖИМОВ ---
     appMode: 'normal', // 'normal' | 'abiturient'
     isAbiturientModalOpen: false,
+    modeJustChanged: false,
 
     // --- СОСТОЯНИЯ ДЛЯ НОВЫХ ФИЧ ---
     isRouteInstructionsVisible: false,
@@ -41,17 +42,26 @@ const useStore = create((set, get) => ({
 
     // --- ACTIONS ---
 
-    setAppMode: (mode) => set({
-        appMode: mode,
-        // Сбрасываем все состояния при смене режима
-        fromRoom: null,
-        toRoom: null,
-        calculatedPath: null,
-        buildRouteTrigger: null,
-        specialSearch: null,
-        highlightedObjectIds: [],
-        isAbiturientModalOpen: false,
+    setAppMode: (mode) => set(state => {
+        // Не делаем ничего, если режим уже установлен
+        if (state.appMode === mode) return {};
+
+        return {
+            appMode: mode,
+            // Сбрасываем все состояния при смене режима
+            fromRoom: null,
+            toRoom: null,
+            calculatedPath: null,
+            buildRouteTrigger: null,
+            specialSearch: null,
+            highlightedObjectIds: [],
+            isAbiturientModalOpen: false,
+            modeJustChanged: true,
+        };
     }),
+
+    clearModeChangeFlag: () => set({ modeJustChanged: false }),
+
 
     setFaculties: (faculties) => set({ faculties }),
     setIsAbiturientModalOpen: (isOpen) => set({ isAbiturientModalOpen: isOpen }),

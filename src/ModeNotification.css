@@ -1,0 +1,35 @@
+.mode-notification {
+    position: fixed;
+    bottom: -100px; /* Изначально скрыто под экраном */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 2000; /* Выше всех остальных элементов */
+    font-family: "Nunito", sans-serif;
+    font-size: 16px;
+    opacity: 0;
+    transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease-out;
+    pointer-events: none; /* Не мешает кликать по элементам под ним */
+}
+
+.mode-notification.show {
+    bottom: 120px; /* Позиция на экране, когда видимо */
+    opacity: 1;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 480px) {
+    .mode-notification {
+        width: calc(100% - 40px);
+        text-align: center;
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    .mode-notification.show {
+        bottom: 80px;
+    }
+}

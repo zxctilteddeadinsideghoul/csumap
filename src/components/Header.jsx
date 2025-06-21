@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import React, { useMemo, useState } from 'react';
 import Select from 'react-select';
 import useStore from './store.jsx';
@@ -11,18 +10,24 @@ function Header() {
     const rooms = useStore(state => state.rooms);
     const faculties = useStore(state => state.faculties);
     const appMode = useStore(state => state.appMode);
+    const setAppMode = useStore(state => state.setAppMode);
     const setSelectedSearchRoom = useStore(state => state.setSelectedSearchRoom);
     const initiateSpecialSearch = useStore(state => state.initiateSpecialSearch);
     const setHighlightedObjectIds = useStore(state => state.setHighlightedObjectIds);
 
-    // Обработчик для переключения в режим абитуриента (перезагружает страницу с параметром)
+    // Обработчик для переключения в режим абитуриента
     const handleAbiturientModeClick = () => {
-        window.location.href = '/?mode=abiturient';
+        // 1. Меняем URL без перезагрузки
+        window.history.pushState({}, '', '/?mode=abiturient');
+        // 2. Вызываем action в сторе, чтобы приложение среагировало
+        setAppMode('abiturient');
     };
 
-    // Обработчик для возврата в обычный режим
     const handleNormalModeClick = () => {
-        window.location.href = '/';
+        // 1. Меняем URL без перезагрузки
+        window.history.pushState({}, '', '/');
+        // 2. Вызываем action
+        setAppMode('normal');
     };
 
     // useMemo для генерации опций выпадающего списка в зависимости от режима

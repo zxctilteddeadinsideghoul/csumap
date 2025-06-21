@@ -92,7 +92,7 @@ function SpecialSearchUI() {
                 <>
                     <p>Откуда начать поиск?</p>
                     {!fromRoom ? (
-                        <p className="prompt-text">Укажите ваше местоположение на карте.</p>
+                        <p className="prompt-text">Укажите ваше местоположение на карте или воспользуйтесь поиском.</p>
                     ) : (
                         <div className="start-point-info">
                             <span>{fromRoom.name || fromRoom.description}</span>

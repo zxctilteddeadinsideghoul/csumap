@@ -359,18 +359,18 @@
       "rooms": [
         {
           "data": "M720.5 775.149H552.5V872.149H720.5V775.149Z",
-          "description": "Отдел материально-технического снабжения",
+          "description": null,
           "draggable": true,
           "id": "r014",
-          "name": "014",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
-          "workingtime": "ПН-ЧТ: 8:00-17:00\nПТ: 8:00-15:45\nПерерыв с 12:00 до 12:45"
+          "workingtime": ""
         },
         {
           "data": "M614.5 872.149H552.5V936.149H614.5V872.149Z",
-          "description": "Техническое помещение",
+          "description": null,
           "draggable": true,
           "id": "r0tex1",
           "name": null,
@@ -381,10 +381,10 @@
         },
         {
           "data": "M652.572 936.149H552.5V1036.15L652.572 1035.65V936.149Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r027",
-          "name": "027",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -392,10 +392,10 @@
         },
         {
           "data": "M876.609 775.149H754.5V872.149L876.609 871.828V775.149Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r012",
-          "name": "012",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -403,10 +403,10 @@
         },
         {
           "data": "M717.5 936.149L652.778 936.22L652.5 1035.65L716.5 1036.15L717.5 936.149Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r025",
-          "name": "025",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -414,10 +414,10 @@
         },
         {
           "data": "M812.5 936.149H717.5L716.5 1036.15H812.5V936.149Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r023",
-          "name": "023",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -425,7 +425,7 @@
         },
         {
           "data": "M846.5 936.149H812.5V1036.15L846.5 1035.65V936.149Z",
-          "description": "Техническое помещение",
+          "description": null,
           "draggable": true,
           "id": "r0tex2",
           "name": null,
@@ -436,7 +436,7 @@
         },
         {
           "data": "M1019.5 936.149H846.5V1035.65L1019.5 1036.15V936.149Z",
-          "description": "Техническое помещение",
+          "description": null,
           "draggable": true,
           "id": "r0tex3",
           "name": null,
@@ -447,7 +447,7 @@
         },
         {
           "data": "M953.5 778.026V872.149L876.609 871.828V774.934L917.434 733.979L917.5 778.149L953.5 778.026Z",
-          "description": "Техническое помещение",
+          "description": null,
           "draggable": true,
           "id": "r0tex4",
           "name": null,
@@ -458,10 +458,10 @@
         },
         {
           "data": "M1017.5 677L918 677.498V778H1017.5V677Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r008",
-          "name": "008",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -469,10 +469,10 @@
         },
         {
           "data": "M1017.5 576.151H917.434L917.5 677.149L1017.5 677.041V576.151Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r006",
-          "name": "006",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -480,10 +480,10 @@
         },
         {
           "data": "M1018 415H917.5V576H1017.5L1018 415Z",
-          "description": "Кабинет огневой подготовки",
+          "description": null,
           "draggable": true,
           "id": "r004",
-          "name": "004",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -491,10 +491,10 @@
         },
         {
           "data": "M1018 265.041L949 265V315H1018V265.041Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r002b",
-          "name": "002б",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -502,10 +502,10 @@
         },
         {
           "data": "M1018 315.437H948.5V365.383H1018V315.437Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r002a",
-          "name": "002a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -513,10 +513,10 @@
         },
         {
           "data": "M1018 365.383H948.5V415.15L1018 415.328V365.383Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r002",
-          "name": "002",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -524,10 +524,10 @@
         },
         {
           "data": "M1159.5 265.149H1085.5V309.149H1159.39L1159.5 265.149Z",
-          "description": "Кабинет ведущего специалиста РУМЦ",
+          "description": null,
           "draggable": true,
           "id": "r003",
-          "name": "003",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -535,10 +535,10 @@
         },
         {
           "data": "M1188.5 414.149H1085.5V474.149H1188.5V414.149Z",
-          "description": "Складское помещение",
+          "description": null,
           "draggable": true,
           "id": "r007",
-          "name": "007",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -546,10 +546,10 @@
         },
         {
           "data": "M1188.5 474.149H1085.5V573.154H1188.5V474.149Z",
-          "description": "Учебный полигон «Квартира»",
+          "description":null,
           "draggable": true,
           "id": "r009",
-          "name": "009",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -557,10 +557,10 @@
         },
         {
           "data": "M1188.5 573.154L1085.5 573.149V674.149L1188.5 674.044V573.154Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r011",
-          "name": "011",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -568,10 +568,10 @@
         },
         {
           "data": "M1188.5 674.149H1085.5V778.149H1188.5V674.149Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r013",
-          "name": "013",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -579,10 +579,10 @@
         },
         {
           "data": "M1188.5 778.149H1085.5V824.149H1188.5V778.149Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r015",
-          "name": "015",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -590,10 +590,10 @@
         },
         {
           "data": "M1188.5 824.15L1085.5 823.72V872.15H1188.5V824.15Z",
-          "description": "Лекционная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r017",
-          "name": "017",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -601,10 +601,10 @@
         },
         {
           "data": "M1085.5 120.149H915.515V265.149H1085.5V120.149Z",
-          "description": "СКРЕП - студенческое креативное пространство",
+          "description": null,
           "draggable": true,
           "id": "r001",
-          "name": "001",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -3267,10 +3267,10 @@
         },
         {
           "data": "M530.074 1531.57H613L625.5 1544L584.5 1587L573.074 1579.57H530.074V1531.57Z",
-          "description": "Центр коллективного пользования ЧелГУ\nНаукоемкие технологии\nФизика и химия функциональных материалов и нанотехнологий",
+          "description": null,
           "draggable": true,
           "id": "r124g",
-          "name": "124г",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -3278,10 +3278,10 @@
         },
         {
           "data": "M642.074 865.574H669.074V782.574H604.526V808.574L584.074 829.574L628.574 879.074L642.074 865.574Z",
-          "description": "Компьютерная учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r132b",
-          "name": "132б",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -3300,10 +3300,10 @@
         },
         {
           "data": "M658.074 1553.57L658.5 1636.5H596.074V1595.07L584.5 1587L625.5 1544L635.074 1553.57H658.074Z",
-          "description": "Учебная аудитория",
+          "description": null,
           "draggable": true,
           "id": "r124",
-          "name": "124",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -3311,10 +3311,10 @@
         },
         {
           "data": "M530 1636.5V1579.5H573.5L596 1595V1636.5H530Z",
-          "description": "Учебная лаборатория нанотехнологий",
+          "description": null,
           "draggable": true,
           "id": "r124a",
-          "name": "124a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -3357,10 +3357,10 @@
         },
         {
           "data": "M1136 284H1022V325H1136V284Z",
-          "description": "Гардероб в лекционном корпусе",
+          "description": null,
           "draggable": true,
           "id": "a_checkroom",
-          "name": "",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -3368,7 +3368,7 @@
         },
         {
           "data": "M1021.5 190H1222.5V132H1331.5V88.5H1135.5V106.5V121H1021.5V190Z",
-          "description": "Техническое помещение",
+          "description": null,
           "draggable": true,
           "id": "a_r1tex1",
           "name": null,
@@ -3379,10 +3379,10 @@
         },
         {
           "data": "M1331.5 201.108V217.166V263H1358.01L1381.5 245V217.5V203.727V190H1348.5V200.912L1331.5 201.108Z",
-          "description": "Отдел технических средств обучения и охраны",
+          "description": null,
           "draggable": true,
           "id": "r_a14",
-          "name": "А-14",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -3390,10 +3390,10 @@
         },
         {
           "data": "M1331.5 351V367.13V414H1356.77L1381.5 395V339H1348.5V351H1331.5Z",
-          "description": "Отдел кадров студентов",
+          "description": null,
           "draggable": true,
           "id": "r_a16",
-          "name": "А-16",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -3422,7 +3422,7 @@
           "workingtime": "ПН-ЧТ: 8:30-11:00, 14:00-16:00\nПТ: 9:00-15:00\nПерерыв с 12:00 до 13:00"
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 157.221,
           "id": "th_r1tex1",
           "name": null,
@@ -3435,7 +3435,7 @@
           "y": 1879.28
         },
         {
-          "description": "Гардероб в театральном корпусе",
+          "description": null,
           "height": 44.7745,
           "id": "th_r_checkroom",
           "name": null,
@@ -3474,7 +3474,7 @@
           "y": 1920.5
         },
         {
-          "description": "Столовая",
+          "description": null,
           "height": 157,
           "id": "canteen",
           "name": null,
@@ -3487,7 +3487,7 @@
           "y": 1879.5
         },
         {
-          "description": "Вахта",
+          "description": null,
           "height": 37,
           "id": "keys",
           "name": null,
@@ -3500,10 +3500,10 @@
           "y": 666.574
         },
         {
-          "description": "Компьютерная учебная аудитория\nЛаборатория I-LAB",
+          "description": null,
           "height": 83,
           "id": "r132",
-          "name": "132",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3513,10 +3513,10 @@
           "y": 782.574
         },
         {
-          "description": "Компьютерная учебная аудитория\nСетевая лаборатория",
+          "description": null,
           "height": 83,
           "id": "r132a",
-          "name": "132a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3526,10 +3526,10 @@
           "y": 782.574
         },
         {
-          "description": "Отдел кадров студентов",
+          "description": null,
           "height": 83,
           "id": "r145",
-          "name": "145",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3539,10 +3539,10 @@
           "y": 666.574
         },
         {
-          "description": "Отдел кадров\nНачальник: Зудова Наталья Александровна",
+          "description": null,
           "height": 83,
           "id": "r143",
-          "name": "143",
+          "name":null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3552,10 +3552,10 @@
           "y": 666.574
         },
         {
-          "description": "Отдел кадров работников",
+          "description": null,
           "height": 83,
           "id": "r141",
-          "name": "141",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3565,10 +3565,10 @@
           "y": 666.574
         },
         {
-          "description": "Канцелярия",
+          "description": null,
           "height": 83,
           "id": "r139",
-          "name": "139",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3578,10 +3578,10 @@
           "y": 666.574
         },
         {
-          "description": "Отдел кадров работников",
+          "description": null,
           "height": 57,
           "id": "r137a",
-          "name": "137a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3591,10 +3591,10 @@
           "y": 725.574
         },
         {
-          "description": "Учебная лаборатория биохимии",
+          "description": null,
           "height": 99,
           "id": "r137",
-          "name": "137",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3604,10 +3604,10 @@
           "y": 782.574
         },
         {
-          "description": "",
+          "description": null,
           "height": 119,
           "id": "r135",
-          "name": "135",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3617,10 +3617,10 @@
           "y": 881.574
         },
         {
-          "description": "Учебная лаборатория оптики",
+          "description": null,
           "height": 85,
           "id": "r133",
-          "name": "133",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3630,10 +3630,10 @@
           "y": 1000.57
         },
         {
-          "description": "Учебная лаборатория инновационных биотехнологий: Отдел иммунологии, ИФА, ПЦР",
+          "description": null,
           "height": 118,
           "id": "r130",
-          "name": "130",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3643,7 +3643,7 @@
           "y": 904.574
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 68,
           "id": "r1tex2",
           "name": null,
@@ -3656,7 +3656,7 @@
           "y": 1085.57
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 33,
           "id": "r1tex3",
           "name": null,
@@ -3669,7 +3669,7 @@
           "y": 1153.57
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 42,
           "id": "r1tex4",
           "name": null,
@@ -3682,10 +3682,10 @@
           "y": 1022.57
         },
         {
-          "description": "Кафедра микробиологии, иммунологии и общей биологии",
+          "description": null,
           "height": 89,
           "id": "r128",
-          "name": "128",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3695,10 +3695,10 @@
           "y": 1064.57
         },
         {
-          "description": "Отдел капитального строительства",
+          "description": null,
           "height": 48,
           "id": "r128a",
-          "name": "128а",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3708,10 +3708,10 @@
           "y": 1153.57
         },
         {
-          "description": "Лаборатория фазовых переходов",
+          "description": null,
           "height": 138,
           "id": "r131",
-          "name": "131",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3721,10 +3721,10 @@
           "y": 1268.57
         },
         {
-          "description": "Учебная лаборатория радиоспектроскопии\nУчебная аудитория физической электроники",
+          "description": null,
           "height": 157,
           "id": "r129",
-          "name": "129",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3734,10 +3734,10 @@
           "y": 1406.57
         },
         {
-          "description": "Заведующий хозяйством",
+          "description": null,
           "height": 44,
           "id": "r126a",
-          "name": "126a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3747,10 +3747,10 @@
           "y": 1229.57
         },
         {
-          "description": "Учебная лаборатория рентгеноструктурного анализа",
+          "description": null,
           "height": 216,
           "id": "r126",
-          "name": "126",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3760,10 +3760,10 @@
           "y": 1273.57
         },
         {
-          "description": "Центр коллективного пользования ЧелГУ\nНаукоемкие технологии\nФизика и химия функциональных материалов и нанотехнологий",
+          "description": null,
           "height": 42,
           "id": "r126v",
-          "name": "126в",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3773,10 +3773,10 @@
           "y": 1489.57
         },
         {
-          "description": "Межвузовский медико-физический центр\nд-р физ-мат. наук, профессор Лаппа Александр Владимирович",
+          "description": null,
           "height": 79,
           "id": "r127",
-          "name": "127",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3786,10 +3786,10 @@
           "y": 1563.57
         },
         {
-          "description": "Учебная аудитория",
+          "description": null,
           "height": 83,
           "id": "r122",
-          "name": "122",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3799,10 +3799,10 @@
           "y": 1553
         },
         {
-          "description": "Кафедра физики кондексированного состояния",
+          "description": null,
           "height": 83,
           "id": "r120",
-          "name": "120",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3812,10 +3812,10 @@
           "y": 1553
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r125",
-          "name": "125",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3838,10 +3838,10 @@
           "y": 1690.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r121a",
-          "name": "121а",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3851,10 +3851,10 @@
           "y": 1690.5
         },
         {
-          "description": "Лаборатория электронной микроскопии",
+          "description": null,
           "height": 83,
           "id": "r121",
-          "name": "121",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3864,10 +3864,10 @@
           "y": 1690.5
         },
         {
-          "description": "И.о. заведующего кафедрой радиофизики и электроники: Бутаков Анатолий Владимирович",
+          "description": null,
           "height": 52,
           "id": "r119b",
-          "name": "119б",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3877,10 +3877,10 @@
           "y": 1575.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 52,
           "id": "r119g",
-          "name": "119г",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3890,10 +3890,10 @@
           "y": 1692.5
         },
         {
-          "description": "Учебная лаборатория инновационных биотехнологий: Банк олигонуклеотидов",
+          "description": null,
           "height": 52,
           "id": "r119v",
-          "name": "119в",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3903,10 +3903,10 @@
           "y": 1692.5
         },
         {
-          "description": "Лаборатория фитопатологии",
+          "description": null,
           "height": 52,
           "id": "r119a",
-          "name": "119а",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3929,10 +3929,10 @@
           "y": 1553.57
         },
         {
-          "description": "Учебная лаборатория клетовых биотехнологий",
+          "description": null,
           "height": 83,
           "id": "r117",
-          "name": "117",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3942,10 +3942,10 @@
           "y": 1690.57
         },
         {
-          "description": "Преподавательская",
+          "description": null,
           "height": 83,
           "id": "r116",
-          "name": "116",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3955,10 +3955,10 @@
           "y": 1553.57
         },
         {
-          "description": "Учебная лаборатория инновационных биотехнологий: Отдел электрофоретической детекции продуктов амплификации",
+          "description": null,
           "height": 83,
           "id": "r114",
-          "name": "114",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3968,10 +3968,10 @@
           "y": 1553.57
         },
         {
-          "description": "Учебная лаборатория ботаники и зоологии",
+          "description": null,
           "height": 83,
           "id": "r115",
-          "name": "115",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3981,10 +3981,10 @@
           "y": 1690.57
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r115a",
-          "name": "115а",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -3994,10 +3994,10 @@
           "y": 1690.57
         },
         {
-          "description": "",
+          "description": null,
           "height": 57,
           "id": "r113a",
-          "name": "113а",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4007,10 +4007,10 @@
           "y": 1584.5
         },
         {
-          "description": "Мобилизационный отдел",
+          "description": null,
           "height": 44,
           "id": "r113",
-          "name": "113",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4020,10 +4020,10 @@
           "y": 1540.57
         },
         {
-          "description": "",
+          "description": null,
           "height": 85,
           "id": "r111",
-          "name": "111",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4033,10 +4033,10 @@
           "y": 1455.5
         },
         {
-          "description": "Учебная лаборатория",
+          "description": null,
           "height": 47,
           "id": "r112",
-          "name": "112",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4046,10 +4046,10 @@
           "y": 1429.5
         },
         {
-          "description": "Аудитория курсового проектирования и самостоятельной работы студентов",
+          "description": null,
           "height": 65,
           "id": "r110",
-          "name": "110",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4059,10 +4059,10 @@
           "y": 1364.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 80,
           "id": "r109",
-          "name": "109",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4072,10 +4072,10 @@
           "y": 1375.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 42,
           "id": "r108",
-          "name": "108",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4085,10 +4085,10 @@
           "y": 1322.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 26,
           "id": "r107",
-          "name": "107",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4098,10 +4098,10 @@
           "y": 1349.5
         },
         {
-          "description": "Кафедра прокурорского надзора и организации правоохранительной деятельности (преподавательская)",
+          "description": null,
           "height": 43,
           "id": "r106",
-          "name": "106",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4111,10 +4111,10 @@
           "y": 1279.5
         },
         {
-          "description": "Редактор сайта\nМатерьяльник Олеся Валерьевна",
+          "description": null,
           "height": 35,
           "id": "r106a",
-          "name": "106а",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4124,10 +4124,10 @@
           "y": 1244.57
         },
         {
-          "description": "",
+          "description": null,
           "height": 70,
           "id": "r105",
-          "name": "105",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4137,10 +4137,10 @@
           "y": 1279.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 35,
           "id": "r105a",
-          "name": "105а",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4150,10 +4150,10 @@
           "y": 1244.57
         },
         {
-          "description": "Психологическая служба",
+          "description": null,
           "height": 41,
           "id": "r104",
-          "name": "104",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4163,10 +4163,10 @@
           "y": 1119.57
         },
         {
-          "description": "Профком преподавателей и сотрудников",
+          "description": null,
           "height": 35,
           "id": "r103a",
-          "name": "103a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4176,10 +4176,10 @@
           "y": 1146.57
         },
         {
-          "description": "Профком студентов ЧелГу",
+          "description": null,
           "height": 29,
           "id": "r103",
-          "name": "103",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4189,10 +4189,10 @@
           "y": 1117.57
         },
         {
-          "description": "Управление молодежной политики",
+          "description": null,
           "height": 92,
           "id": "r102",
-          "name": "102",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4202,10 +4202,10 @@
           "y": 1027.57
         },
         {
-          "description": "Начальник управления: Мельникова Анна Викторовна",
+          "description": null,
           "height": 90,
           "id": "r101",
-          "name": "101",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4215,10 +4215,10 @@
           "y": 1027.5
         },
         {
-          "description": "По вопросам стипендии и материальной помощи",
+          "description": null,
           "height": 80,
           "id": "r100",
-          "name": "100",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4241,7 +4241,7 @@
           "y": 743.574
         },
         {
-          "description": "Помещение коворкинга",
+          "description": null,
           "height": 40,
           "id": "r1tex7",
           "name": null,
@@ -4254,7 +4254,7 @@
           "y": 703.574
         },
         {
-          "description": "Помещение коворкинга",
+          "description": null,
           "height": 37,
           "id": "r1tex8",
           "name": null,
@@ -4267,10 +4267,10 @@
           "y": 666.574
         },
         {
-          "description": "Редакция газеты «Университетская набережная",
+          "description": null,
           "height": 26,
           "id": "r_a10",
-          "name": "А-10",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4293,10 +4293,10 @@
           "y": 190
         },
         {
-          "description": "Лекционная аудитория им. Г.В. Клещёва",
+          "description": null,
           "height": 109,
           "id": "r_a13",
-          "name": "А-13",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -4306,10 +4306,10 @@
           "y": 132
         },
         {
-          "description": "",
+          "description": null,
           "height": 111,
           "id": "r_a15",
-          "name": "А-15",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9120,7 +9120,7 @@
           "description": "",
           "draggable": true,
           "id": "r216a",
-          "name": "216a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -9139,7 +9139,7 @@
         },
         {
           "data": "M1349.62 1564.18L1379.5 1564.18L1379.5 1508.39L1296.5 1508.39L1296.5 1523.39L1281 1538.89L1325.23 1588.5L1349.62 1564.18Z",
-          "description": "Техническое помещение",
+          "description": null,
           "draggable": true,
           "id": "r2tex16",
           "name": null,
@@ -9174,7 +9174,7 @@
         },
         {
           "data": "M1021 187H1224.38V129H1333.5V87H1141.5L1140.25 103L1141.5 119H1021V187Z",
-          "description": "Музей археологии и этнографии",
+          "description": null,
           "draggable": true,
           "id": "r_museum",
           "name": null,
@@ -9185,10 +9185,10 @@
         },
         {
           "data": "M1333.5 198.519V214.709V260.92H1360.01L1383.5 242.772V215.046V201.159V187.319H1350.5V198.321L1333.5 198.519Z",
-          "description": "Учебная лаборатория физиологии человека и животных. Отдел микроскопии",
+          "description": null,
           "draggable": true,
           "id": "r_a22",
-          "name": "А-22",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -9228,10 +9228,10 @@
           "workingtime": ""
         },
         {
-          "description": "",
+          "description": null,
           "height": 155,
           "id": "th_hall_2",
-          "name": "Актовый зал",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9267,7 +9267,7 @@
           "y": 1923.5
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 39,
           "id": "r2tex14",
           "name": null,
@@ -9280,10 +9280,10 @@
           "y": 1459.5
         },
         {
-          "description": "Управление образовательной политики",
+          "description": null,
           "height": 45,
           "id": "r251",
-          "name": "251",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9293,7 +9293,7 @@
           "y": 743.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 28,
           "id": "bufet",
           "name": null,
@@ -9306,10 +9306,10 @@
           "y": 1011.5
         },
         {
-          "description": "Отдел аспирантуры и докторантуры",
+          "description": null,
           "height": 83,
           "id": "r249",
-          "name": "249",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9319,10 +9319,10 @@
           "y": 666.5
         },
         {
-          "description": "Управление образовательной политики",
+          "description": null,
           "height": 83,
           "id": "r236",
-          "name": "236",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9332,10 +9332,10 @@
           "y": 786.5
         },
         {
-          "description": "Управление образовательной политики",
+          "description": null,
           "height": 83,
           "id": "r234a",
-          "name": "234a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9345,10 +9345,10 @@
           "y": 786.5
         },
         {
-          "description": "Управление образовательной политики",
+          "description": null,
           "height": 83,
           "id": "r234",
-          "name": "234",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9358,10 +9358,10 @@
           "y": 786.5
         },
         {
-          "description": "Управление образовательной политики",
+          "description": null,
           "height": 83,
           "id": "r247",
-          "name": "247",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9371,7 +9371,7 @@
           "y": 666.5
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 83,
           "id": "r2tex1_2",
           "name": null,
@@ -9384,10 +9384,10 @@
           "y": 782.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r245",
-          "name": "245",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9397,7 +9397,7 @@
           "y": 666.5
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 83,
           "id": "r2tex2_2",
           "name": null,
@@ -9410,7 +9410,7 @@
           "y": 782.5
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 83,
           "id": "r2tex4_2",
           "name": null,
@@ -9423,10 +9423,10 @@
           "y": 666.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r243",
-          "name": "243",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9436,10 +9436,10 @@
           "y": 666.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r241",
-          "name": "241",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9449,10 +9449,10 @@
           "y": 666.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r239a",
-          "name": "239a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9462,10 +9462,10 @@
           "y": 666.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r239",
-          "name": "239",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9475,10 +9475,10 @@
           "y": 666.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 48,
           "id": "r230",
-          "name": "230",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9488,10 +9488,10 @@
           "y": 904.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 220,
           "id": "r237",
-          "name": "237",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9501,10 +9501,10 @@
           "y": 782.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 150,
           "id": "r235",
-          "name": "235",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9514,10 +9514,10 @@
           "y": 1002.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 72,
           "id": "r224",
-          "name": "224",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9527,10 +9527,10 @@
           "y": 1079.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 33,
           "id": "r231a",
-          "name": "231a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9540,7 +9540,7 @@
           "y": 1152.5
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 43,
           "id": "r2tex7_2",
           "name": null,
@@ -9553,10 +9553,10 @@
           "y": 1250.5
         },
         {
-          "description": "Научно-исследовательский сектор",
+          "description": null,
           "height": 121,
           "id": "r222a",
-          "name": "222a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9566,10 +9566,10 @@
           "y": 1151.5
         },
         {
-          "description": "Учебная лаборатория вычислительной физики",
+          "description": null,
           "height": 131,
           "id": "r222",
-          "name": "222",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9579,10 +9579,10 @@
           "y": 1272.5
         },
         {
-          "description": "Лаборатория атомной и ядерной физики",
+          "description": null,
           "height": 103,
           "id": "r229",
-          "name": "229",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9592,10 +9592,10 @@
           "y": 1293.5
         },
         {
-          "description": "Кафедра общей и теоретической физики\nЗаведующий кафедрой: Майер Александр Евгеньевич",
+          "description": null,
           "height": 88,
           "id": "r218",
-          "name": "218",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9605,10 +9605,10 @@
           "y": 1403.5
         },
         {
-          "description": "Кафедра общей и прикладной физики\nУчебная лаборатория молекулярной физики",
+          "description": null,
           "height": 168,
           "id": "r227",
-          "name": "227",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9618,10 +9618,10 @@
           "y": 1396.5
         },
         {
-          "description": "Заведующий кафедрой микробиологии, иммунологии и общей биологии\nБурмистрова Александра Леонидовна",
+          "description": null,
           "height": 78,
           "id": "r225",
-          "name": "225",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9631,10 +9631,10 @@
           "y": 1564.5
         },
         {
-          "description": "Научно-исследовательский сектор",
+          "description": null,
           "height": 55,
           "id": "r225a",
-          "name": "225a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9644,7 +9644,7 @@
           "y": 1642.5
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 83,
           "id": "r2tex11",
           "name": null,
@@ -9657,7 +9657,7 @@
           "y": 1690.5
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 83,
           "id": "r2tex12",
           "name": null,
@@ -9670,10 +9670,10 @@
           "y": 1690.5
         },
         {
-          "description": "Учебная лаборатория электроники и схемотехники\nУчебная лаборатория микропроцессорных систем",
+          "description": null,
           "height": 83,
           "id": "r221",
-          "name": "221",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9683,7 +9683,7 @@
           "y": 1690.5
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 83,
           "id": "r2tex10",
           "name": null,
@@ -9709,10 +9709,10 @@
           "y": 1553.5
         },
         {
-          "description": "Учебная лаборатория механики",
+          "description": null,
           "height": 83,
           "id": "r219",
-          "name": "219",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9761,10 +9761,10 @@
           "y": 1575.5
         },
         {
-          "description": "Центр карьеры",
+          "description": null,
           "height": 54,
           "id": "r219a",
-          "name": "219a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9787,10 +9787,10 @@
           "y": 1690.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 61,
           "id": "r208a",
-          "name": "208a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9800,7 +9800,7 @@
           "y": 1575.5
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 83,
           "id": "r2tex13",
           "name": null,
@@ -9813,10 +9813,10 @@
           "y": 1690.5
         },
         {
-          "description": "Библиотека юридической литературы\nАбонемент",
+          "description": null,
           "height": 83,
           "id": "r208",
-          "name": "208",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9839,10 +9839,10 @@
           "y": 1553.5
         },
         {
-          "description": "Библиотека юридической литературы\nЭлектронный зал для самостоятельной работы и курсового проектирования",
+          "description":  null,
           "height": 83,
           "id": "r215",
-          "name": "215",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9852,10 +9852,10 @@
           "y": 1690.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r213",
-          "name": "213",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9865,10 +9865,10 @@
           "y": 1690.5
         },
         {
-          "description": "Читательный зал иностранной литературы",
+          "description": null,
           "height": 83,
           "id": "r211",
-          "name": "211",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9878,10 +9878,10 @@
           "y": 1690.5
         },
         {
-          "description": "Читательный зал иностранной литературы",
+          "description": null,
           "height": 83,
           "id": "r209",
-          "name": "209",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9917,10 +9917,10 @@
           "y": 1641.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 61,
           "id": "r204",
-          "name": "204",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9930,10 +9930,10 @@
           "y": 1413.5
         },
         {
-          "description": "Читательный зал №3",
+          "description": null,
           "height": 88,
           "id": "r205",
-          "name": "205",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9943,10 +9943,10 @@
           "y": 1371.5
         },
         {
-          "description": "Директор научной библиотеки",
+          "description": null,
           "height": 113,
           "id": "r202",
-          "name": "202",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9956,7 +9956,7 @@
           "y": 1300.5
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 30,
           "id": "r2tex15_2",
           "name": null,
@@ -9969,10 +9969,10 @@
           "y": 1270.5
         },
         {
-          "description": "Заместитель начальник управления\nБасова Нина Алексеевна",
+          "description": null,
           "height": 26,
           "id": "r203a",
-          "name": "203a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9982,10 +9982,10 @@
           "y": 1244.5
         },
         {
-          "description": "Управление по связям с общественностью",
+          "description": null,
           "height": 110,
           "id": "r202a",
-          "name": "202a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -9995,10 +9995,10 @@
           "y": 1160.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 133,
           "id": "r201",
-          "name": "201",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -10008,10 +10008,10 @@
           "y": 1027.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 53,
           "id": "r228",
-          "name": "228",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -10021,10 +10021,10 @@
           "y": 952.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 74,
           "id": "r226",
-          "name": "226",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -10034,10 +10034,10 @@
           "y": 1005.5
         },
         {
-          "description": "Сектор информационно-библиографического обслуживания",
+          "description": null,
           "height": 101,
           "id": "r203",
-          "name": "203",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -10047,10 +10047,10 @@
           "y": 1270.5
         },
         {
-          "description": "Специалист по мaркетингу\nКузикова Мария Владимировна",
+          "description": null,
           "height": 21,
           "id": "r201a",
-          "name": "201a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -10060,10 +10060,10 @@
           "y": 1160.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 121,
           "id": "r200",
-          "name": "200",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -10099,10 +10099,10 @@
           "y": 393.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 43,
           "id": "r_a29",
-          "name": "А-29",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -10112,7 +10112,7 @@
           "y": 350.5
         },
         {
-          "description": "",
+          "description": null,
           "height": 165.21,
           "id": "r2_a11",
           "name": null,
@@ -10125,10 +10125,10 @@
           "y": 187
         },
         {
-          "description": "Лекционная аудитория",
+          "description": null,
           "height": 119.988,
           "id": "r_a25",
-          "name": "А-25",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -10138,10 +10138,10 @@
           "y": 408.117
         },
         {
-          "description": "Лекционная аудитория",
+          "description": null,
           "height": 110.914,
           "id": "r_a21",
-          "name": "А-21",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -10151,10 +10151,10 @@
           "y": 128.838
         },
         {
-          "description": "Лекционная аудитория",
+          "description": null,
           "height": 111.922,
           "id": "r_a23",
-          "name": "А-23",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -13869,10 +13869,10 @@
       "rooms": [
         {
           "data": "M1147.71 255.075H1108.5V338.075L1161 338.575L1171 348.575L1231 288.575L1220.5 279.075V255.075H1147.71Z",
-          "description": "Управление международного сотрудничества",
+          "description": null,
           "draggable": true,
           "id": "r354",
-          "name": "354",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -13880,10 +13880,10 @@
         },
         {
           "data": "M973.5 135.075H1147.5V218.075H973.5V135.075Z",
-          "description": "Конференц-зал",
+          "description": null,
           "draggable": true,
           "id": "r353",
-          "name": "353",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -13891,10 +13891,10 @@
         },
         {
           "data": "M601 654.075L538.5 653.575V691.075L601 727.575V654.075Z",
-          "description": "",
+          "description": null,
           "draggable": true,
           "id": "r334a",
-          "name": "334a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -13902,10 +13902,10 @@
         },
         {
           "data": "M538.5 752.075V691.075L601 727.575V752.075H538.5Z",
-          "description": "",
+          "description": null,
           "draggable": true,
           "id": "r332a",
-          "name": "332a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -13913,10 +13913,10 @@
         },
         {
           "data": "M1445 497.075H1303.5V480.575L1297.5 474.575L1364.5 407.075L1373.5 416.575H1445V497.075Z",
-          "description": "",
+          "description": null,
           "draggable": true,
           "id": "r300",
-          "name": "300",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -13989,7 +13989,7 @@
           "workingtime": ""
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 42,
           "id": "r3tex1",
           "name": null,
@@ -14002,10 +14002,10 @@
           "y": 213.075
         },
         {
-          "description": "Управление по связям с общественностью\nВедущий специалист Пластинина Вера Александровна",
+          "description": null,
           "height": 54,
           "id": "r321а",
-          "name": "321а",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14015,10 +14015,10 @@
           "y": 1160.08
         },
         {
-          "description": "Помещение для хранения и профилактического обслуживания оборудования",
+          "description": null,
           "height": 54,
           "id": "r323a",
-          "name": "323a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14028,7 +14028,7 @@
           "y": 1160.08
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 23,
           "id": "r3tex8",
           "name": null,
@@ -14041,7 +14041,7 @@
           "y": 628.075
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 23,
           "id": "r3tex9",
           "name": null,
@@ -14054,10 +14054,10 @@
           "y": 717.075
         },
         {
-          "description": "Секретариат ученого совета",
+          "description": null,
           "height": 83,
           "id": "r350",
-          "name": "350",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14067,10 +14067,10 @@
           "y": 255.075
         },
         {
-          "description": "Отдел капитального строительства и ремонта",
+          "description": null,
           "height": 83,
           "id": "r348",
-          "name": "348",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14080,10 +14080,10 @@
           "y": 255.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r351a",
-          "name": "351a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14093,10 +14093,10 @@
           "y": 135.075
         },
         {
-          "description": "Кабинет китайского языка",
+          "description": null,
           "height": 82,
           "id": "r344",
-          "name": "344",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14106,10 +14106,10 @@
           "y": 252.075
         },
         {
-          "description": "Кафедра делового иностранного языка",
+          "description": null,
           "height": 83,
           "id": "r349/2",
-          "name": "349/2",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14119,10 +14119,10 @@
           "y": 135.075
         },
         {
-          "description": "Кафедра романо-германских языков и межкультурной коммуникации",
+          "description": null,
           "height": 82,
           "id": "r342b",
-          "name": "342б",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14132,10 +14132,10 @@
           "y": 252.075
         },
         {
-          "description": "Кафедра теории и практики перевода",
+          "description": null,
           "height": 83,
           "id": "r349/1",
-          "name": "349/1",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14145,10 +14145,10 @@
           "y": 135.075
         },
         {
-          "description": "Учебная аудитория",
+          "description": null,
           "height": 82,
           "id": "r342a",
-          "name": "342a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14158,10 +14158,10 @@
           "y": 252.075
         },
         {
-          "description": "Лаборатория синхронного перевода",
+          "description": null,
           "height": 83,
           "id": "r347",
-          "name": "347",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14171,10 +14171,10 @@
           "y": 135.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 56,
           "id": "r345a",
-          "name": "345a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14184,10 +14184,10 @@
           "y": 195.075
         },
         {
-          "description": "Кабинет современных технологий обучения иностранным языкам",
+          "description": null,
           "height": 86,
           "id": "r345",
-          "name": "345",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14197,10 +14197,10 @@
           "y": 251.075
         },
         {
-          "description": "Компьютерный класс",
+          "description": null,
           "height": 151,
           "id": "r341",
-          "name": "341",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14210,10 +14210,10 @@
           "y": 337.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 77,
           "id": "r340",
-          "name": "340",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14236,10 +14236,10 @@
           "y": 488.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 77,
           "id": "r338",
-          "name": "338",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14249,10 +14249,10 @@
           "y": 452.075
         },
         {
-          "description": "Кафедра теории и практики английского языка",
+          "description": null,
           "height": 57,
           "id": "r336",
-          "name": "336",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14262,10 +14262,10 @@
           "y": 529.075
         },
         {
-          "description": "Французский клуб",
+          "description": null,
           "height": 49,
           "id": "r339",
-          "name": "339",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14275,7 +14275,7 @@
           "y": 573.075
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 68,
           "id": "r3tex3",
           "name": null,
@@ -14288,10 +14288,10 @@
           "y": 586.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 33,
           "id": "r339a",
-          "name": "339a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14314,10 +14314,10 @@
           "y": 720.075
         },
         {
-          "description": "Компьютерный класс №2",
+          "description": null,
           "height": 97,
           "id": "r337",
-          "name": "337",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14327,10 +14327,10 @@
           "y": 754.075
         },
         {
-          "description": "Учебная аудитория\nПомещение для хранения и профилактического обслуживания учебного оборудования",
+          "description": null,
           "height": 92,
           "id": "r332",
-          "name": "332",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14340,10 +14340,10 @@
           "y": 752.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 36,
           "id": "r335",
-          "name": "335",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14353,10 +14353,10 @@
           "y": 851.075
         },
         {
-          "description": "Кафедра информационных технологий и экономической информатики",
+          "description": null,
           "height": 84,
           "id": "r330",
-          "name": "330",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14366,10 +14366,10 @@
           "y": 844.075
         },
         {
-          "description": "Компьютерный класс №1",
+          "description": null,
           "height": 121,
           "id": "r333",
-          "name": "333",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14379,10 +14379,10 @@
           "y": 887.075
         },
         {
-          "description": "Отдел информационно-вычислительных систем и связи",
+          "description": null,
           "height": 31,
           "id": "r328",
-          "name": "328",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14405,10 +14405,10 @@
           "y": 1008.08
         },
         {
-          "description": "",
+          "description": null,
           "height": 58,
           "id": "r329a",
-          "name": "329a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14418,7 +14418,7 @@
           "y": 1111.08
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 83,
           "id": "r3tex4",
           "name": null,
@@ -14431,10 +14431,10 @@
           "y": 1160.08
         },
         {
-          "description": "Отдел корпоративных и финансовых систем",
+          "description": null,
           "height": 83,
           "id": "r327",
-          "name": "327",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14444,10 +14444,10 @@
           "y": 1160.08
         },
         {
-          "description": "Учебная аудитория",
+          "description": null,
           "height": 83,
           "id": "r326",
-          "name": "326",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14457,10 +14457,10 @@
           "y": 1023.08
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r325",
-          "name": "325",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14470,10 +14470,10 @@
           "y": 1160.08
         },
         {
-          "description": "Отдел технической поддержки",
+          "description": null,
           "height": 83,
           "id": "r324",
-          "name": "324",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14483,10 +14483,10 @@
           "y": 1023.08
         },
         {
-          "description": "Учебная часть ИИТ",
+          "description": null,
           "height": 83,
           "id": "r323",
-          "name": "323",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14496,10 +14496,10 @@
           "y": 1160.08
         },
         {
-          "description": "Начальник управления\nТатьянина Елена Павловна",
+          "description": null,
           "height": 83,
           "id": "r322",
-          "name": "322",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14509,10 +14509,10 @@
           "y": 1023.08
         },
         {
-          "description": "Институт повышения квалификации и переподготовки кадров",
+          "description": null,
           "height": 62,
           "id": "r320",
-          "name": "320",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14522,10 +14522,10 @@
           "y": 1044.08
         },
         {
-          "description": "Кафедра прокурорского надзора и организации правоохранительной деятельности",
+          "description": null,
           "height": 83,
           "id": "r321",
-          "name": "321",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14535,10 +14535,10 @@
           "y": 1160.08
         },
         {
-          "description": "Управление образовательной политики",
+          "description": null,
           "height": 83,
           "id": "r318",
-          "name": "318",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14548,10 +14548,10 @@
           "y": 1023.08
         },
         {
-          "description": "Кафедра теоретических и публично-правовых дисциплин",
+          "description": null,
           "height": 83,
           "id": "r319",
-          "name": "319",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14561,10 +14561,10 @@
           "y": 1160.08
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r316",
-          "name": "316",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14574,10 +14574,10 @@
           "y": 1023.08
         },
         {
-          "description": "Кафедра теоретических и публично-правовых дисциплин",
+          "description": null,
           "height": 83,
           "id": "r317",
-          "name": "317",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14587,10 +14587,10 @@
           "y": 1160.08
         },
         {
-          "description": "Управление образовательной политики",
+          "description": null,
           "height": 83,
           "id": "r314",
-          "name": "314",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14600,10 +14600,10 @@
           "y": 1023.08
         },
         {
-          "description": "Кафедра гражданского права и процесса",
+          "description": null,
           "height": 83,
           "id": "r315",
-          "name": "315",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14613,10 +14613,10 @@
           "y": 1160.08
         },
         {
-          "description": "Отдел торгов и закупок",
+          "description": null,
           "height": 83,
           "id": "r313",
-          "name": "313",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14626,10 +14626,10 @@
           "y": 1160.08
         },
         {
-          "description": "Отдел торгов и закупок",
+          "description": null,
           "height": 59,
           "id": "r311a",
-          "name": "311a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14639,10 +14639,10 @@
           "y": 1110.08
         },
         {
-          "description": "Финансово-экономическое управление. Сектор расчетов по договорам на обучение",
+          "description": null,
           "height": 101,
           "id": "r311",
-          "name": "311",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14652,10 +14652,10 @@
           "y": 1009.08
         },
         {
-          "description": "Планово-экономический отдел",
+          "description": null,
           "height": 70,
           "id": "r309",
-          "name": "309",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14665,10 +14665,10 @@
           "y": 939.075
         },
         {
-          "description": "Финансовый отдел",
+          "description": null,
           "height": 83,
           "id": "r307",
-          "name": "307",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14678,10 +14678,10 @@
           "y": 856.075
         },
         {
-          "description": "Отдел по расчетам с дебиторами, кредиторами и учету товарно-материальных ценностей",
+          "description": null,
           "height": 61,
           "id": "r305",
-          "name": "305",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14691,10 +14691,10 @@
           "y": 795.075
         },
         {
-          "description": "Начальник управления экономики\nВарицкая Галина Геннадьевна",
+          "description": null,
           "height": 55,
           "id": "r303",
-          "name": "303",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14704,10 +14704,10 @@
           "y": 740.075
         },
         {
-          "description": "Кабинет криминалистики\nАудитория им. Р.В.Голубева",
+          "description": null,
           "height": 127,
           "id": "r312",
-          "name": "312",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14717,10 +14717,10 @@
           "y": 848.075
         },
         {
-          "description": "Кафедра уголовно-правовых дисциплин",
+          "description": null,
           "height": 64,
           "id": "r310",
-          "name": "310",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14730,10 +14730,10 @@
           "y": 784.075
         },
         {
-          "description": "Планово-экономический отдел",
+          "description": null,
           "height": 44,
           "id": "r308",
-          "name": "308",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14743,10 +14743,10 @@
           "y": 740.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 40,
           "id": "r306",
-          "name": "306",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14756,10 +14756,10 @@
           "y": 590.075
         },
         {
-          "description": "Отдел по расчетам с рабочими, служащими и стипендиатами",
+          "description": null,
           "height": 131,
           "id": "r301",
-          "name": "301",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14769,10 +14769,10 @@
           "y": 497.075
         },
         {
-          "description": "Финансовое управление",
+          "description": null,
           "height": 44,
           "id": "r304",
-          "name": "304",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -14782,10 +14782,10 @@
           "y": 546.075
         },
         {
-          "description": "Финансовое управление",
+          "description": null,
           "height": 49,
           "id": "r302",
-          "name": "302",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -17845,10 +17845,10 @@
         },
         {
           "data": "M1038.5 165.075H1147.5V248.075H1038.5V165.075Z",
-          "description": "Кафедра теории управления и оптимизации\nИ.О. заведующего кафедрой: Изместьев Игорь Вячеславович",
+          "description": null,
           "draggable": true,
           "id": "r451",
-          "name": "451",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -17856,10 +17856,10 @@
         },
         {
           "data": "M1386.5 527.075H1303.5V510.575L1297.5 504.575L1364.5 437.075L1373.5 446.575H1386.5V527.075Z",
-          "description": "",
+          "description": null,
           "draggable": true,
           "id": "r400",
-          "name": "400",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "vectorized_room",
@@ -17932,10 +17932,10 @@
           "workingtime": ""
         },
         {
-          "description": "Кафедра компьютерной топологии и алгебры\nИ.о. Заведующего кафедрой Митина Ольга Викторовна",
+          "description": null,
           "height": 83,
           "id": "r419",
-          "name": "419",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -17945,7 +17945,7 @@
           "y": 1190.08
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 54,
           "id": "r4tex2",
           "name": null,
@@ -17958,7 +17958,7 @@
           "y": 1190.08
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 54,
           "id": "r4tex3",
           "name": null,
@@ -17971,10 +17971,10 @@
           "y": 1190.08
         },
         {
-          "description": "Учебно-научная лаборатория правовых исследований Института права ФГБОУ ВО \"ЧелГУ\"",
+          "description": null,
           "height": 43,
           "id": "r403",
-          "name": "403",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -17984,7 +17984,7 @@
           "y": 770.075
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 23,
           "id": "r4tex5",
           "name": null,
@@ -17997,7 +17997,7 @@
           "y": 658.075
         },
         {
-          "description": "Техническое помещение",
+          "description": null,
           "height": 23,
           "id": "r4tex6",
           "name": null,
@@ -18010,10 +18010,10 @@
           "y": 747.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r449",
-          "name": "449",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18036,10 +18036,10 @@
           "y": 285.075
         },
         {
-          "description": "Кафедра вычислительной математики\nЗаведующий кафедрой: Павленко Вячеслав Николаевич",
+          "description": null,
           "height": 83,
           "id": "r438",
-          "name": "438",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18049,10 +18049,10 @@
           "y": 285.075
         },
         {
-          "description": "Учебная аудитория",
+          "description": null,
           "height": 83,
           "id": "r447a",
-          "name": "447a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18062,10 +18062,10 @@
           "y": 165.075
         },
         {
-          "description": "Учебная аудитория",
+          "description": null,
           "height": 82,
           "id": "r436",
-          "name": "436",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18075,10 +18075,10 @@
           "y": 282.075
         },
         {
-          "description": "Кафедра математического анализа\nЗаведующий кафедрой: Федоров Владимир Евгеньевич",
+          "description": null,
           "height": 83,
           "id": "r447",
-          "name": "447",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18088,10 +18088,10 @@
           "y": 165.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 82,
           "id": "r434",
-          "name": "434",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18101,10 +18101,10 @@
           "y": 282.075
         },
         {
-          "description": "Учебно-вычислительная аудитория\nКомпьютерный класс",
+          "description": null,
           "height": 83,
           "id": "r445",
-          "name": "445",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18114,10 +18114,10 @@
           "y": 165.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 82,
           "id": "r432",
-          "name": "432",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18127,10 +18127,10 @@
           "y": 282.075
         },
         {
-          "description": "Учебно-вычислительная аудитория\nКомпьютерный класс\nАудитория для курсового проектирования",
+          "description": null,
           "height": 83,
           "id": "r443",
-          "name": "443",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18140,10 +18140,10 @@
           "y": 165.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 56,
           "id": "r441a",
-          "name": "441a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18153,10 +18153,10 @@
           "y": 225.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 148,
           "id": "r441",
-          "name": "441",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18166,10 +18166,10 @@
           "y": 281.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 49,
           "id": "r430a",
-          "name": "430a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18179,10 +18179,10 @@
           "y": 405.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 134,
           "id": "r437",
-          "name": "437",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18192,10 +18192,10 @@
           "y": 429.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 84,
           "id": "r430",
-          "name": "430",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18205,10 +18205,10 @@
           "y": 454.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 78,
           "id": "r428",
-          "name": "428",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18218,10 +18218,10 @@
           "y": 538.075
         },
         {
-          "description": "",
+          "description":null,
           "height": 89,
           "id": "r435",
-          "name": "435",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18231,10 +18231,10 @@
           "y": 563.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 68,
           "id": "r426",
-          "name": "426",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18244,10 +18244,10 @@
           "y": 616.075
         },
         {
-          "description": "Научно-исследовательская лаборатория математических методов обработки мультисенсорных данных",
+          "description": null,
           "height": 33,
           "id": "r435a",
-          "name": "435a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18257,10 +18257,10 @@
           "y": 652.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 64,
           "id": "r436a",
-          "name": "436a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18270,10 +18270,10 @@
           "y": 684.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 34,
           "id": "r424a",
-          "name": "424a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18283,10 +18283,10 @@
           "y": 748.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 34,
           "id": "r433b",
-          "name": "433б",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18296,10 +18296,10 @@
           "y": 750.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 43,
           "id": "r433a",
-          "name": "433a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18309,10 +18309,10 @@
           "y": 784.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 30,
           "id": "r422a",
-          "name": "422a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18322,10 +18322,10 @@
           "y": 844.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 62,
           "id": "r424",
-          "name": "424",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18335,10 +18335,10 @@
           "y": 782.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 72,
           "id": "r429",
-          "name": "429",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18348,10 +18348,10 @@
           "y": 895.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 68,
           "id": "r431",
-          "name": "431",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18361,10 +18361,10 @@
           "y": 827.075
         },
         {
-          "description": "Учебно-вычислительная лаборатория\nКомпьютерный кабинет",
+          "description": null,
           "height": 84,
           "id": "r422",
-          "name": "422",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18374,10 +18374,10 @@
           "y": 874.075
         },
         {
-          "description": "Учебно-вычислительная лаборатория\nПомещения для хранения и профилактического обслуживания учебого оборудования",
+          "description": null,
           "height": 31,
           "id": "r420",
-          "name": "420",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18387,10 +18387,10 @@
           "y": 958.075
         },
         {
-          "description": "",
+          "description": null,
           "height": 84,
           "id": "r427",
-          "name": "427",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18400,10 +18400,10 @@
           "y": 967.075
         },
         {
-          "description": "Учебная аудитория",
+          "description": null,
           "height": 90,
           "id": "r425",
-          "name": "425",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18413,10 +18413,10 @@
           "y": 1051.08
         },
         {
-          "description": "Учебная аудитория",
+          "description": null,
           "height": 58,
           "id": "r432a",
-          "name": "432a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18426,10 +18426,10 @@
           "y": 1141.08
         },
         {
-          "description": "Учебная аудитория «Сетевой полигон»\nКомпьютерный класс\nАудитория для курсового проектирования",
+          "description": null,
           "height": 83,
           "id": "r423",
-          "name": "423",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18439,10 +18439,10 @@
           "y": 1190.08
         },
         {
-          "description": "Учебная лаборатория технических средств защиты информации",
+          "description": null,
           "height": 83,
           "id": "r421",
-          "name": "421",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18452,10 +18452,10 @@
           "y": 1190.08
         },
         {
-          "description": "Помещения для хранения и профилактического обслуживания учебного оборудования",
+          "description":null,
           "height": 83,
           "id": "r421a",
-          "name": "421a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18465,10 +18465,10 @@
           "y": 1190.08
         },
         {
-          "description": "Кафедра вычислительной механики и информационных технологий\nЗаведующий кафедрой: Плеханова Марина Васильевна",
+          "description": null,
           "height": 83,
           "id": "r418",
-          "name": "418",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18478,10 +18478,10 @@
           "y": 1053.08
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r416",
-          "name": "416",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18491,10 +18491,10 @@
           "y": 1053.08
         },
         {
-          "description": "Отдел разработки информационных образовательных систем",
+          "description": null,
           "height": 83,
           "id": "r414",
-          "name": "414",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18504,10 +18504,10 @@
           "y": 1053.08
         },
         {
-          "description": "Кафедра компьютерной безопасности и прикладной алгебры\nЗаведующий кафедрой: Ручай Алексей Николаевич",
+          "description": null,
           "height": 62,
           "id": "r412",
-          "name": "412",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18517,10 +18517,10 @@
           "y": 1074.08
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r417",
-          "name": "417",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18530,10 +18530,10 @@
           "y": 1190.08
         },
         {
-          "description": "Кабинет профессиональной подготовки\nЛазерный стрелковый тир",
+          "description": null,
           "height": 83,
           "id": "r410",
-          "name": "410",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18543,10 +18543,10 @@
           "y": 1053.08
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r415",
-          "name": "415",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18556,10 +18556,10 @@
           "y": 1190.08
         },
         {
-          "description": "",
+          "description": null,
           "height": 83,
           "id": "r413",
-          "name": "413",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18569,10 +18569,10 @@
           "y": 1190.08
         },
         {
-          "description": "Учебная аудитория им. И.Я.Дюрягина\nСпециализированная аудитория теории и истории государства и права",
+          "description": null,
           "height": 83,
           "id": "r408",
-          "name": "408",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18582,10 +18582,10 @@
           "y": 1053.08
         },
         {
-          "description": "Учебная аудитория\nУчебный зал судебных заседений",
+          "description": null,
           "height": 83,
           "id": "r411",
-          "name": "411",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18595,10 +18595,10 @@
           "y": 1190.08
         },
         {
-          "description": "",
+          "description": null,
           "height": 59,
           "id": "r409a",
-          "name": "409a",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18608,10 +18608,10 @@
           "y": 1140.08
         },
         {
-          "description": "Аудитория для практических занятий",
+          "description": null,
           "height": 117,
           "id": "r409",
-          "name": "409",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18634,10 +18634,10 @@
           "y": 972
         },
         {
-          "description": "Учебная аудитория\nФотолаборатория",
+          "description": null,
           "height": 113,
           "id": "r407",
-          "name": "407",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18647,10 +18647,10 @@
           "y": 910.075
         },
         {
-          "description": "Кафедра уголовно-правовых дисциплин",
+          "description": null,
           "height": 97,
           "id": "r405",
-          "name": "405",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18660,10 +18660,10 @@
           "y": 813.075
         },
         {
-          "description": "Учебная аудитория\nКабинет информатики",
+          "description": null,
           "height": 94,
           "id": "r406",
-          "name": "406",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18673,10 +18673,10 @@
           "y": 878.075
         },
         {
-          "description": "Учебная аудитория\nКабинет уголовного права",
+          "description": null,
           "height": 109,
           "id": "r404",
-          "name": "404",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",
@@ -18699,10 +18699,10 @@
           "y": 527.075
         },
         {
-          "description": "Учебная аудитория",
+          "description": null,
           "height": 131,
           "id": "r401",
-          "name": "401",
+          "name": null,
           "stroke": "black",
           "strokeWidth": 1,
           "type": "room",

@@ -86,3 +86,43 @@
 .building-option-button.active:hover {
     background-color: #b52a25; /* Darker red on hover when active */
 }
+
+/* Делаем родительский блок flex-контейнером для лучшего контроля */
+.building-modal-content .building-options {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Убедимся, что контейнер занимает всю ширину */
+    overflow: hidden; /* Скрываем все, что выходит за пределы */
+}
+
+/* Новый контейнер для прокрутки */
+.scrollable-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-right: -10px;
+}
+
+
+/* Стилизация скроллбара (опционально, но красиво) */
+.scrollable-options::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollable-options::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.scrollable-options::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.scrollable-options::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}

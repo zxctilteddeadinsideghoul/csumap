@@ -9,6 +9,7 @@ import SpecialSearchUI from './components/SpecialSearchUI.jsx';
 import HighlightOverlay from './components/HighlightOverlay.jsx';
 import AbiturientSelectionModal from "./components/AbiturientSelectionModal.jsx";
 import ModeNotification from "./components/ModeNotification.jsx";
+import WelcomeModal from "./components/WelcomeModal.jsx";
 
 function App() {
     // Получаем actions и данные из стора
@@ -17,6 +18,7 @@ function App() {
     const appMode = useStore(state => state.appMode);
     const pendingFromRoomId = useStore(state => state.pendingFromRoomId);
     const {
+        setAppMode,
         setPendingFromRoomId,
         setFromRoom,
         setSelectedSearchRoom,
@@ -26,13 +28,16 @@ function App() {
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        setAppMode(mode === 'abiturient' ? 'abiturient' : 'normal');
+
         const fromRoomId = urlParams.get('fromRoomId');
         if (fromRoomId) {
             setPendingFromRoomId(fromRoomId);
-            const newUrl = `${window.location.pathname}${urlParams.get('mode') ? `?mode=${urlParams.get('mode')}` : ''}`;
+            const newUrl = `${window.location.pathname}${mode ? `?mode=${mode}` : ''}`;
             window.history.replaceState({}, document.title, newUrl);
         }
-    }, [setPendingFromRoomId]);
+    }, [setAppMode, setPendingFromRoomId]);
 
     // Этот эффект срабатывает, когда `pendingFromRoomId` установлен и `rooms` загружены
     useEffect(() => {
@@ -96,6 +101,7 @@ function App() {
             <SpecialSearchUI />
             <AbiturientSelectionModal />
             <ModeNotification />
+            <WelcomeModal />
         </>
     );
 }

@@ -24,12 +24,13 @@ function AbiturientSelectionModal() {
         <div className="building-modal-overlay">
             <div className="building-modal-content" onClick={(e) => e.stopPropagation()}>
                 <h2>На какой факультет вы планируете поступить?</h2>
-                <div className="building-options">
+
+                <div className="scrollable-options">
                     {faculties.length > 0 ? (
                         faculties.map((faculty) => (
                             <button
                                 key={faculty.id}
-                                className="building-option-button" // Стили как у выбора корпуса
+                                className="building-option-button"
                                 onClick={() => handleSelectFaculty(faculty)}
                             >
                                 {faculty.name}
@@ -39,6 +40,7 @@ function AbiturientSelectionModal() {
                         <p>Факультеты не найдены в данных карты.</p>
                     )}
                 </div>
+
             </div>
         </div>
     );

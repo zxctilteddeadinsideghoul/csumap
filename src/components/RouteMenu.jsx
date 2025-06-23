@@ -27,7 +27,7 @@ function RouteMenu() {
                 const isValidRoom = room && room.id && (room.name || room.description);
                 const hasTexInId = room.id.toLowerCase().includes('tex');
                 const isTechnical = room.description?.toLowerCase().includes('техническое помещение');
-                const isNoSearchRoom = room.name?.toLowerCase().includes('/');
+                const isNoSearchRoom = room.name?.toLowerCase().includes('###');
                 
 
                 return isValidRoom && !hasTexInId && !isTechnical && !isNoSearchRoom;

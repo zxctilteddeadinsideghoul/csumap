@@ -9,7 +9,6 @@ const MAP_DATA_URL_DEFAULT = 'https://staticstorm.ru/map/default_map_data';
 const MAP_DATA_URL_ABITURIENT = 'https://staticstorm.ru/map/abiturient_map_data';
 const DETAILED_LOGGING = false;
 
-// --- КОМПОНЕНТ ПЕРЕПИСАН ДЛЯ СТАБИЛЬНОСТИ ---
 function BuildingMap({isMapActive}) {
     if (DETAILED_LOGGING) console.log(`%c[BuildingMap Render]`, 'color: blue; font-weight: bold;');
 
@@ -21,7 +20,7 @@ function BuildingMap({isMapActive}) {
     const [layers, setLayers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState(null);
-    const [selectedRoom, setSelectedRoom] = useState(null);
+    // const [selectedRoom, setSelectedRoom] = useState(null); // это можно удалить по сути хз лан пусть будет пока
 
     // --- АТОМАРНЫЕ СЕЛЕКТОРЫ ZUSTAND ---
     const appMode = useStore(state => state.appMode);
@@ -30,6 +29,7 @@ function BuildingMap({isMapActive}) {
     const toRoom = useStore(state => state.toRoom);
     const highlightedObjectIds = useStore(state => state.highlightedObjectIds);
     const selectedSearchRoom = useStore(state => state.selectedSearchRoom);
+    const selectedRoom = useStore(state => state.selectedRoom);
 
     const selectedCandidate = useStore(state => {
         const {specialSearch: ss} = state;
@@ -41,6 +41,7 @@ function BuildingMap({isMapActive}) {
 
     const {
         setRooms, setFaculties, setCurrentMapFloor, setSelectedSearchRoom, setFromRoom,
+        setSelectedRoom
     } = useStore.getState();
 
     const lastCenterRef = useRef(null);
@@ -68,7 +69,7 @@ function BuildingMap({isMapActive}) {
         } else {
             setSelectedRoom(room);
         }
-    }, [isMapActive, setFromRoom]);
+    }, [isMapActive, setFromRoom, setSelectedRoom]);
 
     const handleTouchRoom = useCallback((e, room) => {
         e.evt.preventDefault();
@@ -172,7 +173,7 @@ function BuildingMap({isMapActive}) {
                 // Сохраняем все объекты в стор
                 setRooms(Array.from(new Map(allItems.map(item => [item.id, item])).values()));
 
-                // **НОВАЯ ЛОГИКА: ищем факультеты и сохраняем их отдельно**
+                // ищем факультеты и сохраняем их отдельно
                 const facultyItems = allItems
                     .filter(item => item.id && item.id.includes('_fac')) // Ищем по суффиксу в ID
                     .sort((a, b) => a.name.localeCompare(b.name)); // Сортируем для красивого отображения
@@ -304,7 +305,7 @@ function BuildingMap({isMapActive}) {
             if (centerX !== undefined && centerY !== undefined) {
                 const targetScale = isMobileDevice() ? 1 : 1.4;
                 const newX = window.innerWidth / 2 - centerX * targetScale;
-                const newY = window.innerHeight / 2 - centerY * targetScale;
+                const newY = isMobileDevice() ? (window.innerHeight / 2 - centerY * targetScale)- 125 : (window.innerHeight / 2 - centerY * targetScale);
                 setStageScale(targetScale);
                 setStageX(newX);
                 setStageY(newY);
@@ -314,11 +315,11 @@ function BuildingMap({isMapActive}) {
     }, [selectedSearchRoom, layers, getPathBoundingBox, setSelectedSearchRoom, currentMapFloor, setCurrentMapFloor, isMobileDevice, getFloorCenter]);
 
     const currentLayerData = useMemo(() => (layers[currentMapFloor] || {
-            walls: [],
-            roads: [],
-            rooms: [],
-            vectors: []
-        }), [layers, currentMapFloor]);
+        walls: [],
+        roads: [],
+        rooms: [],
+        vectors: []
+    }), [layers, currentMapFloor]);
 
     const renderedWalls = useMemo(() => {
         const walls = currentLayerData.walls || [];
@@ -347,22 +348,22 @@ function BuildingMap({isMapActive}) {
               strokeWidth={2} listening={false}
               perfectDrawEnabled={false}/>), [currentLayerData.roads, currentMapFloor]);
     const renderedIcons = useMemo(() => currentLayerData.vectors.map(v => v.data ?
-        <Path key={`v-${currentMapFloor}-${v.id}`}
-              id={v.id.toString()}
-              data={v.data}
-              stroke={v.stroke}
-              strokeWidth={v.strokeWidth ?? 1}
-              fill={v.fill}
-              hitStrokeWidth={10}
-              onClick={() => handleIconClick(v)}
-              onTap={(e) => {
-                  e.evt.preventDefault();
-                  handleIconClick(v)
-              }}
-              listening={!!(v.name || v.description)}
-              perfectDrawEnabled={false}
-              x={v.x || 0}
-              y={v.y || 0}/> : null),
+            <Path key={`v-${currentMapFloor}-${v.id}`}
+                  id={v.id.toString()}
+                  data={v.data}
+                  stroke={v.stroke}
+                  strokeWidth={v.strokeWidth ?? 1}
+                  fill={v.fill}
+                  hitStrokeWidth={10}
+                  onClick={() => handleIconClick(v)}
+                  onTap={(e) => {
+                      e.evt.preventDefault();
+                      handleIconClick(v)
+                  }}
+                  listening={!!(v.name || v.description)}
+                  perfectDrawEnabled={false}
+                  x={v.x || 0}
+                  y={v.y || 0}/> : null),
         [currentLayerData.vectors, currentMapFloor, handleIconClick]);
 
     const renderedRooms = useMemo(() => {
@@ -432,20 +433,20 @@ function BuildingMap({isMapActive}) {
                 const bbox = getPathBoundingBox(room.data);
                 if (!bbox) return null;
                 return (<Group key={`${room.id}-${currentMapFloor}`}>
-                        <Path {...commonProps} data={room.data}/>
-                        {displayText && <Text {...textProps} x={bbox.minX} y={bbox.minY} width={bbox.maxX - bbox.minX}
-                                              height={bbox.maxY - bbox.minY} clipFunc={ctx => {
-                            const p = new Path2D(room.data);
-                            ctx.clip(p);
-                        }}/>}
-                    </Group>);
+                    <Path {...commonProps} data={room.data}/>
+                    {displayText && <Text {...textProps} x={bbox.minX} y={bbox.minY} width={bbox.maxX - bbox.minX}
+                                          height={bbox.maxY - bbox.minY} clipFunc={ctx => {
+                        const p = new Path2D(room.data);
+                        ctx.clip(p);
+                    }}/>}
+                </Group>);
             }
             if (room.x !== undefined) {
                 return (<Group key={`${room.id}-${currentMapFloor}`}>
-                        <Rect {...commonProps} x={room.x} y={room.y} width={room.width} height={room.height}/>
-                        {displayText &&
-                            <Text {...textProps} x={room.x} y={room.y} width={room.width} height={room.height}/>}
-                    </Group>);
+                    <Rect {...commonProps} x={room.x} y={room.y} width={room.width} height={room.height}/>
+                    {displayText &&
+                        <Text {...textProps} x={room.x} y={room.y} width={room.width} height={room.height}/>}
+                </Group>);
             }
             return null;
         });
@@ -458,33 +459,34 @@ function BuildingMap({isMapActive}) {
     }}>{loadError}</div>;
 
     return (<>
-            <div className="floor-buttons">
-                {[0, 1, 2, 3, 4].map(floorIndex => (layers[floorIndex] ? (<button
-                            key={`fb-${floorIndex}`}
-                            className={`floor-button ${currentMapFloor === floorIndex ? 'active' : ''}`}
-                            onClick={() => setCurrentMapFloor(floorIndex)}
-                        >
-                            {floorIndex}
-                        </button>) : null))}
-            </div>
-            <Stage
-                height={window.innerHeight} width={window.innerWidth}
-                onWheel={handleWheel} onTouchMove={handleMultiTouch} onTouchEnd={multiTouchEnd}
-                onDragStart={handleDragStart} onDragEnd={handleDragEnd}
-                scaleX={stageScale} scaleY={stageScale} x={stageX} y={stageY}
-                draggable={isMapActive && !isZooming} ref={stageRef}
-                style={{background: "#F3F3F4", cursor: isMapActive ? 'grab' : 'default'}}
+        <div className="floor-buttons">
+            {[0, 1, 2, 3, 4].map(floorIndex => (layers[floorIndex] ? (<button
+                key={`fb-${floorIndex}`}
+                className={`floor-button ${currentMapFloor === floorIndex ? 'active' : ''}`}
+                onClick={() => setCurrentMapFloor(floorIndex)}
             >
-                <Layer>
-                    {renderedRoads}
-                    {renderedRooms}
-                    {renderedWalls}
-                    {renderedIcons}
-                    <RouteMap currentFloorIndex={currentMapFloor} mapDataPath={appMode === 'abiturient' ? MAP_DATA_URL_ABITURIENT : MAP_DATA_URL_DEFAULT}/>
-                </Layer>
-            </Stage>
-            <RoomInfoModal room={selectedRoom} onClose={() => setSelectedRoom(null)}/>
-        </>);
+                {floorIndex}
+            </button>) : null))}
+        </div>
+        <Stage
+            height={window.innerHeight} width={window.innerWidth}
+            onWheel={handleWheel} onTouchMove={handleMultiTouch} onTouchEnd={multiTouchEnd}
+            onDragStart={handleDragStart} onDragEnd={handleDragEnd}
+            scaleX={stageScale} scaleY={stageScale} x={stageX} y={stageY}
+            draggable={isMapActive && !isZooming} ref={stageRef}
+            style={{background: "#F3F3F4", cursor: isMapActive ? 'grab' : 'default'}}
+        >
+            <Layer>
+                {renderedRoads}
+                {renderedRooms}
+                {renderedWalls}
+                {renderedIcons}
+                <RouteMap currentFloorIndex={currentMapFloor} mapDataPath={appMode === 'abiturient' ? MAP_DATA_URL_ABITURIENT : MAP_DATA_URL_DEFAULT}/>
+            </Layer>
+        </Stage>
+        {/* Теперь onClose сбрасывает глобальное состояние */}
+        <RoomInfoModal room={selectedRoom} onClose={() => setSelectedRoom(null)}/>
+    </>);
 }
 
 export default BuildingMap;

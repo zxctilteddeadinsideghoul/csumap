@@ -1,45 +1,98 @@
-.route-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+/* Стили для оверлея (темного фона) */
+       .route-menu-overlay {
+           position: fixed;
+           top: 0;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           background-color: rgba(0, 0, 0, 0.4);
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           z-index: 1005; /* Убедимся, что он поверх карты, но под другими модалками, если нужно */
+           padding: 20px;
+       }
+
+/* Стили для самой карточки (белого контейнера) */
+.route-menu-content {
     background-color: white;
-    padding: 20px;
-    z-index: 1001;
+    padding: 25px 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 90%;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
+/* Кнопка закрытия "×" */
+.route-menu-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+    color: #343434;
+}
+
+.route-menu-close-button:hover svg path {
+    fill: #d6322d;
+}
+
+
+/* Заголовок */
+.route-menu-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #343434;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* Контейнер для выпадающих списков */
 .route-inputs {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 80%;
-    max-width: 400px;
+    width: 100%;
 }
 
-.route-menu button {
+/* Кнопка "Построить маршрут" */
+.route-menu-content .build-route-button {
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
     margin-top: 20px;
-    padding: 10px 20px;
+    padding: 12px 20px;
+    width: 100%;
     font-size: 16px;
     background-color: #d6322d;
     color: white;
     border: none;
     border-radius: 50px;
     cursor: pointer;
+    transition: background-color 0.3s, opacity 0.3s;
 }
 
-.route-menu button:hover {
+.route-menu-content .build-route-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.route-menu-content .build-route-button:hover:not(:disabled) {
     background-color: #b52a25;
 }
 
+
+/* Стили для компонента react-select (остаются без изменений) */
 .route-select__control {
     border: 2px solid #d6322d !important;
     border-radius: 50px !important;
@@ -69,28 +122,4 @@
 .route-select__option--is-selected {
     background-color: #db5b57 !important;
     color: white !important;
-}
-
-@media (max-width: 768px) {
-    .route-menu {
-        padding: 15px;
-    }
-
-    .route-inputs {
-        width: 90%;
-    }
-
-    .route-menu button {
-        padding: 8px 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .route-menu {
-        padding: 10px;
-    }
-
-    .route-menu button {
-        font-size: 14px;
-    }
 }

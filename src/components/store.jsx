@@ -16,9 +16,10 @@ const useStore = create((set, get) => ({
     fromRoom: null,
     toRoom: null,
     rooms: [],
-    faculties: [], // <--- НОВОЕ: для хранения факультетов
+    faculties: [],
     activeMenu: null,
-    selectedSearchRoom: null,
+    selectedSearchRoom: null, // Для центрирования камеры
+    selectedRoom: null,
     buildRouteTrigger: null,
     isBuildingModalOpen: false,
     selectedBuilding: availableBuildings[0],
@@ -51,6 +52,7 @@ const useStore = create((set, get) => ({
             // Сбрасываем все состояния при смене режима
             fromRoom: null,
             toRoom: null,
+            selectedRoom: null,
             calculatedPath: null,
             buildRouteTrigger: null,
             specialSearch: null,
@@ -69,6 +71,7 @@ const useStore = create((set, get) => ({
     // Базовые
     setFromRoom: (room) => set({ fromRoom: room }),
     setToRoom: (room) => set({ toRoom: room }),
+    setSelectedRoom: (room) => set({ selectedRoom: room }),
     setRooms: (rooms) => set({ rooms }),
     setActiveMenu: (menu) => set({ activeMenu: menu }),
     setSelectedSearchRoom: (room) => set({ selectedSearchRoom: room }),
@@ -77,7 +80,7 @@ const useStore = create((set, get) => ({
     setPendingFromRoomId: (roomId) => set({ pendingFromRoomId: roomId }),
 
     // Модальные окна
-    setIsBuildingModalOpen: (isOpen) => set({ isBuildingModalOpen: isOpen }),
+    setIsBuildingModalOpen: (isOpen) => set({ setIsBuildingModalOpen: isOpen }),
     setIsFeedbackFormOpen: (isOpen) => set({ isFeedbackFormOpen: isOpen }),
 
     // Управление маршрутом
@@ -148,8 +151,8 @@ const useStore = create((set, get) => ({
             if (targetNodeInfo) {
                 newState.selectedSearchRoom = {
                     id: prevInstruction.nodeId,
-                    x: targetNodeInfo.x,
-                    y: targetNodeInfo.y,
+                    x: prevInstruction.nodeId.x,
+                    y: prevInstruction.nodeId.y,
                     floorIndex: targetNodeInfo.floorIndex,
                 };
                 if (targetNodeInfo.floorIndex !== state.currentMapFloor) {
@@ -168,11 +171,12 @@ const useStore = create((set, get) => ({
         calculatedPath: null,
         fromRoom: null,
         toRoom: null,
+        selectedRoom: null,
     }),
 
     // Поиск ближайшего
     initiateSpecialSearch: (config) => set({
-        fromRoom: null, toRoom: null, calculatedPath: null,
+        fromRoom: null, toRoom: null, calculatedPath: null, selectedRoom: null,
         specialSearch: {
             status: config.isFilterable ? 'pending_filters' : 'pending_start_point',
             config: config, activeFilterId: null, candidates: [], selectedIndex: 0,
@@ -196,7 +200,7 @@ const useStore = create((set, get) => ({
         if (!state.specialSearch) return {};
         return {specialSearch: {...state.specialSearch, selectedIndex: index}};
     }),
-    clearSpecialSearch: () => set({specialSearch: null}),
+    clearSpecialSearch: () => set({specialSearch: null, selectedRoom: null}),
     setHighlightedObjectIds: (ids) => set({highlightedObjectIds: ids, activeMenu: null}),
     resetStartPointSelection: () => set(state => {
         if (!state.specialSearch) return {};

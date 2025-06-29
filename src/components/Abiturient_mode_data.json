@@ -1236,6 +1236,9 @@
           "strokeWidth": 1,
           "type": "walls"
         }
+      ],
+      "decor": [
+
       ]
     },
     {
@@ -7229,6 +7232,9 @@
           "strokeWidth": 1,
           "type": "walls"
         }
+      ],
+      "decor": [
+
       ]
     },
     {
@@ -12788,6 +12794,9 @@
           "strokeWidth": 1,
           "type": "walls"
         }
+      ],
+      "decor": [
+
       ]
     },
     {
@@ -16769,6 +16778,9 @@
           "strokeWidth": 1,
           "type": "walls"
         }
+      ],
+      "decor": [
+
       ]
     },
     {
@@ -20557,6 +20569,9 @@
           "x": 1.07670388593232,
           "y": 29.6093568631384
         }
+      ],
+      "decor": [
+
       ]
     }
   ]

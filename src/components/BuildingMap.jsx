@@ -5,7 +5,7 @@ import '../BuildingMap.css';
 import useStore from './store.jsx';
 import RouteMap from "./RouteMap.jsx";
 
-const MAP_DATA_URL_DEFAULT = 'https://staticstorm.ru/map/default_map_data';
+const MAP_DATA_URL_DEFAULT = 'src/components/Default_mode_data.json';
 const MAP_DATA_URL_ABITURIENT = 'https://staticstorm.ru/map/abiturient_map_data';
 const DETAILED_LOGGING = false;
 
@@ -164,6 +164,7 @@ function BuildingMap({isMapActive}) {
                     vectors: (layer.vectors || []).map(v => ({
                         ...v, floorIndex: index, type: v.type || 'icon'
                     })).filter(Boolean),
+                    decor: (layer.decor || []).map(d => ({ ...d, floorIndex: index })),
                 })).filter(Boolean);
                 setLayers(processedLayers);
 
@@ -318,8 +319,35 @@ function BuildingMap({isMapActive}) {
         walls: [],
         roads: [],
         rooms: [],
-        vectors: []
+        vectors: [],
+        decor: []
     }), [layers, currentMapFloor]);
+
+    const renderedDecor = useMemo(() => {
+        return currentLayerData.decor.map((item, index) => {
+            const commonProps = {
+                key: `decor-${item.type}-${currentMapFloor}-${index}`,
+                fill: item.fill || 'transparent',
+                stroke: item.stroke || 'grey',
+                strokeWidth: item.strokeWidth || 1,
+                opacity: item.opacity || 1,
+                listening: false,
+                perfectDrawEnabled: false,
+                shadowForStrokeEnabled: false,
+            };
+
+            switch (item.type) {
+                case 'rect':
+                    return <Rect {...commonProps} x={item.x} y={item.y} width={item.width} height={item.height} />;
+                case 'path':
+                    return <Path {...commonProps} data={item.data} x={item.x || 0} y={item.y || 0} />;
+                case 'line':
+                    return <Line {...commonProps} points={item.points} closed={item.closed || false} />;
+                default:
+                    return null;
+            }
+        }).filter(Boolean);
+    }, [currentLayerData.decor, currentMapFloor]);
 
     const renderedWalls = useMemo(() => {
         const walls = currentLayerData.walls || [];
@@ -477,6 +505,7 @@ function BuildingMap({isMapActive}) {
             style={{background: "#F3F3F4", cursor: isMapActive ? 'grab' : 'default'}}
         >
             <Layer>
+                {renderedDecor}
                 {renderedRoads}
                 {renderedRooms}
                 {renderedWalls}

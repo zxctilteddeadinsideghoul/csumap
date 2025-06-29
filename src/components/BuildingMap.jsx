@@ -30,6 +30,7 @@ function BuildingMap({isMapActive}) {
     const highlightedObjectIds = useStore(state => state.highlightedObjectIds);
     const selectedSearchRoom = useStore(state => state.selectedSearchRoom);
     const selectedRoom = useStore(state => state.selectedRoom);
+    const showRoomDescriptions = useStore(state => state.showRoomDescriptions);
 
     const selectedCandidate = useStore(state => {
         const {specialSearch: ss} = state;
@@ -403,6 +404,8 @@ function BuildingMap({isMapActive}) {
             const isEndSelected = toRoom?.id === room.id && toRoom?.floorIndex === currentMapFloor;
             const isHighlighted = highlightedObjectIds.includes(room.id);
             const isCandidateSelected = selectedCandidate?.id === room.id;
+            const isTechnical = room.description.includes('Техническое');
+            const isToilet = room.description.includes('Туалет')
 
             let baseColor = 'rgba(200, 200, 200, 0.3)', strokeColor = "grey", strokeWidth = 0.5;
 
@@ -446,39 +449,60 @@ function BuildingMap({isMapActive}) {
                 perfectDrawEnabled: false,
                 fill: baseColor
             };
-            const textProps = {
-                text: room.name || '',
-                fontSize: 13,
-                fill: '#333',
-                listening: false,
-                align: 'center',
-                verticalAlign: 'middle',
-                fontFamily: "'Nunito', sans-serif"
-            };
-            const displayText = room.name || '';
 
+            // 1. Не показываем текст для технических помещений
+            const displayText = isTechnical ? '' : (room.name || '');
+            const displayDescription = !isTechnical && !isToilet && showRoomDescriptions && room.description && room.description !== room.name;
+
+            let geometry, posX, posY, roomWidth, roomHeight;
             if (room.data && typeof room.data === 'string') {
                 const bbox = getPathBoundingBox(room.data);
                 if (!bbox) return null;
-                return (<Group key={`${room.id}-${currentMapFloor}`}>
-                    <Path {...commonProps} data={room.data}/>
-                    {displayText && <Text {...textProps} x={bbox.minX} y={bbox.minY} width={bbox.maxX - bbox.minX}
-                                          height={bbox.maxY - bbox.minY} clipFunc={ctx => {
-                        const p = new Path2D(room.data);
-                        ctx.clip(p);
-                    }}/>}
-                </Group>);
+                geometry = <Path {...commonProps} data={room.data}/>;
+                posX = bbox.minX; posY = bbox.minY; roomWidth = bbox.maxX - bbox.minX; roomHeight = bbox.maxY - bbox.minY;
+            } else if (room.x !== undefined) {
+                geometry = <Rect {...commonProps} x={room.x} y={room.y} width={room.width} height={room.height}/>;
+                posX = room.x; posY = room.y; roomWidth = room.width; roomHeight = room.height;
+            } else {
+                return null;
             }
-            if (room.x !== undefined) {
-                return (<Group key={`${room.id}-${currentMapFloor}`}>
-                    <Rect {...commonProps} x={room.x} y={room.y} width={room.width} height={room.height}/>
-                    {displayText &&
-                        <Text {...textProps} x={room.x} y={room.y} width={room.width} height={room.height}/>}
-                </Group>);
-            }
-            return null;
+
+            // 2. Расчет размера шрифта для НОМЕРА
+            const baseNameFontSize = 13;
+            // Уменьшаем шрифт, только если комната слишком узкая или низкая для базового размера
+            const nameFontSize = Math.min(baseNameFontSize, roomWidth / 3.5, roomHeight / 3);
+
+            // 3. Расчет размера шрифта для ОПИСАНИЯ
+            const descriptionFontSize = Math.min(5, roomWidth / 5, roomHeight / 2.5);
+
+            // Не рендерим текст, если он становится слишком маленьким
+            const shouldShowName = nameFontSize > 3;
+            const shouldShowDescription = displayDescription && descriptionFontSize > 4;
+
+            const nameTextProps = {
+                text: displayText, fontSize: nameFontSize, fill: '#333', listening: false,
+                align: 'center', fontFamily: "'Nunito', sans-serif",
+                x: posX, y: posY, width: roomWidth, height: shouldShowDescription ? (room.type === ('vectorized_room') ? roomHeight - 10 : roomHeight / 2) : roomHeight,
+                verticalAlign: shouldShowDescription ? 'middle' : 'middle',
+                padding: shouldShowDescription ? 0 : 0,
+            };
+            const descriptionTextProps = {
+                text: room.description, fontSize: descriptionFontSize, fill: '#555',
+                listening: false, align: 'center', fontFamily: "'Nunito', sans-serif",
+                x: posX, y: posY + roomHeight / 2, width: roomWidth, height: roomHeight / 2,
+                 padding: 2,
+                wrap: 'word', ellipsis: true // перенос и троеточие для длинных описаний
+            };
+
+            return (
+                <Group key={`${room.id}-${currentMapFloor}`}>
+                    {geometry}
+                    {shouldShowName && <Text {...nameTextProps} />}
+                    {shouldShowDescription && <Text {...descriptionTextProps} />}
+                </Group>
+            );
         });
-    }, [currentLayerData.rooms, currentMapFloor, fromRoom, toRoom, selectedRoom, highlightedObjectIds, selectedCandidate, getPathBoundingBox, handleRoomClick, handleTouchRoom]);
+    }, [currentLayerData.rooms, currentMapFloor, fromRoom, toRoom, selectedRoom, highlightedObjectIds, selectedCandidate, showRoomDescriptions, getPathBoundingBox, handleRoomClick, handleTouchRoom]);
 
     if (loading) return <div
         style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'}}>Загрузка...</div>;

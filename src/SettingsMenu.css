@@ -175,3 +175,35 @@
 .settings-content::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
 .settings-content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
 .settings-content::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+.settings-section {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.settings-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 10px 0;
+}
+
+.settings-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.settings-option label {
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+}
+
+.settings-option input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}

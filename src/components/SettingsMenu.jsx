@@ -1,3 +1,5 @@
+// src/components/SettingsMenu.jsx
+
 import React, {useEffect, useState} from 'react';
 import '../SettingsMenu.css';
 import useStore from './store';
@@ -6,9 +8,10 @@ import "../FeedbackForm.css"
 function SettingsMenu() {
     const [clickCount, setClickCount] = useState(0);
     const [showCat, setShowCat] = useState(false);
-    const {setIsFeedbackFormOpen} = useStore();
 
+    const { setIsFeedbackFormOpen, showRoomDescriptions, toggleShowRoomDescriptions } = useStore();
     const setActiveMenu = useStore((state) => state.setActiveMenu);
+
     const handleAuthorClick = () => {
         const newClickCount = clickCount + 1;
         setClickCount(newClickCount);
@@ -24,10 +27,6 @@ function SettingsMenu() {
             return () => clearTimeout(timer);
         }
     }, [clickCount]);
-
-    const handleRickroll = () => {
-        window.open('', '_blank');
-    };
 
     const handleCloseButtonClick = () => setActiveMenu(null);
     const handleOverlayClick = (e) => {
@@ -51,6 +50,20 @@ function SettingsMenu() {
                     <span className="close-x">×</span>
                 </button>
                 <h2 className="settings-title">Настройки</h2>
+
+                <div className="settings-section">
+                    <h3 className="settings-section-title">Вид карты</h3>
+                    <div className="settings-option">
+                        <input
+                            type="checkbox"
+                            id="show-descriptions"
+                            checked={showRoomDescriptions}
+                            onChange={toggleShowRoomDescriptions}
+                        />
+                        <label htmlFor="show-descriptions">Показывать описания кабинетов (Бета)</label>
+                    </div>
+                </div>
+
                 <div className="settings-divider"/>
                 <div className="authors-section">
                     <h3
@@ -70,7 +83,6 @@ function SettingsMenu() {
                             Разраб. системы навигации:{' '}
                             <span
                                 className="author-name rickroll"
-                                //onClick={handleRickroll}
                                 style={{cursor: 'pointer'}}
                                 title="Нажми на меня!"
                             >
@@ -91,9 +103,6 @@ function SettingsMenu() {
 
             <div className={`cat-easter-egg ${showCat ? 'show' : ''}`}>
                 <img src="https://media.tenor.com/4YCgHLAsE3UAAAAi/rick-roll.gif" alt="Рик Ролл"/>
-
-                {/* <img src="https://media.tenor.com/gjTjxUCoP3sAAAAi/jumping-gatito.gif" alt="Прыгающий котик"/> */}
-
             </div>
 
         </div>

@@ -40,8 +40,11 @@ const useStore = create((set, get) => ({
     calculatedPath: null,
     specialSearch: null,
     highlightedObjectIds: [],
+    showRoomDescriptions: false,
 
     // --- ACTIONS ---
+
+    toggleShowRoomDescriptions: () => set(state => ({ showRoomDescriptions: !state.showRoomDescriptions })),
 
     setAppMode: (mode) => set(state => {
         // Не делаем ничего, если режим уже установлен

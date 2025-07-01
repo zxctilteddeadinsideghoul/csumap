@@ -449,14 +449,14 @@ function BuildingMap({isMapActive}) {
         strokeWidth,
         onClick: () => handleRoomClick(room),
         onTap: (e) => handleTouchRoom(e, room),
-        listening: !!(room.name || description),
+        listening: !!(room.name || room.description),
         perfectDrawEnabled: false,
         fill: baseColor
       };
 
       // 1. Не показываем текст для технических помещений
       const displayText = isTechnical ? '' : (room.name || '');
-      const displayDescription = !isTechnical && !isToilet && showRoomDescriptions && description && description !== room.name;
+      const displayDescription = !isTechnical && !isToilet && showRoomDescriptions && room.description && room.description !== room.name;
 
       let geometry, posX, posY, roomWidth, roomHeight;
       if (room.data && typeof room.data === 'string') {
@@ -504,7 +504,7 @@ function BuildingMap({isMapActive}) {
         padding: shouldShowDescription ? 0 : 0,
       };
       const descriptionTextProps = {
-        text: description, fontSize: descriptionFontSize, fill: '#555',
+        text: room.description, fontSize: descriptionFontSize, fill: '#555',
         listening: false, align: 'center', fontFamily: "'Nunito', sans-serif",
         x: posX, y: posY + roomHeight / 2, width: roomWidth, height: roomHeight / 2,
         padding: 2,

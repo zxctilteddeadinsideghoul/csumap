@@ -1259,7 +1259,8 @@
       "roads": [
         {"id": "road_lobby0_exit_theatre_auditorium_2", "x1":214.5, "y1":2144, "x2":213.5, "y2":550.001, "stroke": "", "strokeWidth": 1},
         {"id": "road_lobby0_exit_theatre_auditorium_3", "x1":213, "y1":550.001, "x2":725, "y2":550.001, "stroke": "", "strokeWidth": 1},
-        {"id": "road_lobby0_exit_theatre_auditorium_4", "x1": 958, "y1": 550, "x2": 959.5, "y2": 100, "stroke": "", "strokeWidth": 1},
+        {"id": "road_lobby0_exit_theatre_auditorium_4", "x1": 958, "y1": 550, "x2": 958, "y2": 100, "stroke": "", "strokeWidth": 1},
+        {"id": "road_lobby0_exit_theatre_auditorium_4_2", "x1": 215, "y1": 612, "x2": 991, "y2": 612, "stroke": "", "strokeWidth": 1},
         {"id": "road_lobby0_exit_theatre_auditorium_5", "x1":725, "y1":550.001, "x2":969.703, "y2":383.598, "stroke": "", "strokeWidth": 1},
         {"id": "road_clean_1", "x1": 214, "y1": 2145, "x2": 1053, "y2": 2145, "stroke": "", "strokeWidth": 1},
         {"id": "road_clean_2", "x1": 1053, "y1": 2145, "x2": 1053, "y2": 1858, "stroke": "", "strokeWidth": 1},
@@ -5459,6 +5460,15 @@
           "type": "icon"
         },
         {
+          "data": "M215 637.5C221.351 637.5 226.5 642.649 226.5 649C226.5 655.351 221.351 660.5 215 660.5C208.649 660.5 203.5 655.351 203.5 649C203.5 642.649 208.649 637.5 215 637.5Z",
+          "draggable": true,
+          "id": "point6",
+          "name": "Штендер около сусликов",
+          "stroke": "black",
+          "strokeWidth": 1,
+          "type": "icon"
+        },
+        {
           "height": 13,
           "stroke": "black",
           "strokeWidth": 1,
@@ -7218,13 +7228,6 @@
           "type": "walls"
         },
         {
-          "data": "M917.5 1235.5L917.5 1546.5L981.5 1546.5L981.5 1236L1287 1236L1287 1194L981.5 1194L981.5 1058L917.5 1058L917.5 1194L610.5 1194L610.5 1235.5L917.5 1235.5Z",
-          "draggable": true,
-          "stroke": "black",
-          "strokeWidth": 1,
-          "type": "walls"
-        },
-        {
           "data": "M1197.52 844.319L1320 975.5",
           "draggable": true,
           "id": "grates",
@@ -7234,7 +7237,18 @@
         }
       ],
       "decor": [
-
+        {
+          "type": "path",
+          "data": "M1234 880L1344 765.5L1140.5 666.5M1726.5 608V1901H1091V2187.5H273V2586.01M1294.5 950.5L1416.5 809.5L1595 909V1812H1010.5V2102.5H424V2044M-471 2501.5L160 2099V493H739L882 399.5V72M952 70V351.255L984 351.5M163 2585.5V2258L-354.5 2585.5M771 579.5H866V509L771 579.5ZM771 579.5H278.5M967 651V644.5H278.5V1913.5H390.5M1416.5 89V575.5L1310.5 599L1140.5 592L1135 575.5M1516.5 101V468M1310.5 672L1383 719.5L1433 644.5L1310.5 672ZM1453.5 748L1621.5 838L1642 672L1498 651L1453.5 748Z",
+          "stroke": "black",
+          "strokeWidth": 2
+        },
+        {
+          "type": "path",
+          "data": "M592.5 1242.5H923.5V1575.5M977.5 1575.5V1244.5H1307.5M1307.5 1188.5L981.5 1188V1058.5M917.5 1058.5V1188H592.5",
+          "stroke": "black",
+          "strokeWidth": 2
+        }
       ]
     },
     {

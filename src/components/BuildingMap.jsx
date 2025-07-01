@@ -407,8 +407,9 @@ function BuildingMap({isMapActive}) {
       const isEndSelected = toRoom?.id === room.id && toRoom?.floorIndex === currentMapFloor;
       const isHighlighted = highlightedObjectIds.includes(room.id);
       const isCandidateSelected = selectedCandidate?.id === room.id;
-      const isTechnical = room.description.includes('Техническое');
-      const isToilet = room.description.includes('Туалет')
+      const description = room.descriptopn || '';
+      const isTechnical = description.includes('Техническое');
+      const isToilet = description.includes('Туалет')
 
       let baseColor = 'rgba(200, 200, 200, 0.3)', strokeColor = "grey", strokeWidth = 0.5;
 
@@ -448,14 +449,14 @@ function BuildingMap({isMapActive}) {
         strokeWidth,
         onClick: () => handleRoomClick(room),
         onTap: (e) => handleTouchRoom(e, room),
-        listening: !!(room.name || room.description),
+        listening: !!(room.name || description),
         perfectDrawEnabled: false,
         fill: baseColor
       };
 
       // 1. Не показываем текст для технических помещений
       const displayText = isTechnical ? '' : (room.name || '');
-      const displayDescription = !isTechnical && !isToilet && showRoomDescriptions && room.description && room.description !== room.name;
+      const displayDescription = !isTechnical && !isToilet && showRoomDescriptions && description && description !== room.name;
 
       let geometry, posX, posY, roomWidth, roomHeight;
       if (room.data && typeof room.data === 'string') {
@@ -503,7 +504,7 @@ function BuildingMap({isMapActive}) {
         padding: shouldShowDescription ? 0 : 0,
       };
       const descriptionTextProps = {
-        text: room.description, fontSize: descriptionFontSize, fill: '#555',
+        text: description, fontSize: descriptionFontSize, fill: '#555',
         listening: false, align: 'center', fontFamily: "'Nunito', sans-serif",
         x: posX, y: posY + roomHeight / 2, width: roomWidth, height: roomHeight / 2,
         padding: 2,

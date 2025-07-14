@@ -1259,9 +1259,9 @@
       "roads": [
         {"id": "road_lobby0_exit_theatre_auditorium_2", "x1":214.5, "y1":2144, "x2":213.5, "y2":550.001, "stroke": "", "strokeWidth": 1},
         {"id": "road_lobby0_exit_theatre_auditorium_3", "x1":213, "y1":550.001, "x2":725, "y2":550.001, "stroke": "", "strokeWidth": 1},
-        {"id": "road_lobby0_exit_theatre_auditorium_4", "x1": 958, "y1": 550, "x2": 958, "y2": 100, "stroke": "", "strokeWidth": 1},
+        {"id": "road_lobby0_exit_theatre_auditorium_4", "x1": 920, "y1": 550, "x2": 920 , "y2": 100, "stroke": "", "strokeWidth": 1},
         {"id": "road_lobby0_exit_theatre_auditorium_4_2", "x1": 215, "y1": 612, "x2": 991, "y2": 612, "stroke": "", "strokeWidth": 1},
-        {"id": "road_lobby0_exit_theatre_auditorium_5", "x1":725, "y1":550.001, "x2":969.703, "y2":383.598, "stroke": "", "strokeWidth": 1},
+        {"id": "road_lobby0_exit_theatre_auditorium_5", "x1":725, "y1":550.001, "x2":920, "y2":395, "stroke": "", "strokeWidth": 1},
         {"id": "road_clean_1", "x1": 214, "y1": 2145, "x2": 1053, "y2": 2145, "stroke": "", "strokeWidth": 1},
         {"id": "road_clean_2", "x1": 1053, "y1": 2145, "x2": 1053, "y2": 1858, "stroke": "", "strokeWidth": 1},
         {"id": "road_clean_3", "x1": 1053, "y1": 1858, "x2": 1665, "y2": 1858, "stroke": "", "strokeWidth": 1},
@@ -1672,118 +1672,10 @@
           "y2": 500
         },
         {
-          "id": "road_outside_1_2_1",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 780,
-          "x2": 810,
-          "y1": 500,
-          "y2": 500
-        },
-        {
-          "id": "road_outside_1_2_2",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 810,
-          "x2": 840,
-          "y1": 500,
-          "y2": 500
-        },
-        {
-          "id": "road_outside_1_2_3",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 840,
-          "x2": 870,
-          "y1": 500,
-          "y2": 500
-        },
-        {
-          "id": "road_outside_1_2_4",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 870,
-          "x2": 900,
-          "y1": 500,
-          "y2": 500
-        },
-        {
-          "id": "road_outside_1_2_5",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 900,
-          "x2": 920,
-          "y1": 500,
-          "y2": 500
-        },
-        {
-          "id": "road_outside_1_4_1",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 780,
-          "x2": 780,
-          "y1": 500,
-          "y2": 530
-        },
-        {
-          "id": "road_outside_1_4_2",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 780,
-          "x2": 780,
-          "y1": 530,
-          "y2": 550
-        },
-        {
-          "id": "road_outside_1_4_1_1",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 780,
-          "x2": 810,
-          "y1": 550,
-          "y2": 550
-        },
-        {
-          "id": "road_outside_1_4_1_2",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 810,
-          "x2": 840,
-          "y1": 550,
-          "y2": 550
-        },
-        {
-          "id": "road_outside_1_4_1_3",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 840,
-          "x2": 870,
-          "y1": 550,
-          "y2": 550
-        },
-        {
-          "id": "road_outside_1_4_1_4",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 870,
-          "x2": 900,
-          "y1": 550,
-          "y2": 550
-        },
-        {
-          "id": "road_outside_1_4_1_5",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 900,
-          "x2": 930,
-          "y1": 550,
-          "y2": 550
-        },
-        {
           "id": "road_outside_1_4_1_6",
           "stroke": "",
           "strokeWidth": 1,
-          "x1": 930,
+          "x1": 920,
           "x2": 960,
           "y1": 550,
           "y2": 550
@@ -3478,7 +3370,7 @@
           "y": 1920.5
         },
         {
-          "description": null,
+          "description": "Столовая",
           "height": 157,
           "id": "canteen",
           "name": null,
@@ -8424,78 +8316,6 @@
           "x2": 1310,
           "y1": 1670,
           "y2": 1670
-        },
-        {
-          "id": "road_lobby2_hall_into_theatre_0_1",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 545,
-          "x2": 545,
-          "y1": 1620,
-          "y2": 1640
-        },
-        {
-          "id": "road_lobby2_hall_into_theatre_0_2",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 545,
-          "x2": 545,
-          "y1": 1640,
-          "y2": 1670
-        },
-        {
-          "id": "road_lobby2_hall_into_theatre_1",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 545,
-          "x2": 545,
-          "y1": 1670,
-          "y2": 1700
-        },
-        {
-          "id": "road_lobby2_hall_into_theatre_2",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 545,
-          "x2": 545,
-          "y1": 1700,
-          "y2": 1730
-        },
-        {
-          "id": "road_lobby2_hall_into_theatre_3",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 545,
-          "x2": 545,
-          "y1": 1730,
-          "y2": 1760
-        },
-        {
-          "id": "road_lobby2_hall_into_theatre_4",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 545,
-          "x2": 545,
-          "y1": 1760,
-          "y2": 1790
-        },
-        {
-          "id": "road_lobby2_hall_into_theatre_5",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 545,
-          "x2": 545,
-          "y1": 1790,
-          "y2": 1820
-        },
-        {
-          "id": "road_lobby2_hall_into_theatre_6",
-          "stroke": "",
-          "strokeWidth": 1,
-          "x1": 545,
-          "x2": 545,
-          "y1": 1820,
-          "y2": 1850
         },
         {
           "id": "road_lobby2_hall_into_theatre_7",

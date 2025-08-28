@@ -196,7 +196,7 @@ function Header() {
             </div>
 
             {/* --- КНОПКИ ПЕРЕКЛЮЧЕНИЯ РЕЖИМОВ --- */}
-            {appMode === 'normal' ? (
+            {/* {appMode === 'normal' ? (
                 <button
                     onClick={handleAbiturientModeClick}
                     style={{
@@ -231,6 +231,7 @@ function Header() {
                     </svg>
                 </button>
             )}
+            */}
         </header>
     );
 }

@@ -5,8 +5,8 @@ import '../BuildingMap.css';
 import useStore from './store.jsx';
 import RouteMap from "./RouteMap.jsx";
 
-const MAP_DATA_URL_DEFAULT = 'https://staticstorm.ru/map/default_map_data';
-const MAP_DATA_URL_ABITURIENT = 'https://staticstorm.ru/map/abiturient_map_data';
+const MAP_DATA_URL_DEFAULT = 'https://staticstorm.ru/api/map_data';
+const MAP_DATA_URL_ABITURIENT = 'DELETED(temporarily)';
 const DETAILED_LOGGING = false;
 
 function BuildingMap({isMapActive}) {

@@ -398,6 +398,20 @@ function BuildingMap({isMapActive}) {
             y={v.y || 0}/> : null),
     [currentLayerData.vectors, currentMapFloor, handleIconClick]);
 
+  const bboxCache = useRef(new WeakMap());
+
+  const getCachedBbox = useCallback((room) => {
+    if (!room.data) return null;
+
+    if (bboxCache.current.has(room)) {
+      return bboxCache.current.get(room);
+    }
+
+    const bbox = getPathBoundingBox(room.data);
+    bboxCache.current.set(room, bbox);
+    return bbox;
+  }, []);
+
   const renderedRooms = useMemo(() => {
     return currentLayerData.rooms?.map(room => {
       if (!room || !room.id) return null;
@@ -460,7 +474,7 @@ function BuildingMap({isMapActive}) {
 
       let geometry, posX, posY, roomWidth, roomHeight;
       if (room.data && typeof room.data === 'string') {
-        const bbox = getPathBoundingBox(room.data);
+        const bbox = getCachedBbox(room);
         if (!bbox) return null;
         geometry = <Path {...commonProps} data={room.data}/>;
         posX = bbox.minX;
@@ -523,6 +537,7 @@ function BuildingMap({isMapActive}) {
       );
     });
   }, [currentLayerData.rooms, currentMapFloor, fromRoom, toRoom, selectedRoom, highlightedObjectIds, selectedCandidate, showRoomDescriptions, getPathBoundingBox, handleRoomClick, handleTouchRoom]);
+
 
   if (loading) return <div
     style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'}}>Загрузка...</div>;

@@ -29,7 +29,7 @@ function App() {
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const mode = urlParams.get('mode');
-        setAppMode(mode === 'abiturient' ? 'abiturient' : 'normal');
+        setAppMode(mode === 'abiturient' ? 'normal' : 'normal'); //FIXME
 
         const fromRoomId = urlParams.get('fromRoomId');
         if (fromRoomId) {

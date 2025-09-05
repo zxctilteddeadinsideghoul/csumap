@@ -5,7 +5,7 @@ import '../BuildingMap.css';
 import useStore from './store.jsx';
 import RouteMap from "./RouteMap.jsx";
 
-const MAP_DATA_URL_DEFAULT = 'https://staticstorm.ru/api/map_data';
+const MAP_DATA_URL_DEFAULT = 'https://map.csu.ru/api/map_data';
 const MAP_DATA_URL_ABITURIENT = 'DELETED(temporarily)';
 const DETAILED_LOGGING = false;
 

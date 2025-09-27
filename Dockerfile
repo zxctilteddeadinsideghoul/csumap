@@ -5,6 +5,5 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Только сборка, без nginx
-FROM alpine:latest as production
-COPY --from=builder /app/dist /dist
+FROM nginx:1.25-alpine as production
+COPY --from=builder /app/dist /usr/share/nginx/html
